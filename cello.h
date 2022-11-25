@@ -5,8 +5,8 @@
 #pragma once
 #define CELLO_H_INCLUDED
 
-#if 0
 /*
+BEGIN_JUCE_MODULE_DECLARATION
  ID:               cello
  vendor:           Brett g Porter
  version:          0.0.1
@@ -19,7 +19,6 @@
  dependencies:     juce_core, juce_data_structures
 END_JUCE_MODULE_DECLARATION
 */
-#endif
 
 #include "cello/cello_object.h"
 #include "cello/cello_value.h"
