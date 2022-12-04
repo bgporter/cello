@@ -85,6 +85,8 @@ public:
         juce::ValueTree tree { object };
         return tree.getProperty (id);
     }
+
+    void forceUpdate (bool forceUpdate_) { doForceUpdate = forceUpdate_; }
     /**
      * @brief reset to our initialized state.
      */
@@ -111,8 +113,5 @@ private:
  * as the identifier used for the property in its ValueTree.
  *
  */
-#define MAKE_VALUE                             \
-    (type, name, init) cello::Value<type> name \
-    {                                          \
-        *this, #name, init                     \
-    }
+#define MAKE_VALUE_MEMBER(type, name, init) \
+    cello::Value<type> name { *this, #name, init };

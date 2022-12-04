@@ -65,18 +65,9 @@ Object::Object (const Object& rhs)
 
 Object& Object::operator= (const Object& rhs)
 {
-    // remove ourself from current data's underlying tree callbacks.
-    data.removeListener (this);
-
     // can't change this object's type by doing this.
     jassert (getType () == rhs.getType ());
-
-    data         = rhs.data;
-    undoManager  = rhs.undoManager;
-    initRequired = false;
-
-    // register to receive callbacks when the tree changes.
-    data.addListener (this);
+    data.copyPropertiesAndChildrenFrom (rhs.data, getUndoManager ());
     return *this;
 }
 
@@ -84,6 +75,7 @@ Object::~Object ()
 {
     data.removeListener (this);
 }
+
 void Object::setUndoManager (juce::UndoManager* undo)
 {
     undoManager = undo;
@@ -114,6 +106,7 @@ void Object::valueTreePropertyChanged (juce::ValueTree& treeWhosePropertyHasChan
 {
     if (treeWhosePropertyHasChanged == data)
     {
+        // first, try to find a callback for that exact property.
         for (const auto& updater : propertyUpdaters)
         {
             if (updater.id == property)
@@ -123,8 +116,14 @@ void Object::valueTreePropertyChanged (juce::ValueTree& treeWhosePropertyHasChan
                 return;
             }
         }
+        // a cello extension: register a callback on the name of the tree's
+        // type, and you'll get a callback there for any property change that
+        // didn't have its own callback registered.
+        if (property != getType ())
+            valueTreePropertyChanged (data, getType ());
     }
 }
+
 } // namespace cello
 
 #if RUN_UNIT_TESTS

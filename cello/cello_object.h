@@ -19,9 +19,9 @@ public:
      *
      * Otherwise, we look for a child of our type:
      * if found, we use that as our data.
-     * if not found, we create and intialize a new tree of our type and add it as
-     * a child to the tree pointed to by state.
-     * If state is nullptr, we create and initialize a new tree object.
+     * if not found, we create and (default) intialize a new tree of our type and add it
+     * as a child to the tree pointed to by state. If state is nullptr, we create and
+     * default-initialize a new tree object.
      *
      * We register as a listener to whatever value tree we just found or created.
      *
@@ -98,7 +98,7 @@ public:
     /**
      * @brief Get a pointer to the listener to exclude from property change updates.
      *
-     * @return juce::ValueTree::Listener
+     * @return juce::ValueTree::Listener*
      */
     juce::ValueTree::Listener* getExcludedListener () const { return excludedListener; }
 
@@ -122,7 +122,9 @@ public:
     using PropertyUpdateFn = std::function<void (juce::Identifier)>;
     /**
      * @brief Install (or clear) a function to be called when one of this Object's
-     * properties changes.
+     * properties changes. A cello extension to this mechanism is that you can pass
+     * in the type of this tree, and you'll receive a callback on that key when any
+     * of the other properties that don't have a handler have changed.
      *
      * @param id the ID of the property that has changed.
      * @param callback function to call on update.

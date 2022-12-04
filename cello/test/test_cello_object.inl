@@ -29,11 +29,47 @@ public:
 
     int getValue () const { return val; }
 
+    void setValueForceUpdate (bool doForce) { val.forceUpdate (doForce); }
+
     static const inline juce::String classId { "OneValue" };
     static const inline juce::String valId { "val" };
 
 private:
     cello::Value<int> val { *this, valId, 0 };
+};
+
+struct Vec2 : public cello::Object
+{
+    Vec2 (juce::Identifier id, float x_, float y_)
+    : cello::Object (id, nullptr)
+    {
+        x = x_;
+        y = y_;
+    }
+
+    Vec2 (juce::Identifier id, cello::Object* object)
+    : cello::Object (id, object)
+    {
+        if (initRequired)
+        {
+            x.init ();
+            y.init ();
+        }
+    }
+
+    Vec2 (const Vec2& rhs)
+    : cello::Object (rhs)
+    {
+    }
+
+    Vec2& operator= (const Vec2& rhs)
+    {
+        cello::Object::operator= (rhs);
+        return *this;
+    }
+
+    MAKE_VALUE_MEMBER (float, x, 0.f);
+    MAKE_VALUE_MEMBER (float, y, {});
 };
 
 } // namespace
@@ -49,19 +85,6 @@ public:
 
     void runTest () override
     {
-        /*
-          To create a test, call `test("testName", testLambda);`
-          To (temporarily) skip a test, call `skipTest("testName", testLambda);`
-          To define setup for a block of tests, call `setup(setupLambda);`
-          To define cleanup for a block of tests, call `tearDown(tearDownLambda);`
-
-          Setup and TearDown lambdas will be called before/after each test that
-          is executed, and remain in effect until explicitly replaced.
-
-          All the functionality of the JUCE `UnitTest` class is available from
-          within these tests.
-        */
-
         test ("basic initialization",
               [&] ()
               {
@@ -162,8 +185,93 @@ public:
                   ov.setValue (4);
                   expect (count == 2);
               });
-        skipTest ("force updates", [&] () { expect (false); });
-        skipTest ("exclude listeners", [&] () { expect (false); });
+        test ("force updates",
+              [&] ()
+              {
+                  OneValue ov (22);
+                  OneValue ov2 (ov);
+                  int count { 0 };
+                  ov2.onPropertyChange (OneValue::valId,
+                                        [&count] (juce::Identifier id) { ++count; });
+                  ov.setValue (2);
+                  expect (count == 1);
+                  ov.setValue (2);
+                  expect (count == 1);
+                  ov.forceUpdates (true);
+                  ov.setValue (2);
+                  expect (count == 2);
+                  ov.forceUpdates (false);
+                  ov.setValue (2);
+                  expect (count == 2);
+                  ov.setValue (3);
+                  expect (count == 3);
+                  ov.setValueForceUpdate (true);
+                  ov.setValue (3);
+                  expect (count == 4);
+                  ov.setValueForceUpdate (false);
+                  ov.setValue (3);
+                  expect (count == 4);
+                  // TODO: Add a test for only enabling a single value's updates
+                  // in an object with multiple values.
+              });
+        skipTest ("exclude listeners",
+                  [&] ()
+                  {
+                      OneValue ov (22);
+                      int count { 0 };
+                      ov.onPropertyChange (OneValue::valId,
+                                           [&count] (juce::Identifier id) { ++count; });
+                      OneValue ov2 (ov);
+                      int count2 { 0 };
+                      ov2.onPropertyChange (
+                          OneValue::valId, [&count2] (juce::Identifier id) { ++count2; });
+
+                      ov.setValue (2);
+                      expect (count == 1);
+                      expect (count2 == 1);
+                      ov.excludeListener (&ov2);
+                      ov.setValue (100);
+                      expect (count == 2);
+                      expect (count2 == 1);
+                  });
+        test ("create child objects",
+              [&] ()
+              {
+                  cello::Object root ("root", nullptr);
+                  Vec2 pt ("point", &root);
+                  expectWithinAbsoluteError<float> (pt.x, 0, 0.001);
+                  expectWithinAbsoluteError<float> (pt.y, 0, 0.001);
+                  pt.x = 3.1;
+                  pt.y = -1.9;
+
+                  // init from the root tree
+                  Vec2 pt2 ("point", &root);
+                  expectWithinAbsoluteError<float> (pt2.x, 3.1f, 0.001);
+                  expectWithinAbsoluteError<float> (pt2.y, -1.9f, 0.001);
+              });
+        test ("change notify tree",
+              [&] ()
+              {
+                  cello::Object root ("root", nullptr);
+                  Vec2 pt ("point", &root);
+                  // init from the root tree
+                  Vec2 pt2 ("point", &root);
+                  float x {};
+                  float y {};
+                  pt2.onPropertyChange ("point",
+                                        [&] (juce::Identifier id)
+                                        {
+                                            x = pt2.x;
+                                            y = pt2.y;
+                                        });
+                  expectWithinAbsoluteError<float> (pt2.x, 0.f, 0.001);
+                  expectWithinAbsoluteError<float> (pt2.y, 0.f, 0.001);
+                  pt = Vec2 ("point", 101.1, -33.2);
+                  expectWithinAbsoluteError<float> (x, 101.1f, 0.001);
+                  expectWithinAbsoluteError<float> (y, -33.2, 0.001);
+                  expectWithinAbsoluteError<float> (pt2.x, 101.1f, 0.001);
+                  expectWithinAbsoluteError<float> (pt2.y, -33.2, 0.001);
+              });
     }
 
 private:
