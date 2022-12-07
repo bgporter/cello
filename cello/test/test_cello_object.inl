@@ -266,6 +266,8 @@ public:
                                         });
                   expectWithinAbsoluteError<float> (pt2.x, 0.f, 0.001);
                   expectWithinAbsoluteError<float> (pt2.y, 0.f, 0.001);
+
+                  // replace the entire tree with a new one (by copying its values)
                   pt = Vec2 ("point", 101.1, -33.2);
                   expectWithinAbsoluteError<float> (x, 101.1f, 0.001);
                   expectWithinAbsoluteError<float> (y, -33.2, 0.001);

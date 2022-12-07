@@ -26,9 +26,23 @@ public:
      * We register as a listener to whatever value tree we just found or created.
      *
      * @param type
-     * @param state
+     * @param state pointer to a cello::Object; pass nullptr to default initialize.
      */
     Object (juce::Identifier type, Object* state);
+
+    /**
+     * @brief Construct a new Object from a raw juce ValueTree. Its behavior
+     * mimics that of the ctor that accepts a pointer to object, attempting to
+     * either:
+     * - use the tree directly
+     * - look inside it for a tree of the correct type
+     * - if that's not found (or the initial tree wasn't valid) , create a
+     *   tree/Object of the correct type and add it to the tree that was passed in.
+     *
+     * @param type
+     * @param tree
+     */
+    Object (juce::Identifier type, juce::ValueTree tree);
 
     /**
      * @brief Destroy the Object object
@@ -130,6 +144,10 @@ public:
      * @param callback function to call on update.
      */
     void onPropertyChange (juce::Identifier id, PropertyUpdateFn callback);
+
+    using Iterator = juce::ValueTree::Iterator;
+    Iterator begin () { return data.begin (); }
+    Iterator end () { return data.end (); }
 
 private:
     void valueTreePropertyChanged (juce::ValueTree& treeWhosePropertyHasChanged,

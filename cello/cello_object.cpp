@@ -10,18 +10,22 @@ namespace cello
 {
 
 Object::Object (juce::Identifier type, Object* state)
+: Object { type, (state != nullptr ? static_cast<juce::ValueTree> (*state)
+                                   : juce::ValueTree ()) }
 {
     if (state != nullptr)
+        undoManager = state->getUndoManager ();
+}
+
+Object::Object (juce::Identifier type, juce::ValueTree tree)
+{
+    if (tree.isValid ())
     {
         // case 1: We're passed the tree we use as our store directly.
-        if (state->getType () == type)
-        {
-            data = *state;
-        }
+        if (tree.getType () == type)
+            data = tree;
         else
         {
-            juce::ValueTree tree { *state };
-
             // case 2: look in the state tree for our data.
             auto childTree = tree.getChildWithName (type);
             if (childTree.isValid ())
@@ -40,7 +44,6 @@ Object::Object (juce::Identifier type, Object* state)
                 tree.appendChild (data, getUndoManager ());
             }
         }
-        undoManager = state->getUndoManager ();
     }
     else
     {
