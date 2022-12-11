@@ -274,6 +274,21 @@ public:
                   expectWithinAbsoluteError<float> (pt2.x, 101.1f, 0.001);
                   expectWithinAbsoluteError<float> (pt2.y, -33.2, 0.001);
               });
+
+        test ("set property lambda",
+              [&] ()
+              {
+                  cello::Object root ("root", nullptr);
+                  Vec2 pt ("point", &root);
+                  pt.x.onSet = [] (float v) { return v * 2; };
+                  pt.x       = 10;
+                  expectWithinAbsoluteError<float> (pt.x, 20.f, 0.001f);
+                  pt.x = 100;
+                  expectWithinAbsoluteError<float> (pt.x, 200.f, 0.001f);
+                  pt.x.onSet = nullptr;
+                  pt.x       = 100;
+                  expectWithinAbsoluteError<float> (pt.x, 100.f, 0.001f);
+              });
     }
 
 private:

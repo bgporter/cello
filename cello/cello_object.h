@@ -150,6 +150,19 @@ public:
     Iterator end () { return data.end (); }
 
 private:
+    /**
+     * @brief Handle property changes in this tree by calling a registered
+     * callback function for the property that changed (if one was registered).
+     * As an extension, if no callback exists for a property, we will attempt to
+     * execute a callback registered with the type-name of this tree/object,
+     * so you can register a single catch-all handler if desired.
+     *
+     * Obviously, you can further derive from this and install some other
+     * update mechanism logic as needed.
+     *
+     * @param treeWhosePropertyHasChanged
+     * @param property
+     */
     void valueTreePropertyChanged (juce::ValueTree& treeWhosePropertyHasChanged,
                                    const juce::Identifier& property) override;
 
@@ -167,6 +180,12 @@ protected:
     bool doForceUpdates { false };
 
 private:
+    /**
+     * @brief key/value mapping between a property ID and the callback
+     * to execute when its value is updated. We create a vector of these
+     * structs as update functions are registered, and perform a linear
+     * search of them as needed.
+     */
     struct PropertyUpdate
     {
         PropertyUpdate (juce::Identifier id_, PropertyUpdateFn fn_)

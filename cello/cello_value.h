@@ -3,6 +3,7 @@
 //
 
 #pragma once
+
 namespace cello
 {
 
@@ -51,8 +52,41 @@ public:
      */
     void set (const T& val)
     {
+        if (onSet != nullptr)
+            doSet (onSet (val));
+        else
+            doSet (val);
+    }
+    /**
+     * @brief Get the current value of this property from the tree.
+     *
+     * @return T
+     */
+    operator T () const
+    {
         juce::ValueTree tree { object };
+        return tree.getProperty (id);
+    }
+
+    juce::Identifier getId () const { return id; }
+
+    void forceUpdate (bool forceUpdate_) { doForceUpdate = forceUpdate_; }
+    /**
+     * @brief reset to our initialized state.
+     */
+    void init () { set (initVal); }
+
+    using SetPropertyFn = std::function<T (const T&)>;
+    SetPropertyFn onSet;
+
+private:
+    void doSet (const T& val)
+    {
+        juce::ValueTree tree { object };
+
         // check if this call should change the current value.
+        // TODO: Replace this with a call that handles floating point values
+        // responsibly.
         if (val != *this)
         {
             // check if this value or our parent object have a listener to exclude
@@ -75,22 +109,6 @@ public:
                 tree.sendPropertyChangeMessage (id);
         }
     }
-    /**
-     * @brief Get the current value from the tree.
-     *
-     * @return T
-     */
-    operator T () const
-    {
-        juce::ValueTree tree { object };
-        return tree.getProperty (id);
-    }
-
-    void forceUpdate (bool forceUpdate_) { doForceUpdate = forceUpdate_; }
-    /**
-     * @brief reset to our initialized state.
-     */
-    void init () { set (initVal); }
 
 private:
     /// cello::Object containing the tree for this property.
