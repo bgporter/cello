@@ -2,6 +2,29 @@
 
 #include <juce_core/juce_core.h>
 
+#include "../cello_object.h"
+
+namespace
+{
+class ObjectWithOperators : public cello::Object
+{
+public:
+    ObjectWithOperators ()
+    : cello::Object ("opObject", nullptr)
+    {
+        if (initRequired)
+        {
+            intVal.init ();
+            floatVal.init ();
+        }
+    }
+
+    MAKE_VALUE_MEMBER (int, intVal, {});
+    MAKE_VALUE_MEMBER (float, floatVal, {});
+};
+
+} // namespace
+
 class Test_cello_value : public TestSuite
 {
 public:
@@ -26,6 +49,20 @@ public:
           All the functionality of the JUCE `UnitTest` class is available from
           within these tests.
         */
+
+        test ("operator +=",
+              [&] ()
+              {
+                  ObjectWithOperators o;
+                  o.intVal = 100;
+                  expect (o.intVal == 100);
+                  o.floatVal = 3.14f;
+
+                  o.intVal += 55;
+                  expect (o.intVal == 155);
+                  o.floatVal += 5;
+                  expectWithinAbsoluteError<float> (o.floatVal, 8.14f, 0.001f);
+              });
     }
 
 private:

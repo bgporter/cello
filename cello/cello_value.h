@@ -123,6 +123,14 @@ public:
         excludedListener = listener;
     }
 
+    template <typename = typename std::enable_if<std::is_arithmetic<T>::value, T>::type>
+    Value<T>& operator+= (const T& rhs)
+    {
+        T current { static_cast<T> (*this) };
+        set (current + rhs);
+        return *this;
+    }
+
 private:
     void doSet (const T& val)
     {
@@ -172,6 +180,12 @@ private:
     /// pointer to a listener to exclude from property change callbacks.
     juce::ValueTree::Listener* excludedListener { nullptr };
 };
+
+#if 0 
+template <typename T, // the actual type
+    typename = typename std::enable_if<std::is_arithmetic<T>::value, T>::type>
+    operator++
+#endif
 
 } // namespace cello
 
