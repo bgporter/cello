@@ -84,6 +84,65 @@ void Object::setUndoManager (juce::UndoManager* undo)
     undoManager = undo;
 }
 
+bool Object::canUndo () const
+{
+    if (auto* undoMgr = getUndoManager ())
+        return undoMgr->canUndo ();
+    return false;
+}
+
+bool Object::undo ()
+{
+    if (auto* undoMgr = getUndoManager ())
+        return undoMgr->undo ();
+    return false;
+}
+
+bool Object::canRedo () const
+{
+    if (auto* undoMgr = getUndoManager ())
+        return undoMgr->canRedo ();
+    return false;
+}
+
+bool Object::redo ()
+{
+    if (auto* undoMgr = getUndoManager ())
+        return undoMgr->redo ();
+    return false;
+}
+
+void Object::clearUndoHistory ()
+{
+    if (auto* undoMgr = getUndoManager ())
+        return undoMgr->clearUndoHistory ();
+}
+
+void Object::append (Object* object)
+{
+    insert (object, -1);
+}
+
+void Object::insert (Object* object, int index)
+{
+    data.addChild (*object, index, getUndoManager ());
+}
+
+bool Object::remove (Object* object)
+{
+    return remove (data.indexOf (*object));
+}
+
+bool Object::remove (int index)
+{
+    // make sure the object we're removing is really a child.
+    if (index == -1)
+        return false;
+
+    data.removeChild (index, getUndoManager ());
+    return true;
+}
+
 juce::UndoManager* Object::getUndoManager () const
 {
     return undoManager;

@@ -39,14 +39,18 @@ public:
      * @return Value& reference to this value so you could e.g. do
      * ```
      * this.x = this.y = 42;
+     * ```
      */
     Value& operator= (const T& val)
     {
         set (val);
         return *this;
     }
+
     /**
-     * @brief Set property value in the tree.
+     * @brief Set property value in the tree. If the `onSet` validator function
+     * has been configured, the `val` argument will be passed through that function
+     * (and possibly modified) before being stored into the tree.
      *
      * @param val
      */
@@ -57,6 +61,7 @@ public:
         else
             doSet (val);
     }
+
     /**
      * @brief Get the current value of this property from the tree.
      *
@@ -64,20 +69,59 @@ public:
      */
     operator T () const
     {
-        juce::ValueTree tree { object };
-        return tree.getProperty (id);
+        if (onGet != nullptr)
+            return onGet (doGet ());
+        return doGet ();
     }
 
+    /**
+     * @return this value's type ID.
+     */
     juce::Identifier getId () const { return id; }
 
-    void forceUpdate (bool forceUpdate_) { doForceUpdate = forceUpdate_; }
     /**
-     * @brief reset to our initialized state.
+     * @brief control whether setting this value should cause listeners to
+     * be notified even when the value hasn't been changed.
+     *
+     * @param forceUpdate_
+     */
+    void forceUpdate (bool forceUpdate_) { doForceUpdate = forceUpdate_; }
+
+    /**
+     * @brief reset to our initialized state. Object ctors will use this
+     * when they need to initialize their object tree for the first time.
      */
     void init () { set (initVal); }
 
-    using SetPropertyFn = std::function<T (const T&)>;
-    SetPropertyFn onSet;
+    /**
+     * @brief We define the signature of a 'validator' function that
+     * can validate/modify/replace values as your application requires.
+     *
+     * These will be called (if present) whenever this value is set or
+     * retrieved.
+     */
+    using ValidatePropertyFn = std::function<T (const T&)>;
+    /**
+     * @brief validator function called before setting this Value.
+     */
+    ValidatePropertyFn onSet;
+
+    /**
+     * @brief validator function called when retrieving this Value.
+     * This function is called with the current stored value, and might
+     * return a different value.
+     */
+    ValidatePropertyFn onGet;
+
+    /**
+     * @brief A listener to exclude from property change updates.
+     *
+     * @param listener
+     */
+    void excludeListener (juce::ValueTree::Listener* listener)
+    {
+        excludedListener = listener;
+    }
 
 private:
     void doSet (const T& val)
@@ -108,6 +152,12 @@ private:
             if (forceUpdate)
                 tree.sendPropertyChangeMessage (id);
         }
+    }
+
+    T doGet () const
+    {
+        juce::ValueTree tree { object };
+        return tree.getProperty (id);
     }
 
 private:

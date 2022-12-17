@@ -34,7 +34,7 @@ public:
      * @brief Construct a new Object from a raw juce ValueTree. Its behavior
      * mimics that of the ctor that accepts a pointer to object, attempting to
      * either:
-     * - use the tree directly
+     * - use the tree directly (if its type matches ours)
      * - look inside it for a tree of the correct type
      * - if that's not found (or the initial tree wasn't valid) , create a
      *   tree/Object of the correct type and add it to the tree that was passed in.
@@ -90,6 +90,73 @@ public:
      * @param undo
      */
     void setUndoManager (juce::UndoManager* undo);
+
+    /**
+     * @brief Test whether this object/tree has anything that can be
+     * undone.
+     * @return false if there's no undo manager or nothing to undo
+     */
+    bool canUndo () const;
+
+    /**
+     * @brief Attempt to undo the last transaction.
+     *
+     * @return false if there's no undo manager, nothing to undo, or
+     * the attempt to undo fails.
+     */
+    bool undo ();
+
+    /**
+     * @brief Test whether this object/tree has anything that can be
+     * redone.
+     * @return false if there's no undo manager or nothing to redo
+     */
+    bool canRedo () const;
+
+    /**
+     * @brief Attempt to redo the last transaction.
+     *
+     * @return false if there's no undo manager, nothing to redo, or
+     * the attempt to redo fails.
+     */
+    bool redo ();
+
+    /**
+     * @brief reset the undo manager
+     *
+     */
+    void clearUndoHistory ();
+
+    /**
+     * @brief Add a new child object to the end of our child object list,
+     *
+     * @param object
+     */
+    void append (Object* object);
+
+    /**
+     * @brief add a new child object at a specific index in the list.
+     *
+     * @param object
+     * @param index
+     */
+    void insert (Object* object, int index);
+
+    /**
+     * @brief Attempt to remove a child object from this.
+     *
+     * @param object Object containing sub-tree to remove
+     * @return false if the object is not a child of this object.
+     */
+    bool remove (Object* object);
+
+    /**
+     * @brief remove a child by its index.
+     *
+     * @param index
+     * @return false if the index is out of bounds.
+     */
+    bool remove (int index);
 
     /**
      * @brief Get the current undo manager; only useful to this object's Value
@@ -165,6 +232,25 @@ private:
      */
     void valueTreePropertyChanged (juce::ValueTree& treeWhosePropertyHasChanged,
                                    const juce::Identifier& property) override;
+
+    /**
+     * @brief TODO: implement this!
+     *
+     * @param parentTree
+     * @param childTree
+     */
+    void valueTreeChildAdded (juce::ValueTree& parentTree,
+                              juce::ValueTree& childTree) override {};
+
+    /**
+     * @brief TODO: implement this!
+     *
+     * @param parentTree
+     * @param childTree
+     * @param index
+     */
+    void valueTreeChildRemoved (juce::ValueTree& parentTree, juce::ValueTree& childTree,
+                                int index) override {};
 
 protected:
     ///  The tree where our data lives.

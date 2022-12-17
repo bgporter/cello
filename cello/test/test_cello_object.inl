@@ -72,6 +72,35 @@ struct Vec2 : public cello::Object
     MAKE_VALUE_MEMBER (float, y, {});
 };
 
+class Rectangle : public cello::Object
+{
+public:
+    Rectangle (juce::Identifier id, cello::Object* object)
+    : cello::Object { id, object }
+    {
+        /*
+        NOTE -- we don't need this here; this block only needs to be added
+        when an Object has Value members.
+        if (initRequired)
+        {
+        }
+        */
+    }
+
+    Rectangle (juce::Identifier id, float x, float y, float w, float h)
+    : cello::Object { id, nullptr }
+    {
+        origin.x = x;
+        origin.y = y;
+        size.x   = w;
+        size.y   = h;
+    }
+
+private:
+    Vec2 origin { "origin", this };
+    Vec2 size { "size", this };
+};
+
 } // namespace
 namespace cello
 {
@@ -152,18 +181,27 @@ public:
                   juce::UndoManager undo;
                   ov.setUndoManager (&undo);
 
+                  expect (!ov.canUndo ());
+                  expect (!ov.canRedo ());
                   ov.setValue (2);
                   expect (ov.getValue () == 2);
-                  undo.undo ();
+                  expect (ov.canUndo ());
+                  expect (ov.undo ());
+                  expect (!ov.canUndo ());
                   expect (ov.getValue () == 1);
-                  undo.redo ();
+                  expect (ov.canRedo ());
+                  expect (ov.redo ());
                   expect (ov.getValue () == 2);
                   OneValue ov2 (ov);
                   expect (ov2.getValue () == 2);
                   ov2.setValue (100);
                   expect (ov.getValue () == 100);
-                  undo.undo ();
+                  expect (ov.undo ());
                   expect (ov.getValue () == 2);
+                  ov.setValue (50);
+                  expect (ov.canUndo ());
+                  ov.clearUndoHistory ();
+                  expect (!ov.canUndo ());
               });
 
         test ("property change callbacks",
@@ -288,6 +326,28 @@ public:
                   pt.x.onSet = nullptr;
                   pt.x       = 100;
                   expectWithinAbsoluteError<float> (pt.x, 100.f, 0.001f);
+              });
+
+        test ("embedded objects",
+              [&] ()
+              {
+                  Rectangle box ("box", 100, -100, 200, 250);
+                  Vec2 origin { "origin", &box };
+                  expectWithinAbsoluteError<float> (origin.x, 100.f, 0.001f);
+                  expectWithinAbsoluteError<float> (origin.y, -100.f, 0.001f);
+                  Vec2 size { "size", &box };
+                  expectWithinAbsoluteError<float> (size.x, 200.f, 0.001f);
+                  expectWithinAbsoluteError<float> (size.y, 250.f, 0.001f);
+
+                  // check a default initialized box as a child of another object.
+                  cello::Object root ("root", nullptr);
+                  Rectangle rect ("rect", &root);
+                  Vec2 origin2 { "origin", &rect };
+                  expectWithinAbsoluteError<float> (origin2.x, 0.f, 0.001f);
+                  expectWithinAbsoluteError<float> (origin2.y, 0.f, 0.001f);
+                  Vec2 size2 { "size", &rect };
+                  expectWithinAbsoluteError<float> (size2.x, 0.f, 0.001f);
+                  expectWithinAbsoluteError<float> (size2.y, 0.f, 0.001f);
               });
     }
 
