@@ -123,14 +123,6 @@ public:
         excludedListener = listener;
     }
 
-    template <typename = typename std::enable_if<std::is_arithmetic<T>::value, T>::type>
-    Value<T>& operator+= (const T& rhs)
-    {
-        T current { static_cast<T> (*this) };
-        set (current + rhs);
-        return *this;
-    }
-
 private:
     void doSet (const T& val)
     {
@@ -181,11 +173,113 @@ private:
     juce::ValueTree::Listener* excludedListener { nullptr };
 };
 
-#if 0 
 template <typename T, // the actual type
-    typename = typename std::enable_if<std::is_arithmetic<T>::value, T>::type>
-    operator++
-#endif
+          typename = typename std::enable_if<std::is_arithmetic<T>::value, T>::type>
+Value<T>& operator+= (Value<T>& val, const T& rhs)
+{
+    const auto current = static_cast<T> (val);
+    val                = current + rhs;
+    return val;
+}
+
+template <typename T, // the actual type
+          typename = typename std::enable_if<std::is_arithmetic<T>::value, T>::type>
+Value<T>& operator-= (Value<T>& val, const T& rhs)
+{
+    const auto current = static_cast<T> (val);
+    val                = current - rhs;
+    return val;
+}
+
+template <typename T, // the actual type
+          typename = typename std::enable_if<std::is_arithmetic<T>::value, T>::type>
+Value<T>& operator*= (Value<T>& val, const T& rhs)
+{
+    const auto current = static_cast<T> (val);
+    val                = current * rhs;
+    return val;
+}
+
+template <typename T, // the actual type
+          typename = typename std::enable_if<std::is_arithmetic<T>::value, T>::type>
+Value<T>& operator/= (Value<T>& val, const T& rhs)
+{
+    jassert (rhs != 0);
+    const auto current = static_cast<T> (val);
+    val                = current / rhs;
+    return val;
+}
+
+/**
+ * @brief Pre-increment
+ *
+ * @tparam T
+ * @tparam std::enable_if<std::is_arithmetic<T>::value, T>::type
+ * @param val
+ * @return Value<T>&
+ */
+template <typename T, // the actual type
+          typename = typename std::enable_if<std::is_arithmetic<T>::value, T>::type>
+T operator++ (Value<T>& val)
+{
+    const auto newVal = static_cast<T> (val) + static_cast<int> (1);
+    val.set (newVal);
+    return newVal;
+}
+
+/**
+ * @brief post-increment; note that the semantics of this don't follow 'real'
+ * C++ usage -- because this type relies on an underlying ValueTree object to
+ * provide the actual data storage, the idea of 'returning a copy of this object
+ * in its original state' doesn't work.
+ *
+ * @tparam T
+ * @tparam std::enable_if<std::is_arithmetic<T>::value, T>::type
+ * @param val
+ * @return Value<T>&
+ */
+template <typename T, // the actual type
+          typename = typename std::enable_if<std::is_arithmetic<T>::value, T>::type>
+T operator++ (Value<T>& val, int)
+{
+    const auto original { static_cast<T> (val) };
+    val.set (original + static_cast<T> (1));
+    return original;
+}
+
+/**
+ * @brief Pre-decrement
+ *
+ * @tparam T
+ * @tparam std::enable_if<std::is_arithmetic<T>::value, T>::type
+ * @param val
+ * @return T
+ */
+template <typename T, // the actual type
+          typename = typename std::enable_if<std::is_arithmetic<T>::value, T>::type>
+T operator-- (Value<T>& val)
+{
+    const auto newVal = static_cast<T> (val) - static_cast<T> (1);
+    val.set (newVal);
+    return newVal;
+}
+
+/**
+ * @brief post-decrement;
+ *
+ * @tparam T
+ * @tparam std::enable_if<std::is_arithmetic<T>::value, T>::type
+ * @param val
+ * @return T
+ */
+template <typename T, // the actual type
+          typename = typename std::enable_if<std::is_arithmetic<T>::value, T>::type>
+T operator-- (Value<T>& val, int)
+{
+    const auto original = static_cast<T> (val);
+    val.set (original - static_cast<T> (1));
+    return original;
+}
 
 } // namespace cello
 

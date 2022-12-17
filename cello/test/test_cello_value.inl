@@ -16,11 +16,13 @@ public:
         {
             intVal.init ();
             floatVal.init ();
+            stringVal.init ();
         }
     }
 
     MAKE_VALUE_MEMBER (int, intVal, {});
     MAKE_VALUE_MEMBER (float, floatVal, {});
+    MAKE_VALUE_MEMBER (juce::String, stringVal, {});
 };
 
 } // namespace
@@ -35,33 +37,33 @@ public:
 
     void runTest () override
     {
-        beginTest ("!!! WRITE SOME TESTS FOR THE cello_value Class !!!");
-
-        /*
-          To create a test, call `test("testName", testLambda);`
-          To (temporarily) skip a test, call `skipTest("testName", testLambda);`
-          To define setup for a block of tests, call `setup(setupLambda);`
-          To define cleanup for a block of tests, call `tearDown(tearDownLambda);`
-
-          Setup and TearDown lambdas will be called before/after each test that
-          is executed, and remain in effect until explicitly replaced.
-
-          All the functionality of the JUCE `UnitTest` class is available from
-          within these tests.
-        */
-
         test ("operator +=",
               [&] ()
               {
                   ObjectWithOperators o;
                   o.intVal = 100;
                   expect (o.intVal == 100);
-                  o.floatVal = 3.14f;
+                  o.floatVal  = 3.14f;
+                  o.stringVal = "this is a";
+                  expect (!std::is_arithmetic<juce::String>::value);
+
+                  // next line should NOT compile
+                  //   o.stringVal += " test!";
 
                   o.intVal += 55;
                   expect (o.intVal == 155);
-                  o.floatVal += 5;
+                  o.floatVal += 5.f;
                   expectWithinAbsoluteError<float> (o.floatVal, 8.14f, 0.001f);
+              });
+
+        test ("operator++ (pre/post)",
+              [&] ()
+              {
+                  ObjectWithOperators o;
+                  expect (1 == ++o.intVal);
+                  expect (o.intVal == 1);
+                  expect (1 == o.intVal++);
+                  expect (o.intVal == 2);
               });
     }
 
