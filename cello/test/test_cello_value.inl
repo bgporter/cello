@@ -45,7 +45,6 @@ public:
                   expect (o.intVal == 100);
                   o.floatVal  = 3.14f;
                   o.stringVal = "this is a";
-                  expect (!std::is_arithmetic<juce::String>::value);
 
                   // next line should NOT compile
                   //   o.stringVal += " test!";
@@ -64,6 +63,17 @@ public:
                   expect (o.intVal == 1);
                   expect (1 == o.intVal++);
                   expect (o.intVal == 2);
+              });
+
+        test ("operator-- (pre/post)",
+              [&] ()
+              {
+                  ObjectWithOperators o;
+                  o.intVal = 5;
+                  expect (4 == --o.intVal);
+                  expect (o.intVal == 4);
+                  expect (4 == o.intVal--);
+                  expect (o.intVal == 3);
               });
     }
 

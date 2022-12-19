@@ -123,7 +123,6 @@ public:
 
     /**
      * @brief reset the undo manager
-     *
      */
     void clearUndoHistory ();
 
@@ -146,17 +145,17 @@ public:
      * @brief Attempt to remove a child object from this.
      *
      * @param object Object containing sub-tree to remove
-     * @return false if the object is not a child of this object.
+     * @return nullptr on failure (the specified object wasn't a child)
      */
-    bool remove (Object* object);
+    Object* remove (Object* object);
 
     /**
      * @brief remove a child by its index.
      *
      * @param index
-     * @return false if the index is out of bounds.
+     * @return Invalid tree if the index was out of bounds.
      */
-    bool remove (int index);
+    juce::ValueTree remove (int index);
 
     /**
      * @brief Get the current undo manager; only useful to this object's Value

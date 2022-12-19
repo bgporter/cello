@@ -125,22 +125,34 @@ void Object::append (Object* object)
 
 void Object::insert (Object* object, int index)
 {
+    // a value tree can only have 1 parent -- if the new object has a parent,
+    // remove it there first.
+    juce::ValueTree newChild { *object };
+    juce::ValueTree parent { newChild.getParent () };
+
+    if (parent.isValid ())
+    {
+        // we can get into a weird state if we try to mix operations on
+        // different undo managers.
+        jassert (getUndoManager () == object->getUndoManager ());
+        parent.removeChild (newChild, getUndoManager ());
+    }
     data.addChild (*object, index, getUndoManager ());
 }
 
-bool Object::remove (Object* object)
+Object* Object::remove (Object* object)
 {
-    return remove (data.indexOf (*object));
+    auto removedTree { remove (data.indexOf (*object)) };
+
+    return removedTree.isValid () ? object : nullptr;
 }
 
-bool Object::remove (int index)
+juce::ValueTree Object::remove (int index)
 {
-    // make sure the object we're removing is really a child.
-    if (index == -1)
-        return false;
-
-    data.removeChild (index, getUndoManager ());
-    return true;
+    auto treeToRemove { data.getChild (index) };
+    if (treeToRemove.isValid ())
+        data.removeChild (treeToRemove, getUndoManager ());
+    return treeToRemove;
 }
 
 juce::UndoManager* Object::getUndoManager () const
