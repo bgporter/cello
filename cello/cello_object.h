@@ -92,6 +92,14 @@ public:
     void setUndoManager (juce::UndoManager* undo);
 
     /**
+     * @brief Get the current undo manager; only useful to this object's Value
+     * objects and when creating other Objects to wrap our subtrees.
+     *
+     * @return juce::UndoManager*
+     */
+    juce::UndoManager* getUndoManager () const;
+
+    /**
      * @brief Test whether this object/tree has anything that can be
      * undone.
      * @return false if there's no undo manager or nothing to undo
@@ -158,14 +166,6 @@ public:
     juce::ValueTree remove (int index);
 
     /**
-     * @brief Get the current undo manager; only useful to this object's Value
-     * objects and when creating other Objects to wrap our subtrees.
-     *
-     * @return juce::UndoManager*
-     */
-    juce::UndoManager* getUndoManager () const;
-
-    /**
      * @brief A listener to exclude from property change updates.
      *
      * @param listener
@@ -214,7 +214,55 @@ public:
     using Iterator = juce::ValueTree::Iterator;
     Iterator begin () { return data.begin (); }
     Iterator end () { return data.end (); }
+    /**
+     * @name Pythonesque access
+     *
+     * We use names borrowed from Python for this set of functions to
+     * make them stand out. When using these, the Object becomes more
+     * dynamically typed; the type-safety provided by working through
+     * the cello::Value class is bypassed, and you can add/remove
+     * attributes/properties and change their types from the object
+     * at runtime as is useful for you.
+     */
+    ///@{
 
+    /**
+     * @brief Get a property value from this object, or default if it
+     * doesn't have a property with that name.
+     *
+     * @tparam T
+     * @param attr
+     * @param defaultVal
+     * @return T
+     */
+    template <typename T>
+    T getattr (const juce::Identifier& attr, const T& defaultVal) const;
+
+    /**
+     * @brief test the object to see if it has an attribute with this id.
+     *
+     * @param attr
+     * @return true
+     * @return false
+     */
+    bool hasattr (const juce::Identifier& attr) const;
+
+    /**
+     * @brief Set a new value for the specified attribute/property.
+     * @tparam T
+     * @param attr
+     * @param attrVal
+     */
+    template <typename T>
+    Object& setattr (const juce::Identifier& attr, const T& attrVal);
+
+    /**
+     * @brief Remove the specified property from this object.
+     * @param attr
+     */
+    void delattr (const juce::Identifier& attr);
+
+    ///@}
 private:
     /**
      * @brief Handle property changes in this tree by calling a registered

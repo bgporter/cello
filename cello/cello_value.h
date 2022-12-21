@@ -177,8 +177,8 @@ template <typename T, // the actual type
           typename = typename std::enable_if<std::is_arithmetic<T>::value, T>::type>
 Value<T>& operator+= (Value<T>& val, const T& rhs)
 {
-    const auto current = static_cast<T> (val);
-    val                = current + rhs;
+    const auto current { static_cast<T> (val) };
+    val = current + rhs;
     return val;
 }
 
@@ -186,8 +186,8 @@ template <typename T, // the actual type
           typename = typename std::enable_if<std::is_arithmetic<T>::value, T>::type>
 Value<T>& operator-= (Value<T>& val, const T& rhs)
 {
-    const auto current = static_cast<T> (val);
-    val                = current - rhs;
+    const auto current { static_cast<T> (val) };
+    val = current - rhs;
     return val;
 }
 
@@ -195,8 +195,8 @@ template <typename T, // the actual type
           typename = typename std::enable_if<std::is_arithmetic<T>::value, T>::type>
 Value<T>& operator*= (Value<T>& val, const T& rhs)
 {
-    const auto current = static_cast<T> (val);
-    val                = current * rhs;
+    const auto current { static_cast<T> (val) };
+    val = current * rhs;
     return val;
 }
 
@@ -205,8 +205,8 @@ template <typename T, // the actual type
 Value<T>& operator/= (Value<T>& val, const T& rhs)
 {
     jassert (rhs != 0);
-    const auto current = static_cast<T> (val);
-    val                = current / rhs;
+    const auto current { static_cast<T> (val) };
+    val = current / rhs;
     return val;
 }
 
@@ -222,7 +222,7 @@ template <typename T, // the actual type
           typename = typename std::enable_if<std::is_arithmetic<T>::value, T>::type>
 T operator++ (Value<T>& val)
 {
-    const auto newVal = static_cast<T> (val) + static_cast<int> (1);
+    const auto newVal { static_cast<T> (val) + static_cast<int> (1) };
     val.set (newVal);
     return newVal;
 }
@@ -259,7 +259,7 @@ template <typename T, // the actual type
           typename = typename std::enable_if<std::is_arithmetic<T>::value, T>::type>
 T operator-- (Value<T>& val)
 {
-    const auto newVal = static_cast<T> (val) - static_cast<T> (1);
+    const auto newVal { static_cast<T> (val) - static_cast<T> (1) };
     val.set (newVal);
     return newVal;
 }
@@ -276,7 +276,7 @@ template <typename T, // the actual type
           typename = typename std::enable_if<std::is_arithmetic<T>::value, T>::type>
 T operator-- (Value<T>& val, int)
 {
-    const auto original = static_cast<T> (val);
+    const auto original { static_cast<T> (val) };
     val.set (original - static_cast<T> (1));
     return original;
 }

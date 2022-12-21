@@ -175,6 +175,29 @@ void Object::onPropertyChange (juce::Identifier id, PropertyUpdateFn callback)
     propertyUpdaters.emplace_back (id, callback);
 }
 
+template <typename T>
+T Object::getattr (const juce::Identifier& attr, const T& defaultVal) const
+{
+    return static_cast<T> (data.getProperty (attr, defaultVal));
+}
+
+bool Object::hasattr (const juce::Identifier& attr) const
+{
+    return data.hasProperty (attr);
+}
+
+template <typename T>
+Object& Object::setattr (const juce::Identifier& attr, const T& attrVal)
+{
+    data.setProperty (attr, attrVal, getUndoManager ());
+    return (*this);
+}
+
+void Object::delattr (const juce::Identifier& attr)
+{
+    data.removeProperty (attr, getUndoManager ());
+}
+
 void Object::valueTreePropertyChanged (juce::ValueTree& treeWhosePropertyHasChanged,
                                        const juce::Identifier& property)
 {

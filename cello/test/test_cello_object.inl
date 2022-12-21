@@ -349,6 +349,22 @@ public:
                   expectWithinAbsoluteError<float> (size2.x, 0.f, 0.001f);
                   expectWithinAbsoluteError<float> (size2.y, 0.f, 0.001f);
               });
+
+        test ("pythonic access",
+              [&] ()
+              {
+                  // let's make an object that's purely dynamic.
+                  cello::Object o { "pythonic", nullptr };
+                  juce::Identifier foo { "foo" };
+                  expect (!o.hasattr (foo));
+                  juce::String str { "a string attribute" };
+                  o.setattr (foo, str);
+                  expect (o.hasattr (foo));
+                  juce::String a { o.getattr (foo, juce::String ()) };
+                  expect (a == str);
+                  o.delattr (foo);
+                  expect (!o.hasattr (foo));
+              });
     }
 
 private:
