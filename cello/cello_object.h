@@ -8,6 +8,7 @@
 #include <juce_data_structures/juce_data_structures.h>
 namespace cello
 {
+class ValueBase;
 
 class Object : public juce::ValueTree::Listener
 {
@@ -84,6 +85,11 @@ public:
     operator juce::ValueTree () const { return data; }
 
     /**
+     * @name Undo/redo functionality
+     */
+    ///@{
+
+    /**
      * @brief Set the undo manager to use in this object
      * (and others created from it).
      *
@@ -133,6 +139,39 @@ public:
      * @brief reset the undo manager
      */
     void clearUndoHistory ();
+    ///@}
+
+    /**
+     * @name Child Operations
+     *
+     */
+    ///@{
+
+    // An iterator to access child objects; note that it works in terms
+    // of ValueTrees, not objects (since our list of children can be
+    // heterogeneous)
+    using Iterator = juce::ValueTree::Iterator;
+    Iterator begin () { return data.begin (); }
+    Iterator end () { return data.end (); }
+
+    /**
+     * @brief return a child tree of this object by its index.
+     * NOTE that it does not return an object; to work with this data in
+     * its cello::Object form, you'll need to use this tree to create a new
+     * one, probably testing its type to make sure you're creating the correct
+     * Object type from it.
+     *
+     * @param index
+     * @return juce::ValueTree; will be invalid if the index is out of range.
+     */
+    juce::ValueTree operator[] (int index) const;
+
+    /**
+     * @brief Check how many children this object has.
+     *
+     * @return int
+     */
+    int getNumChildren () const;
 
     /**
      * @brief Add a new child object to the end of our child object list,
@@ -164,6 +203,16 @@ public:
      * @return Invalid tree if the index was out of bounds.
      */
     juce::ValueTree remove (int index);
+
+    /**
+     * @brief Change the position of one of this object's children
+     *
+     * @param fromIndex
+     * @param toIndex
+     */
+    void move (int fromIndex, int toIndex);
+
+    ///@}
 
     /**
      * @brief A listener to exclude from property change updates.
@@ -203,7 +252,7 @@ public:
     /**
      * @brief Install (or clear) a function to be called when one of this Object's
      * properties changes. A cello extension to this mechanism is that you can pass
-     * in the type of this tree, and you'll receive a callback on that key when any
+     * in the type id of this tree, and you'll receive a callback on that key when any
      * of the other properties that don't have a handler have changed.
      *
      * @param id the ID of the property that has changed.
@@ -211,9 +260,15 @@ public:
      */
     void onPropertyChange (juce::Identifier id, PropertyUpdateFn callback);
 
-    using Iterator = juce::ValueTree::Iterator;
-    Iterator begin () { return data.begin (); }
-    Iterator end () { return data.end (); }
+    /**
+     * @brief register a property change callback by passing in a reference
+     * to a Value object instead of its id.
+     *
+     * @param val
+     * @param callback
+     */
+    void onPropertyChange (const ValueBase& val, PropertyUpdateFn callback);
+
     /**
      * @name Pythonesque access
      *

@@ -118,6 +118,19 @@ void Object::clearUndoHistory ()
         return undoMgr->clearUndoHistory ();
 }
 
+int Object::getNumChildren () const
+{
+    return data.getNumChildren ();
+}
+
+juce::ValueTree Object::operator[] (int index) const
+{
+    if (index < 0 || index >= data.getNumChildren ())
+        return {};
+
+    return data.getChild (index);
+}
+
 void Object::append (Object* object)
 {
     insert (object, -1);
@@ -155,6 +168,11 @@ juce::ValueTree Object::remove (int index)
     return treeToRemove;
 }
 
+void Object::move (int fromIndex, int toIndex)
+{
+    data.moveChild (fromIndex, toIndex, getUndoManager ());
+}
+
 juce::UndoManager* Object::getUndoManager () const
 {
     return undoManager;
@@ -173,6 +191,11 @@ void Object::onPropertyChange (juce::Identifier id, PropertyUpdateFn callback)
     }
     // nope, append to the list.
     propertyUpdaters.emplace_back (id, callback);
+}
+
+void Object::onPropertyChange (const ValueBase& val, PropertyUpdateFn callback)
+{
+    onPropertyChange (val.getId (), callback);
 }
 
 template <typename T>

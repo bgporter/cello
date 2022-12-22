@@ -57,6 +57,11 @@ struct Vec2 : public cello::Object
         }
     }
 
+    Vec2 (juce::Identifier id, juce::ValueTree tree)
+    : cello::Object (id, tree)
+    {
+    }
+
     Vec2 (const Vec2& rhs)
     : cello::Object (rhs)
     {
@@ -209,11 +214,13 @@ public:
               {
                   OneValue ov (0);
                   int count { 0 };
-                  ov.onPropertyChange (OneValue::valId,
-                                       [&count] (juce::Identifier id) { ++count; });
+                  cello::Object::PropertyUpdateFn callback =
+                      [&count] (juce::Identifier id) { ++count; };
+                  ov.onPropertyChange (OneValue::valId, callback);
                   ov.setValue (2);
                   expect (count == 1);
-                  // we shouldn't get a callback if the value doeesn't change.
+                  // we shouldn't get a callback if the value
+                  // doeesn't change.
                   ov.setValue (2);
                   expect (count == 1);
                   ov.setValue (3);
@@ -221,6 +228,15 @@ public:
                   // remove the update fn
                   ov.onPropertyChange (OneValue::valId, nullptr);
                   ov.setValue (4);
+                  expect (count == 2);
+
+                  Vec2 pt { "point", 0, 0 };
+                  count = 0;
+                  pt.onPropertyChange (pt.x, callback);
+                  pt.onPropertyChange (pt.y, callback);
+                  pt.x = 100;
+                  expect (count == 1);
+                  pt.y = -50;
                   expect (count == 2);
               });
         test ("force updates",
@@ -364,6 +380,32 @@ public:
                   expect (a == str);
                   o.delattr (foo);
                   expect (!o.hasattr (foo));
+                  juce::String missingDefault { "MISSING" };
+                  juce::String missing { o.getattr (foo, missingDefault) };
+                  expect (missing == missingDefault);
+              });
+        test ("lists of objects",
+              [&] ()
+              {
+                  cello::Object list { "objectList", nullptr };
+                  expectEquals (list.getNumChildren (), 0);
+
+                  // create some objects and add them as children
+                  for (int i { 0 }; i < 10; ++i)
+                  {
+                      Vec2 point { "point", (float) i, (float) i * 2 };
+                      list.append (&point);
+                  }
+                  expectEquals (list.getNumChildren (), 10);
+                  // check the values
+                  for (int i { 0 }; i < list.getNumChildren (); ++i)
+                  {
+                      auto child { list[i] };
+                      expectEquals (child.getType (), juce::Identifier ("point"));
+                      Vec2 pt { "point", child };
+                      expectWithinAbsoluteError<float> (pt.x, i, 0.001f);
+                      expectWithinAbsoluteError<float> (pt.y, i * 2, 0.001f);
+                  }
               });
     }
 
