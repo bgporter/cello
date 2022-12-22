@@ -8,6 +8,26 @@ namespace cello
 {
 
 class Object;
+
+class ValueBase
+{
+public:
+    /**
+     * @return this value's type ID.
+     */
+    juce::Identifier getId () const { return id; }
+
+protected:
+    ValueBase (const juce::Identifier& id_)
+    : id { id_ }
+    {
+    }
+
+protected:
+    /// identifier of this value/property.
+    const juce::Identifier id;
+};
+
 /**
  * @brief A class to abstract away the issues around storing and retrieving
  * a value from a ValueTree. Designed to make working with VT values more
@@ -15,7 +35,7 @@ class Object;
  *
  * @tparam T
  */
-template <typename T> class Value
+template <typename T> class Value : public ValueBase
 {
 public:
     /**
@@ -25,9 +45,9 @@ public:
      * @param id_ Identifier of the data
      * @param init_ default initialized state for this value.
      */
-    Value (Object& data_, juce::Identifier id_, T init_ = {})
-    : object { data_ }
-    , id { id_ }
+    Value (Object& data_, const juce::Identifier& id_, T init_ = {})
+    : ValueBase { id_ }
+    , object { data_ }
     , initVal { init_ }
     {
     }
@@ -73,11 +93,6 @@ public:
             return onGet (doGet ());
         return doGet ();
     }
-
-    /**
-     * @return this value's type ID.
-     */
-    juce::Identifier getId () const { return id; }
 
     /**
      * @brief control whether setting this value should cause listeners to
@@ -163,8 +178,6 @@ private:
 private:
     /// cello::Object containing the tree for this property.
     Object& object;
-    /// identifier of this value/property.
-    const juce::Identifier id;
     /// initial value.
     T initVal;
     /// always send updates on set() even if value doesn't change?
