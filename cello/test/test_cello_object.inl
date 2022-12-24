@@ -50,11 +50,6 @@ struct Vec2 : public cello::Object
     Vec2 (juce::Identifier id, cello::Object* object)
     : cello::Object (id, object)
     {
-        if (initRequired)
-        {
-            x.init ();
-            y.init ();
-        }
     }
 
     Vec2 (juce::Identifier id, juce::ValueTree tree)
@@ -83,13 +78,6 @@ public:
     Rectangle (juce::Identifier id, cello::Object* object)
     : cello::Object { id, object }
     {
-        /*
-        NOTE -- we don't need this here; this block only needs to be added
-        when an Object has Value members.
-        if (initRequired)
-        {
-        }
-        */
     }
 
     Rectangle (juce::Identifier id, float x, float y, float w, float h)

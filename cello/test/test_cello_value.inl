@@ -38,12 +38,6 @@ public:
     ObjectWithOperators ()
     : cello::Object ("opObject", nullptr)
     {
-        if (initRequired)
-        {
-            intVal.init ();
-            floatVal.init ();
-            stringVal.init ();
-        }
     }
 
     MAKE_VALUE_MEMBER (int, intVal, {});
@@ -57,10 +51,6 @@ public:
     ObjectWithConvertibleObject ()
     : cello::Object ("convertible", nullptr)
     {
-        if (initRequired)
-        {
-            complexVal.init ();
-        }
     }
 
     MAKE_VALUE_MEMBER (std::complex<float>, complexVal, {});
