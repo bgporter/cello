@@ -201,7 +201,8 @@ void Object::onPropertyChange (const ValueBase& val, PropertyUpdateFn callback)
 template <typename T>
 T Object::getattr (const juce::Identifier& attr, const T& defaultVal) const
 {
-    return static_cast<T> (data.getProperty (attr, defaultVal));
+    // return static_cast<T> (data.getProperty (attr, defaultVal));
+    return juce::VariantConverter<T>::fromVar (data.getProperty (attr, defaultVal));
 }
 
 bool Object::hasattr (const juce::Identifier& attr) const
@@ -212,7 +213,8 @@ bool Object::hasattr (const juce::Identifier& attr) const
 template <typename T>
 Object& Object::setattr (const juce::Identifier& attr, const T& attrVal)
 {
-    data.setProperty (attr, attrVal, getUndoManager ());
+    data.setProperty (attr, juce::VariantConverter<T>::toVar (attrVal),
+                      getUndoManager ());
     return (*this);
 }
 

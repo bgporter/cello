@@ -1,9 +1,35 @@
 
 
+#include <complex>
 #include <juce_core/juce_core.h>
 
 #include "../cello_object.h"
 
+#if 1
+namespace juce
+{
+template <> struct VariantConverter<std::complex<float>>
+{
+    static std::complex<float> fromVar (const var& v)
+    {
+        if (const auto* array = v.getArray (); array != nullptr && array->size () == 2)
+            return { array->getUnchecked (0), array->getUnchecked (1) };
+        jassertfalse;
+        return {};
+    }
+
+    static var toVar (const std::complex<float>& val)
+    {
+        Array<var> array;
+        array.set (0, val.real ());
+        array.set (1, val.imag ());
+        return { std::move (array) };
+        //        return { 1.f, 1.f };
+    }
+};
+
+} // namespace juce
+#endif
 namespace
 {
 class ObjectWithOperators : public cello::Object
@@ -23,6 +49,21 @@ public:
     MAKE_VALUE_MEMBER (int, intVal, {});
     MAKE_VALUE_MEMBER (float, floatVal, {});
     MAKE_VALUE_MEMBER (juce::String, stringVal, {});
+};
+
+class ObjectWithConvertibleObject : public cello::Object
+{
+public:
+    ObjectWithConvertibleObject ()
+    : cello::Object ("convertible", nullptr)
+    {
+        if (initRequired)
+        {
+            complexVal.init ();
+        }
+    }
+
+    MAKE_VALUE_MEMBER (std::complex<float>, complexVal, {});
 };
 
 } // namespace
@@ -74,6 +115,20 @@ public:
                   expect (o.intVal == 4);
                   expect (4 == o.intVal--);
                   expect (o.intVal == 3);
+              });
+
+        test ("variant conversion",
+              [&] ()
+              {
+                  ObjectWithConvertibleObject o;
+                  std::complex<float> orig { 2.f, 3.f };
+                  o.complexVal = orig;
+
+                  std::complex<float> retrieved { o.complexVal };
+                  expectWithinAbsoluteError<float> (orig.real (), retrieved.real (),
+                                                    0.001f);
+                  expectWithinAbsoluteError<float> (orig.imag (), retrieved.imag (),
+                                                    0.001f);
               });
     }
 

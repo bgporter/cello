@@ -50,6 +50,9 @@ public:
     , object { data_ }
     , initVal { init_ }
     {
+        // if the object doesn't have this value yet, add it and set it
+        // to the initial value.
+        init ();
     }
     /**
      * @brief Assign a new value, setting it in the underlying tree and
@@ -106,7 +109,11 @@ public:
      * @brief reset to our initialized state. Object ctors will use this
      * when they need to initialize their object tree for the first time.
      */
-    void init () { set (initVal); }
+    void init ()
+    {
+        if (!object.hasattr (id))
+            object.setattr (id, initVal);
+    }
 
     /**
      * @brief We define the signature of a 'validator' function that
@@ -146,18 +153,19 @@ private:
         // check if this call should change the current value.
         // TODO: Replace this with a call that handles floating point values
         // responsibly.
-        if (val != *this)
+        if (val != static_cast<T> (*this))
         {
             // check if this value or our parent object have a listener to exclude
             // from updates.
             auto* excluded = (excludedListener != nullptr)
                                  ? excludedListener
                                  : object.getExcludedListener ();
+            const auto asVar { juce::VariantConverter<T>::toVar (val) };
             if (excluded)
-                tree.setPropertyExcludingListener (excluded, id, val,
+                tree.setPropertyExcludingListener (excluded, id, asVar,
                                                    object.getUndoManager ());
             else
-                tree.setProperty (id, val, object.getUndoManager ());
+                tree.setProperty (id, asVar, object.getUndoManager ());
         }
         else
         {
@@ -172,7 +180,7 @@ private:
     T doGet () const
     {
         juce::ValueTree tree { object };
-        return tree.getProperty (id);
+        return juce::VariantConverter<T>::fromVar (tree.getProperty (id));
     }
 
 private:
