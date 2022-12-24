@@ -45,15 +45,16 @@ public:
      * @param id_ Identifier of the data
      * @param init_ default initialized state for this value.
      */
-    Value (Object& data_, const juce::Identifier& id_, T init_ = {})
+    Value (Object& data_, const juce::Identifier& id_, T initVal = {})
     : ValueBase { id_ }
     , object { data_ }
-    , initVal { init_ }
     {
         // if the object doesn't have this value yet, add it and set it
         // to the initial value.
-        init ();
+        if (!object.hasattr (id))
+            object.setattr (id, initVal);
     }
+
     /**
      * @brief Assign a new value, setting it in the underlying tree and
      * perhaps notifying listeners.
@@ -104,16 +105,6 @@ public:
      * @param forceUpdate_
      */
     void forceUpdate (bool forceUpdate_) { doForceUpdate = forceUpdate_; }
-
-    /**
-     * @brief reset to our initialized state. Object ctors will use this
-     * when they need to initialize their object tree for the first time.
-     */
-    void init ()
-    {
-        if (!object.hasattr (id))
-            object.setattr (id, initVal);
-    }
 
     /**
      * @brief We define the signature of a 'validator' function that
@@ -186,10 +177,10 @@ private:
 private:
     /// cello::Object containing the tree for this property.
     Object& object;
-    /// initial value.
-    T initVal;
+
     /// always send updates on set() even if value doesn't change?
     bool doForceUpdate { false };
+
     /// pointer to a listener to exclude from property change callbacks.
     juce::ValueTree::Listener* excludedListener { nullptr };
 };
