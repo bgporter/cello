@@ -246,6 +246,45 @@ void Object::valueTreePropertyChanged (juce::ValueTree& treeWhosePropertyHasChan
     }
 }
 
+void Object::valueTreeChildAdded (juce::ValueTree& parentTree, juce::ValueTree& childTree)
+{
+    if (parentTree == data && onChildAdded != nullptr)
+    {
+        onChildAdded (childTree, -1, data.indexOf (childTree));
+    }
+}
+
+void Object::valueTreeChildRemoved (juce::ValueTree& parentTree,
+                                    juce::ValueTree& childTree, int index)
+{
+    if (parentTree == data && onChildRemoved != nullptr)
+    {
+        onChildRemoved (childTree, index, -1);
+    }
+}
+
+void Object::valueTreeChildOrderChanged (juce::ValueTree& parentTree, int oldIndex,
+                                         int newIndex)
+{
+    if (parentTree == data && onChildMoved != nullptr)
+    {
+        auto childTree { data.getChild (newIndex) };
+        onChildMoved (childTree, oldIndex, newIndex);
+    }
+}
+
+void Object::valueTreeParentChanged (juce::ValueTree& tree)
+{
+    if (tree == data && onParentChanged != nullptr)
+        onParentChanged ();
+}
+
+void Object::valueTreeRedirected (juce::ValueTree& tree)
+{
+    if (tree == data && onTreeRedirected != nullptr)
+        onTreeRedirected ();
+}
+
 } // namespace cello
 
 #if RUN_UNIT_TESTS

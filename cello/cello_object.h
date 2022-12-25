@@ -261,6 +261,12 @@ public:
      */
     bool shouldForceUpdates () const { return doForceUpdates; }
 
+    /**
+     * @name Callbacks
+     *
+     */
+    ///@{
+
     using PropertyUpdateFn = std::function<void (juce::Identifier)>;
     /**
      * @brief Install (or clear) a function to be called when one of this Object's
@@ -281,6 +287,20 @@ public:
      * @param callback
      */
     void onPropertyChange (const ValueBase& val, PropertyUpdateFn callback);
+
+    using ChildUpdateFn =
+        std::function<void (juce::ValueTree& child, int oldIndex, int newIndex)>;
+
+    ChildUpdateFn onChildAdded;
+    ChildUpdateFn onChildRemoved;
+    ChildUpdateFn onChildMoved;
+
+    using SelfUpdateFn = std::function<void (void)>;
+
+    SelfUpdateFn onParentChanged;
+    SelfUpdateFn onTreeRedirected;
+
+    ///@}
 
     /**
      * @name Pythonesque access
@@ -349,23 +369,47 @@ private:
                                    const juce::Identifier& property) override;
 
     /**
-     * @brief TODO: implement this!
+     * @brief Will execute the callback `onChildAdded` if it exists.
      *
      * @param parentTree
      * @param childTree
      */
     void valueTreeChildAdded (juce::ValueTree& parentTree,
-                              juce::ValueTree& childTree) override {};
+                              juce::ValueTree& childTree) override;
 
     /**
-     * @brief TODO: implement this!
+     * @brief Will execute the callback `onChildRemoved` if it exists.
      *
      * @param parentTree
      * @param childTree
      * @param index
      */
     void valueTreeChildRemoved (juce::ValueTree& parentTree, juce::ValueTree& childTree,
-                                int index) override {};
+                                int index) override;
+
+    /**
+     * @brief will execute the callback `onChildMoved` if it exists.
+     *
+     * @param parentTree
+     * @param oldIndex
+     * @param newIndex
+     */
+    void valueTreeChildOrderChanged (juce::ValueTree& childTree, int oldIndex,
+                                     int newIndex) override;
+
+    /**
+     * @brief Will execute the `onParentChanged` callback if it exists.
+     *
+     * @param tree
+     */
+    void valueTreeParentChanged (juce::ValueTree& tree) override;
+
+    /**
+     * @brief will execute the `onRedirected` callback if it exists.
+     *
+     * @param tree
+     */
+    void valueTreeRedirected (juce::ValueTree& tree) override;
 
 protected:
     ///  The tree where our data lives.
