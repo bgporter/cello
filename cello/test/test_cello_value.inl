@@ -24,7 +24,6 @@ template <> struct VariantConverter<std::complex<float>>
         array.set (0, val.real ());
         array.set (1, val.imag ());
         return { std::move (array) };
-        //        return { 1.f, 1.f };
     }
 };
 

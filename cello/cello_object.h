@@ -71,6 +71,19 @@ public:
     Object& operator= (const Object& rhs);
 
     /**
+     * @brief test for true equivalence: does this object point to the same
+     * underlying tree as the tree on the right hand side? Note that because
+     * cello::Object has `operator juce::ValueTree`, you can pass a reference
+     * to Object as the rhs and it will work correctly.
+     *
+     * @param rhs
+     * @return true if the same tree is on both sides.
+     */
+    bool operator== (const juce::ValueTree& rhs) const noexcept { return data == rhs; }
+
+    bool operator!= (const juce::ValueTree& rhs) const noexcept { return data != rhs; }
+
+    /**
      * @brief Get the type of this object.
      *
      * @return juce::Identifier

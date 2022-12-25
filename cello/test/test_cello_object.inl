@@ -136,6 +136,21 @@ public:
                   expect (ov.getValue () == -400);
               });
 
+        test ("op=/!=",
+              [&] ()
+              {
+                  OneValue ov1_1 (100);
+                  OneValue ov1_2 (ov1_1);
+
+                  OneValue ov2_1 (200);
+                  OneValue ov2_2 (ov2_1);
+
+                  expect (ov1_1 == ov1_2);
+                  expect (ov1_2 == ov1_1);
+                  expect (ov1_1 != ov2_1);
+                  expect (ov1_2 != ov2_2);
+              });
+
         test ("copy ctor",
               [&] ()
               {
