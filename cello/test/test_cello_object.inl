@@ -239,6 +239,9 @@ public:
                   pt.onPropertyChange (pt.y, callback);
                   pt.x = 100;
                   expect (count == 1);
+                  // don't trigger callback if we don't change value
+                  pt.x = 100;
+                  expect (count == 1);
                   pt.y = -50;
                   expect (count == 2);
               });

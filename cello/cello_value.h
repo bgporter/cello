@@ -18,6 +18,13 @@ public:
     juce::Identifier getId () const { return id; }
 
 protected:
+    /**
+     * @brief ctor is protected -- you can't create an object of type
+     * `ValueBase` directly, this only exists so we have a common base type that's
+     * shared by all the templated Value<T> classes.
+     *
+     * @param id_ type identifier of this value.
+     */
     ValueBase (const juce::Identifier& id_)
     : id { id_ }
     {
@@ -33,7 +40,7 @@ protected:
  * a value from a ValueTree. Designed to make working with VT values more
  * like working with regular class/struct members.
  *
- * @tparam T
+ * @tparam T Data type handled by this Value.
  */
 template <typename T> class Value : public ValueBase
 {
@@ -142,9 +149,7 @@ private:
         juce::ValueTree tree { object };
 
         // check if this call should change the current value.
-        // TODO: Replace this with a call that handles floating point values
-        // responsibly.
-        if (val != static_cast<T> (*this))
+        if (notEqualTo (val))
         {
             // check if this value or our parent object have a listener to exclude
             // from updates.
@@ -173,6 +178,26 @@ private:
         juce::ValueTree tree { object };
         return juce::VariantConverter<T>::fromVar (tree.getProperty (id));
     }
+
+    /**
+     * @brief Compare some value to our current value; for floating point types, we
+     * check against an epsilon value (that is static for all cello::Value objects)
+     *
+     * @param newValue
+     * @return true if the two values are sufficiently unequal.
+     */
+    bool notEqualTo (T newValue)
+    {
+        if constexpr (std::is_floating_point_v<T>)
+            return std::fabs (newValue - doGet ()) > epsilon;
+        else
+            return (newValue != doGet ());
+    }
+
+public:
+    /// when setting, delta must be larger than this to cause a property
+    /// change callback.
+    static inline float epsilon { 0.001f };
 
 private:
     /// cello::Object containing the tree for this property.
