@@ -14,7 +14,7 @@ BEGIN_JUCE_MODULE_DECLARATION
  description:      Classes for working with JUCE Value Trees
  website:          https://github.com/bgporter/cello
  license:          MIT
- minimumCppStandard: 14
+ minimumCppStandard: 17
 
  dependencies:     juce_core, juce_data_structures
 END_JUCE_MODULE_DECLARATION
