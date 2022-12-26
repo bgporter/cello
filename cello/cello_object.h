@@ -13,6 +13,19 @@ class ValueBase;
 class Object : public juce::ValueTree::Listener
 {
 public:
+    enum class FileFormat
+    {
+        xml,    // load/store as XML text.
+        binary, // load/store in juce's binary format.
+        zipped  // GZIPped juce binary.
+    };
+
+    enum class CreationType
+    {
+        initialized, // this object was default initialized when created.
+        wrapped      // this object wrapped an existing tree.
+    };
+
     /**
      * @brief Construct a new cello::Object object, which will attempt to
      * initialize from the 'state' parameter. If 'state' contains a ValueTree of the
@@ -44,6 +57,18 @@ public:
      * @param tree
      */
     Object (juce::Identifier type, juce::ValueTree tree);
+
+    /**
+     * @brief Construct a new Object by attempting to load it from a file on disk.
+     * You can test whether this succeeded by checking the return value of
+     * `getCreationType()` -- if its value is `CreationType::initialized`, the load
+     * from disk failed, and this instance was default-initialized.
+     *
+     * @param type
+     * @param file
+     * @param format
+     */
+    Object (juce::Identifier type, juce::File file, FileFormat format = FileFormat::xml);
 
     /**
      * @brief Destroy the Object object
@@ -89,6 +114,8 @@ public:
      * @return juce::Identifier
      */
     juce::Identifier getType () const { return data.getType (); }
+
+    CreationType getCreationType () const { return creationType; }
 
     /**
      * @brief Get the ValueTree we're using as our data store.
@@ -351,6 +378,32 @@ public:
     void delattr (const juce::Identifier& attr);
 
     ///@}
+
+    /**
+     * @name File operations
+     * @brief save/load objects to/from disk.
+     */
+    ///@{
+
+    /**
+     * @brief Reload data from disk.
+     *
+     * @param file
+     * @param format
+     * @return true if we loaded the object tree successfully.
+     */
+    static juce::ValueTree load (juce::File file, FileFormat format = FileFormat::xml);
+
+    /**
+     * @brief Save the object tree to disk.
+     *
+     * @param file
+     * @param format
+     * @return true if saved successfully
+     */
+    bool save (juce::File file, FileFormat format = FileFormat::xml) const;
+
+    ///@}
 private:
     /**
      * @brief Handle property changes in this tree by calling a registered
@@ -416,8 +469,9 @@ protected:
     juce::ValueTree data;
     /// The undo manager to use for set() operations.
     juce::UndoManager* undoManager { nullptr };
-    /// True if we are creating a new tree (as opposed to wrapping an existing one).
-    bool initRequired { false };
+
+    CreationType creationType { CreationType::wrapped };
+
     /// a listener to *not* update when properties change.
     juce::ValueTree::Listener* excludedListener { nullptr };
     /// should we send property change notifications even if a property doesn't

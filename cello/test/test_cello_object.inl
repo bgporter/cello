@@ -112,6 +112,7 @@ public:
               {
                   // create an empty tree.
                   auto o1 { Object ("root", nullptr) };
+                  expect (o1.getCreationType () == Object::CreationType::initialized);
                   juce::ValueTree root { o1 };
                   expect (root.isValid ());
                   expect (root.hasType ("root"));
@@ -123,6 +124,7 @@ public:
 
                   // get that child in a separate object.
                   auto o2Copy { Object ("child1", &o1) };
+                  expect (o2Copy.getCreationType () == Object::CreationType::wrapped);
                   juce::ValueTree childCopy { o2Copy };
                   expect (childTree == childCopy);
               });
@@ -411,6 +413,36 @@ public:
                       Vec2 pt { "point", child };
                       expectWithinAbsoluteError<float> (pt.x, i, 0.001f);
                       expectWithinAbsoluteError<float> (pt.y, i * 2, 0.001f);
+                  }
+              });
+
+        test ("save/load XML",
+              [&] ()
+              {
+                  for (auto format : { cello::Object::FileFormat::xml,
+                                       cello::Object::FileFormat::binary,
+                                       cello::Object::FileFormat::zipped })
+                  {
+                      cello::Object root ("root", nullptr);
+                      Vec2 pt1 ("pt1", &root);
+                      pt1.x = 5;
+                      pt1.y = 10;
+                      Vec2 pt2 ("pt2", &root);
+                      pt1.x = 6;
+                      pt1.y = 11;
+                      Vec2 pt3 ("pt3", &root);
+                      pt1.x = 7;
+                      pt1.y = 12;
+
+                      const juce::String fileName { "./testFile" };
+                      expect (root.save (fileName, format));
+
+                      cello::Object recoveredRoot ("root", fileName, format);
+                      juce::ValueTree rootTree { root };
+                      juce::ValueTree recoveredRootTree { recoveredRoot };
+                      expect (rootTree.isEquivalentTo (recoveredRootTree));
+                      juce::File f { fileName };
+                      expect (f.deleteFile ());
                   }
               });
     }

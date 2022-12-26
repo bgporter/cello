@@ -36,11 +36,9 @@ Object::Object (juce::Identifier type, juce::ValueTree tree)
             {
                 // case 3: the state tree doesn't have a tree for our data type
                 // yet. Create an empty tree of the correct type, mark ourselves
-                // as needing to be initialized, and add the empty tree to the state
-                // tree. Derived classes will need to track this `initRequired` flag in
-                // their ctors and respond appropriately.
+                // as having been default-initialized.
                 data         = juce::ValueTree (type);
-                initRequired = true;
+                creationType = CreationType::initialized;
                 tree.appendChild (data, getUndoManager ());
             }
         }
@@ -50,17 +48,20 @@ Object::Object (juce::Identifier type, juce::ValueTree tree)
         // case 4: There's no state, just create an empty tree of the correct
         // type and mark ourselves as needing to be initialized.
         data         = juce::ValueTree (type);
-        initRequired = true;
+        creationType = CreationType::initialized;
     }
     // register to receive callbacks when the tree changes.
     data.addListener (this);
 }
 
+Object::Object (juce::Identifier type, juce::File file, Object::FileFormat format)
+: Object { type, Object::load (file, format) }
+{
+}
+
 Object::Object (const Object& rhs)
 : data { rhs.data }
-
 , undoManager { rhs.undoManager }
-, initRequired { false }
 {
     // register to receive callbacks when the tree changes.
     data.addListener (this);
@@ -115,7 +116,7 @@ bool Object::redo ()
 void Object::clearUndoHistory ()
 {
     if (auto* undoMgr = getUndoManager ())
-        return undoMgr->clearUndoHistory ();
+        undoMgr->clearUndoHistory ();
 }
 
 int Object::getNumChildren () const
@@ -138,6 +139,12 @@ void Object::append (Object* object)
 
 void Object::insert (Object* object, int index)
 {
+    if (object == this)
+    {
+        // can't add an object to itself!
+        jassertfalse;
+        return;
+    }
     // a value tree can only have 1 parent -- if the new object has a parent,
     // remove it there first.
     juce::ValueTree newChild { *object };
@@ -151,12 +158,18 @@ void Object::insert (Object* object, int index)
         parent.removeChild (newChild, getUndoManager ());
     }
     data.addChild (*object, index, getUndoManager ());
+    // make sure that the new child is using this object's undo manager.
+    object->setUndoManager (getUndoManager ());
 }
 
 Object* Object::remove (Object* object)
 {
+    if (object == this)
+    {
+        jassertfalse;
+        return nullptr;
+    }
     auto removedTree { remove (data.indexOf (*object)) };
-
     return removedTree.isValid () ? object : nullptr;
 }
 
@@ -223,6 +236,68 @@ void Object::delattr (const juce::Identifier& attr)
     data.removeProperty (attr, getUndoManager ());
 }
 
+juce::ValueTree Object::load (juce::File file, FileFormat format)
+{
+    // first, try to get the raw value tree re-loaded from disk.
+    juce::ValueTree data;
+    if (format == Object::FileFormat::xml)
+    {
+        const auto xmlText { file.loadFileAsString () };
+        data = juce::ValueTree::fromXml (xmlText);
+    }
+    else
+    {
+        // one of the binary formats
+        juce::MemoryBlock mb;
+        if (!file.loadFileAsData (mb))
+        {
+            jassertfalse;
+            return {};
+        }
+        if (format == Object::FileFormat::binary)
+            data = juce::ValueTree::readFromData (mb.getData (), mb.getSize ());
+        else if (format == Object::FileFormat::zipped)
+            data = juce::ValueTree::readFromGZIPData (mb.getData (), mb.getSize ());
+        else
+        {
+            // unknown format
+            jassertfalse;
+            return {};
+        }
+    }
+    return data;
+}
+
+bool Object::save (juce::File file, FileFormat format) const
+{
+    if (format == FileFormat::xml)
+        return file.replaceWithText (data.toXmlString ());
+    else
+    {
+        juce::FileOutputStream fos { file };
+        if (!fos.openedOk ())
+        {
+            jassertfalse;
+            return false;
+        }
+        if (format == FileFormat::binary)
+            data.writeToStream (fos);
+
+        else if (format == FileFormat::zipped)
+        {
+            juce::GZIPCompressorOutputStream zipper { fos };
+            data.writeToStream (zipper);
+        }
+        else
+        {
+            // unknown format
+            jassertfalse;
+            return false;
+        }
+    }
+    return true;
+}
+
 void Object::valueTreePropertyChanged (juce::ValueTree& treeWhosePropertyHasChanged,
                                        const juce::Identifier& property)
 {
@@ -249,18 +324,14 @@ void Object::valueTreePropertyChanged (juce::ValueTree& treeWhosePropertyHasChan
 void Object::valueTreeChildAdded (juce::ValueTree& parentTree, juce::ValueTree& childTree)
 {
     if (parentTree == data && onChildAdded != nullptr)
-    {
         onChildAdded (childTree, -1, data.indexOf (childTree));
-    }
 }
 
 void Object::valueTreeChildRemoved (juce::ValueTree& parentTree,
                                     juce::ValueTree& childTree, int index)
 {
     if (parentTree == data && onChildRemoved != nullptr)
-    {
         onChildRemoved (childTree, index, -1);
-    }
 }
 
 void Object::valueTreeChildOrderChanged (juce::ValueTree& parentTree, int oldIndex,
