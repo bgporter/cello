@@ -275,8 +275,15 @@ public:
                   ov.setValueForceUpdate (false);
                   ov.setValue (3);
                   expect (count == 4);
-                  // TODO: Add a test for only enabling a single value's updates
-                  // in an object with multiple values.
+
+                  // test scoped force updates.
+                  {
+                      ScopedForceUpdater sfu (ov);
+                      ov.setValue (3);
+                      expect (count == 5);
+                  }
+                  ov.setValue (3);
+                  expect (count == 5);
               });
         skipTest ("exclude listeners",
                   [&] ()
