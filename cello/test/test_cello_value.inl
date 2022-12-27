@@ -1,13 +1,20 @@
-
+//
+// Copyright (c) 2022 Brett g Porter. All Rights Reserved.
+//
 
 #include <complex>
 #include <juce_core/juce_core.h>
 
 #include "../cello_object.h"
 
-#if 1
 namespace juce
 {
+/**
+ * @brief A variant converter template specializations for std::complex<float>
+ * & juce::var.
+ * VariantConverter structs need to be in the juce namespace for
+ * them to work properly.
+ */
 template <> struct VariantConverter<std::complex<float>>
 {
     static std::complex<float> fromVar (const var& v)
@@ -28,7 +35,7 @@ template <> struct VariantConverter<std::complex<float>>
 };
 
 } // namespace juce
-#endif
+
 namespace
 {
 class ObjectWithOperators : public cello::Object
@@ -39,6 +46,7 @@ public:
     {
     }
 
+    // members public so we can verify arithmetic operators
     MAKE_VALUE_MEMBER (int, intVal, {});
     MAKE_VALUE_MEMBER (float, floatVal, {});
     MAKE_VALUE_MEMBER (juce::String, stringVal, {});
@@ -51,7 +59,7 @@ public:
     : cello::Object ("convertible", nullptr)
     {
     }
-
+    // verify the automatic use of variant converters.
     MAKE_VALUE_MEMBER (std::complex<float>, complexVal, {});
 };
 

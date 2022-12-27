@@ -1,4 +1,6 @@
-
+//
+// Copyright (c) 2022 Brett g Porter. All Rights Reserved.
+//
 
 #include <juce_core/juce_core.h>
 
@@ -259,10 +261,10 @@ public:
                   expect (count == 1);
                   ov.setValue (2);
                   expect (count == 1);
-                  ov.forceUpdates (true);
+                  ov.forceUpdate (true);
                   ov.setValue (2);
                   expect (count == 2);
-                  ov.forceUpdates (false);
+                  ov.forceUpdate (false);
                   ov.setValue (2);
                   expect (count == 2);
                   ov.setValue (3);
@@ -398,11 +400,25 @@ public:
                   cello::Object list { "objectList", nullptr };
                   expectEquals (list.getNumChildren (), 0);
 
+                  int newChildIndex { -1 };
+                  int oldChildIndex { -1 };
+
+                  Object::ChildUpdateFn callback =
+                      [&] (juce::ValueTree&, int oldIndex, int newIndex)
+                  {
+                      oldChildIndex = oldIndex;
+                      newChildIndex = newIndex;
+                  };
+
+                  list.onChildAdded = callback;
+
                   // create some objects and add them as children
                   for (int i { 0 }; i < 10; ++i)
                   {
                       Vec2 point { "point", (float) i, (float) i * 2 };
                       list.append (&point);
+                      expectEquals (newChildIndex, i);
+                      expectEquals (oldChildIndex, -1);
                   }
                   expectEquals (list.getNumChildren (), 10);
                   // check the values
@@ -414,11 +430,31 @@ public:
                       expectWithinAbsoluteError<float> (pt.x, i, 0.001f);
                       expectWithinAbsoluteError<float> (pt.y, i * 2, 0.001f);
                   }
+
+                  // move around
+                  list.onChildMoved = callback;
+                  list.move (0, 9);
+                  expectEquals (newChildIndex, 9);
+                  expectEquals (oldChildIndex, 0);
+                  list.move (1, 0);
+                  expectEquals (newChildIndex, 0);
+                  expectEquals (oldChildIndex, 1);
+
+                  // delete
+                  list.onChildRemoved = callback;
+                  list.remove (9);
+                  expectEquals (oldChildIndex, 9);
+                  expectEquals (newChildIndex, -1);
+                  list.remove (4);
+                  expectEquals (oldChildIndex, 4);
+                  expectEquals (newChildIndex, -1);
               });
 
         test ("save/load XML",
               [&] ()
               {
+                  // loop through the formats that we support and verify
+                  // store / re-load behavior
                   for (auto format : { cello::Object::FileFormat::xml,
                                        cello::Object::FileFormat::binary,
                                        cello::Object::FileFormat::zipped })
@@ -444,6 +480,48 @@ public:
                       juce::File f { fileName };
                       expect (f.deleteFile ());
                   }
+              });
+
+        test ("set/get attr",
+              [&] ()
+              {
+                  cello::Object root ("root", nullptr);
+                  root.setattr ("intVal", 11);
+                  expectEquals (root.getattr<int> ("intVal", 0), 11);
+                  // chain set operations together -- we can use CTAD, so there's
+                  // no need to be explicit here about the template type.
+                  root.setattr ("floatVal", 45.7f)
+                      .setattr ("stringVal", juce::String ("this is a string"))
+                      .setattr ("anotherInt", 10101);
+                  expect (root.hasattr ("anotherInt"));
+                  expectEquals (root.getattr<int> ("anotherInt", {}), 10101);
+                  root.delattr ("anotherInt");
+                  expect (!root.hasattr ("anotherInt"));
+                  expect (!root.hasattr ("nonexistent"));
+                  expectEquals (root.getattr<int> ("nonexistent", {}), 0);
+              });
+
+        test ("parentage change",
+              [&] ()
+              {
+                  cello::Object parent ("root", nullptr);
+                  bool childAdded { false };
+                  parent.onChildAdded = [&] (juce::ValueTree&, int, int)
+                  { childAdded = true; };
+
+                  cello::Object child ("c1", nullptr);
+                  bool parentChanged { false };
+                  child.onParentChanged = [&] () { parentChanged = true; };
+
+                  parent.append (&child);
+                  expect (parentChanged);
+                  expect (childAdded);
+
+                  // make sure the parent really has it -- instantiate another
+                  // Object from the child tree and verify how it was created.
+                  cello::Object child2 ("c1", &parent);
+                  expect (child2.getCreationType () ==
+                          cello::Object::CreationType::wrapped);
               });
     }
 

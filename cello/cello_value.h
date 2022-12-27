@@ -4,12 +4,14 @@
 
 #pragma once
 
+#include "cello_update_source.h"
+
 namespace cello
 {
 
 class Object;
 
-class ValueBase
+class ValueBase : public UpdateSource
 {
 public:
     /**
@@ -40,6 +42,10 @@ protected:
  * a value from a ValueTree. Designed to make working with VT values more
  * like working with regular class/struct members.
  *
+ * Data types to be stored as Values must:
+ * - have an `operator !=`
+ * - define a `juce::VariantConverter` structure to round-trip through a `juce::var`
+ *
  * @tparam T Data type handled by this Value.
  */
 template <typename T> class Value : public ValueBase
@@ -48,16 +54,18 @@ public:
     /**
      * @brief Construct a new Value object
      *
-     * @param data_ The cello::Object that owns this Value
-     * @param id_ Identifier of the data
-     * @param init_ default initialized state for this value.
+     * @param data The cello::Object that owns this Value
+     * @param id Identifier of the data
+     * @param initVal default initialized state for this value.
      */
-    Value (Object& data_, const juce::Identifier& id_, T initVal = {})
-    : ValueBase { id_ }
-    , object { data_ }
+    Value (Object& data, const juce::Identifier& id, T initVal = {})
+    : ValueBase { id }
+    , object { data }
     {
         // if the object doesn't have this value yet, add it and set it
-        // to the initial value.
+        // to the initial value. This will happen as part of initializing a
+        // new Object, but may also happen if new values are added to an existing
+        // type.
         if (!object.hasattr (id))
             object.setattr (id, initVal);
     }
@@ -68,9 +76,7 @@ public:
      *
      * @param val
      * @return Value& reference to this value so you could e.g. do
-     * ```
-     * this.x = this.y = 42;
-     * ```
+     * `this.x = this.y = 42;`
      */
     Value& operator= (const T& val)
     {
@@ -104,14 +110,6 @@ public:
             return onGet (doGet ());
         return doGet ();
     }
-
-    /**
-     * @brief control whether setting this value should cause listeners to
-     * be notified even when the value hasn't been changed.
-     *
-     * @param forceUpdate_
-     */
-    void forceUpdate (bool forceUpdate_) { doForceUpdate = forceUpdate_; }
 
     /**
      * @brief We define the signature of a 'validator' function that
@@ -167,7 +165,7 @@ private:
         {
             // check if we or our parent object want us to always send
             // a property change callback for this value.
-            const auto forceUpdate = doForceUpdate || object.shouldForceUpdates ();
+            const auto forceUpdate = shouldForceUpdate () || object.shouldForceUpdate ();
             if (forceUpdate)
                 tree.sendPropertyChangeMessage (id);
         }
@@ -202,9 +200,6 @@ public:
 private:
     /// cello::Object containing the tree for this property.
     Object& object;
-
-    /// always send updates on set() even if value doesn't change?
-    bool doForceUpdate { false };
 
     /// pointer to a listener to exclude from property change callbacks.
     juce::ValueTree::Listener* excludedListener { nullptr };
@@ -268,7 +263,8 @@ T operator++ (Value<T>& val)
  * @brief post-increment; note that the semantics of this don't follow 'real'
  * C++ usage -- because this type relies on an underlying ValueTree object to
  * provide the actual data storage, the idea of 'returning a copy of this object
- * in its original state' doesn't work.
+ * in its original state' doesn't work. Instead, we return an instance of the
+ * `T` data type itself.
  *
  * @tparam T
  * @tparam std::enable_if<std::is_arithmetic<T>::value, T>::type

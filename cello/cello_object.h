@@ -6,11 +6,14 @@
 
 #include <juce_core/juce_core.h>
 #include <juce_data_structures/juce_data_structures.h>
+
+#include "cello_update_source.h"
 namespace cello
 {
 class ValueBase;
 
-class Object : public juce::ValueTree::Listener
+class Object : public UpdateSource,
+               public juce::ValueTree::Listener
 {
 public:
     enum class FileFormat
@@ -115,6 +118,17 @@ public:
      */
     juce::Identifier getType () const { return data.getType (); }
 
+    /**
+     * @brief Determine how this object was created, which will be one of:
+     * * CreationType::initialized -- All values were default-initialized
+     * * CreationType::wrapped -- this object refers to a value tree that already
+     *   existed
+     *
+     * It might be an error in your application to expect one or the other
+     * and not find it at runtime.
+     *
+     * @return CreationType
+     */
     CreationType getCreationType () const { return creationType; }
 
     /**
@@ -272,25 +286,7 @@ public:
     juce::ValueTree::Listener* getExcludedListener () const { return excludedListener; }
 
     /**
-     * @brief If passed true, any call that sets any Value property on this
-     * Object will result in a property change update callback being executed.
-     * Default (false) behavior only performs this callback when the underlying
-     * value is changed.
-     *
-     * This may also be controlled on a per-Value basis as well.
-     *
-     * @param shouldForceUpdates
-     */
-    void forceUpdates (bool shouldForceUpdates) { doForceUpdates = shouldForceUpdates; }
-
-    /**
-     * @return true if this Object should always issue property changed callbacks.
-     */
-    bool shouldForceUpdates () const { return doForceUpdates; }
-
-    /**
      * @name Callbacks
-     *
      */
     ///@{
 
@@ -332,12 +328,12 @@ public:
     /**
      * @name Pythonesque access
      *
-     * We use names borrowed from Python for this set of functions to
-     * make them stand out. When using these, the Object becomes more
-     * dynamically typed; the type-safety provided by working through
-     * the cello::Value class is bypassed, and you can add/remove
-     * attributes/properties and change their types from the object
-     * at runtime as is useful for you.
+     * We use names (ending in `-attr`) borrowed from Python for this
+     * set of functions to make them stand out. When using these, the
+     * Object becomes more dynamically typed; the type-safety provided
+     * by working through * the cello::Value class is bypassed, and you
+     * can add/remove attributes/properties and change their types from
+     * the object at runtime as is useful for you.
      */
     ///@{
 
@@ -364,6 +360,8 @@ public:
 
     /**
      * @brief Set a new value for the specified attribute/property.
+     * We return a reference to this object so that setattr calls
+     * may be chained.
      * @tparam T
      * @param attr
      * @param attrVal
@@ -386,11 +384,12 @@ public:
     ///@{
 
     /**
-     * @brief Reload data from disk.
+     * @brief Reload data from disk. Used in the ctor that accepts file name and
+     * format.
      *
      * @param file
-     * @param format
-     * @return true if we loaded the object tree successfully.
+     * @param format one of (xml, binary, zipped)
+     * @return ValueTree, invalid if the attempt to load failed.
      */
     static juce::ValueTree load (juce::File file, FileFormat format = FileFormat::xml);
 
@@ -398,7 +397,7 @@ public:
      * @brief Save the object tree to disk.
      *
      * @param file
-     * @param format
+     * @param format one of (xml, binary, zipped)
      * @return true if saved successfully
      */
     bool save (juce::File file, FileFormat format = FileFormat::xml) const;
@@ -467,13 +466,16 @@ private:
 protected:
     ///  The tree where our data lives.
     juce::ValueTree data;
+
     /// The undo manager to use for set() operations.
     juce::UndoManager* undoManager { nullptr };
 
+    /// Remember how this Object was created.
     CreationType creationType { CreationType::wrapped };
 
     /// a listener to *not* update when properties change.
     juce::ValueTree::Listener* excludedListener { nullptr };
+
     /// should we send property change notifications even if a property doesn't
     /// change?
     bool doForceUpdates { false };
