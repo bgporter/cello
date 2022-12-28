@@ -43,8 +43,9 @@ protected:
  * like working with regular class/struct members.
  *
  * Data types to be stored as Values must:
- * - have an `operator !=`
- * - define a `juce::VariantConverter` structure to round-trip through a `juce::var`
+ * - have an `operator !=` (so we can execute change callbacks)
+ * - be supported by the `juce::var` type, or define a
+ *   `juce::VariantConverter` structure to round-trip through a `juce::var`
  *
  * @tparam T Data type handled by this Value.
  */

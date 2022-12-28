@@ -33,7 +33,7 @@ private:
 };
 
 /**
- * @class ScopedForceValueUpdater
+ * @class ScopedForceUpdater
  * @brief RAII class to restrict the 'forceUpdate` value to one
  * scope.
  */
