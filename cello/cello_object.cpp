@@ -238,34 +238,27 @@ void Object::delattr (const juce::Identifier& attr)
 
 juce::ValueTree Object::load (juce::File file, FileFormat format)
 {
-    // first, try to get the raw value tree re-loaded from disk.
-    juce::ValueTree data;
     if (format == Object::FileFormat::xml)
     {
         const auto xmlText { file.loadFileAsString () };
-        data = juce::ValueTree::fromXml (xmlText);
+        return juce::ValueTree::fromXml (xmlText);
     }
-    else
+
+    // one of the binary formats
+    juce::MemoryBlock mb;
+    if (!file.loadFileAsData (mb))
     {
-        // one of the binary formats
-        juce::MemoryBlock mb;
-        if (!file.loadFileAsData (mb))
-        {
-            jassertfalse;
-            return {};
-        }
-        if (format == Object::FileFormat::binary)
-            data = juce::ValueTree::readFromData (mb.getData (), mb.getSize ());
-        else if (format == Object::FileFormat::zipped)
-            data = juce::ValueTree::readFromGZIPData (mb.getData (), mb.getSize ());
-        else
-        {
-            // unknown format
-            jassertfalse;
-            return {};
-        }
+        jassertfalse;
+        return {};
     }
-    return data;
+    if (format == Object::FileFormat::binary)
+        return juce::ValueTree::readFromData (mb.getData (), mb.getSize ());
+    else if (format == Object::FileFormat::zipped)
+        return juce::ValueTree::readFromGZIPData (mb.getData (), mb.getSize ());
+
+    // unknown format
+    jassertfalse;
+    return {};
 }
 
 bool Object::save (juce::File file, FileFormat format) const
