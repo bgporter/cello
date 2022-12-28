@@ -265,30 +265,30 @@ bool Object::save (juce::File file, FileFormat format) const
 {
     if (format == FileFormat::xml)
         return file.replaceWithText (data.toXmlString ());
-    else
-    {
-        juce::FileOutputStream fos { file };
-        if (!fos.openedOk ())
-        {
-            jassertfalse;
-            return false;
-        }
-        if (format == FileFormat::binary)
-            data.writeToStream (fos);
 
-        else if (format == FileFormat::zipped)
-        {
-            juce::GZIPCompressorOutputStream zipper { fos };
-            data.writeToStream (zipper);
-        }
-        else
-        {
-            // unknown format
-            jassertfalse;
-            return false;
-        }
+    juce::FileOutputStream fos { file };
+    if (!fos.openedOk ())
+    {
+        jassertfalse;
+        return false;
     }
-    return true;
+
+    if (format == FileFormat::binary)
+    {
+        data.writeToStream (fos);
+        return true;
+    }
+
+    else if (format == FileFormat::zipped)
+    {
+        juce::GZIPCompressorOutputStream zipper { fos };
+        data.writeToStream (zipper);
+        return true;
+    }
+
+    // unknown format
+    jassertfalse;
+    return false;
 }
 
 void Object::valueTreePropertyChanged (juce::ValueTree& treeWhosePropertyHasChanged,
