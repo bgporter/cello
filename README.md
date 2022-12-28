@@ -6,5 +6,13 @@ Classes for working with juce ValueTree objects.
 
 brett@bgporter.net
 
-## Overview
+## Motivation and Overview
 
+t/k
+
+## Values
+
+t/k
+## Objects
+
+t/k
