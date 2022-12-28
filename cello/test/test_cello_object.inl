@@ -495,11 +495,13 @@ public:
                   cello::Object root ("root", nullptr);
                   root.setattr ("intVal", 11);
                   expectEquals (root.getattr<int> ("intVal", 0), 11);
+
                   // chain set operations together -- we can use CTAD, so there's
                   // no need to be explicit here about the template type.
                   root.setattr ("floatVal", 45.7f)
                       .setattr ("stringVal", juce::String ("this is a string"))
                       .setattr ("anotherInt", 10101);
+
                   expect (root.hasattr ("anotherInt"));
                   expectEquals (root.getattr<int> ("anotherInt", {}), 10101);
                   root.delattr ("anotherInt");

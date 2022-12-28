@@ -10,8 +10,8 @@
 namespace juce
 {
 /**
- * @brief A variant converter template specializations for std::complex<float>
- * & juce::var.
+ * @brief A variant converter template specialization for
+ * std::complex<float> <--> & juce::var.
  * VariantConverter structs need to be in the juce namespace for
  * them to work properly.
  */
