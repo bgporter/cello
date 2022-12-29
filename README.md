@@ -95,6 +95,9 @@ We define a macro in `cello_value.h` that's less cumbersome and less potentially
     cello::Value<type> name { *this, #name, init };
 ```
 
+...so the above declaration would be `MAKE_VALUE_MEMBER (int, x, {});`
+
+
 
 ## Objects
 
