@@ -65,7 +65,7 @@ demoObject.x = 100;
 - can be set to always update their listeners when the value is set, even if the underlying value wasn't changed. 
 - can be given validator functions that will be called when the value is set or retrieved.
 - arithmetic types have all of the in-place operators (`++`, `--`, `+=`, `-=`, `*=`, `/=`) defined.
-- Can be used to access any C++ data type for which a `juce::VariantConverter` struct has been defined. 
+- Can be used to access any C++ value data type for which a `juce::VariantConverter` struct has been defined. 
 
 `cello::Value` objects only make sense as members of a class derived from `cello::Object` (below). The signature of the Value constuctor is:
 
@@ -95,7 +95,16 @@ We define a macro in `cello_value.h` that's less cumbersome and less potentially
     cello::Value<type> name { *this, #name, init };
 ```
 
-...so the above declaration would be `MAKE_VALUE_MEMBER (int, x, {});`
+...so the above declaration would be `MAKE_VALUE_MEMBER (int, x, {});`. Once a `cello::Object` containing this declaration is instantiated, you can manipulate that value almost exactly the same as if it were an actual instance of the underlying type ("almost exactly" here covers edge cases like `sizeof` giving different results, and probably others that I haven't considered yet):
+
+```cpp
+// after each of these lines, any property change callbacks watching 
+// `x` will be called. 
+myObj.x = 20;
+--myObj.x;
+myObj.x *= -3;
+```
+
 
 
 
