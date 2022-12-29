@@ -104,9 +104,13 @@ myObj.x = 20;
 --myObj.x;
 myObj.x *= -3;
 ```
+### `VariantConverter`s
 
+### Validator Functions
 
+### Forcing Update Callbacks
 
+### Excluding Listeners
 
 ## Objects
 
