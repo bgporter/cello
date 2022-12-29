@@ -35,7 +35,7 @@ As frequently happens with me, these thoughts sat collecting dust in a document 
 
 In short, my goal was: create a set of C++ classes that I can derive my own classes from where member variables are stored transparently in JUCE ValueTrees instead of directly in those object instances, combining the comfort and simplicity of working with normal-looking C++ code with the benefits and tradeoffs of ValueTrees. 
 
-Something like:
+Something similar to:
 
 ```cpp
 
@@ -50,7 +50,7 @@ struct CelloDemo : public cello::Object
 CelloDemo demoObject;
 
 // give that object a lambda to call whenever the value of `x` changes. 
-demoObject.onPropertyChange(demoObject.x, [&demoObject]() 
+demoObject.onPropertyChange(demoObject.x, [&demoObject] () 
 { 
     std::cout << "x changed to " << demoObject.x << "\n"; 
 });
@@ -61,8 +61,27 @@ demoObject.x = 100;
 ```
 ## Values
 
+- actually, a proxy to a value. We store a `juce::Identifier` and a reference to a ValueTree that provides the actual storage; storing or retrieving the value through its variable needs to do so through the ValueTree API, but that's all kept out of sight. 
+- can be set to always update their listeners when the value is set, even if the underlying value wasn't changed. 
+- can be given validator functions that will be called when the value is set or retrieved.
+- arithmetic types have all of the in-place operators (`++`, `--`, `+=`, `-=`, `*=`, `/=`) defined.
+- Can be used to access any C++ data type for which a `juce::VariantConverter` struct has been defined. 
 
-- 
+`cello::Value` objects only make sense as members of a class derived from `cello::Object` (below). The signature of the Value constuctor is:
+
+```cpp
+template <typename T>
+Value::Value (Object& object, const juce::Identifier& id, T initVal);
+```
+
+...so at creation time, a value knows:
+1. the Object holding a ValueTree where its storage is located
+2. the identifier of this piece of data in the value tree
+3. how to initialize that data if needed
+4. The data type to use outside of the ValueTree. Because we use the `VariantConverter` facility in JUCE, almost any type of data can be converted to/from the `var` variant type. 
+
+
+
 ## Objects
 
 t/k
