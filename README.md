@@ -106,6 +106,65 @@ myObj.x *= -3;
 ```
 ### `VariantConverter`s
 
+By defining a template specialization of the `juce::VariantConverter` struct, you can store more complex value types by cleverly packing them inside one of the more interesting `var` variants that exist -- in this example from the `cello` unit tests, we use the fact that an `Array` of `var`s is a `var`:
+
+```cpp
+namespace juce
+{
+/**
+ * @brief A variant converter template specialization for
+ * std::complex<float> <--> & juce::var.
+ * VariantConverter structs need to be in the juce namespace for
+ * them to work properly.
+ */
+template <> struct VariantConverter<std::complex<float>>
+{
+    static std::complex<float> fromVar (const var& v)
+    {
+        if (const auto* array = v.getArray (); array != nullptr && array->size () == 2)
+            return { array->getUnchecked (0), array->getUnchecked (1) };
+        jassertfalse;
+        return {};
+    }
+
+    static var toVar (const std::complex<float>& val)
+    {
+        Array<var> array;
+        array.set (0, val.real ());
+        array.set (1, val.imag ());
+        return { std::move (array) };
+    }
+};
+
+} // namespace juce
+```
+
+Then we define a class that has a single public Value member that contains a `std::complex<float>` -- there's no additional work required to perform the conversions:
+
+```cpp
+class ObjectWithConvertibleObject : public cello::Object
+{
+public:
+    ObjectWithConvertibleObject ()
+    : cello::Object ("convertible", nullptr)
+    {
+    }
+    // verify the automatic use of variant converters.
+    MAKE_VALUE_MEMBER (std::complex<float>, complexVal, {});
+};
+```
+
+Your code is then free to work with that value directly: 
+
+```cpp
+ObjectWithConvertibleObject o;
+std::complex<float> orig { 2.f, 3.f };
+o.complexVal = orig;
+
+std::complex<float> retrieved { o.complexVal };
+expectWithinAbsoluteError<float> (orig.real (), retrieved.real (), 0.001f);
+expectWithinAbsoluteError<float> (orig.imag (), retrieved.imag (), 0.001f);
+```
 ### Validator Functions
 
 ### Forcing Update Callbacks
@@ -135,3 +194,4 @@ myObj.x *= -3;
 
 ### Persistence
 
+## Achnowledgements
