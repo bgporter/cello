@@ -86,7 +86,7 @@ So, declaring an instance of this type templated on `int` as a member of a `cell
 cello::Value<int> x { *this, "x", {} };
 ```
 
--- we pass a reference to the owning object, the ID to use, and its default initial value. By convention, we use the same name for the member variable as for its Identifier in the ValueTree. 
+We pass a reference to the owning object, the ID to use, and its default initial value. By convention, we use the same name for the member variable as for its Identifier in the ValueTree. 
 
 We define a macro in `cello_value.h` that's less cumbersome and less potentially error-prone to do the same thing: 
 
@@ -101,4 +101,24 @@ We define a macro in `cello_value.h` that's less cumbersome and less potentially
 
 ## Objects
 
-t/k
+### Creation Patterns: Creating vs Wrapping
+
+### Undo/Redo
+
+### Working with Children
+
+### Change Callbacks
+
+#### `onPropertyChange`
+
+#### `onChildAdded`
+#### `onChildRemoved`
+#### `onChildMoved`
+
+#### `onParentChanged`
+#### `onTreeRedirected`
+
+### "Pythonesque" access
+
+### Persistence
+
