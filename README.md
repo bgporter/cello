@@ -167,9 +167,22 @@ expectWithinAbsoluteError<float> (orig.imag (), retrieved.imag (), 0.001f);
 ```
 ### Validator Functions
 
+If we're taking some inspiration from Python here, it's worth remembering that Python developers are in the practice of leaving all their class member variables public instead of hiding them behind a wall or privacy and forcing the usage of `getVariable()`/`setVariable()` methods to ensure the separation of interface from implementation -- much of the time, there's no reason to require those accessor/mutator methods, and when there is an actual reason (for example, to ensure the maintenance of a class invariant), it's easy to switch over to using a property to manage access to the underlying data. Bertrand Meyer, creator of the Eiffel programming language refers to this as the "Uniform Access Principle," that "...all services offered by a module should be available through a uniform notation, which does not betray whether they are implemented through storage or through computation."
+
+Each `cello::Value` object may have `ValidatePropertyFn` lambdas assigned to it (where that lambda accepts a const reference to `T` and returns a `T` by value) that are (`onSet`) called before that value is stored into the underlying ValueTree or (`onGet`) called after retrieving the property from the ValueTree but before returning the value to calling code. 
+
+Your application can use this facility to modify the value (e.g. to keep it within a valid range), create an entirely new value, make changes to other peroperties of the ValueTree, create log entries, or anything else that you need to happen at these juncture points. 
+
+
 ### Forcing Update Callbacks
 
+The normal behavior of ValueTrees is to only notify callback listeners of property changes when a value actually *changes*. In practice, it's frequently useful to ensure that any attempt to set a property results in notifications being sent even if setting it to its current value. This can be controlled on a per-value basis by calling that value's `forceUpdate (bool shouldForceUpdate)` method. 
+
+To simplify the common case where this behavior is only meant to be in force for a single update, we provide a utility class `ScopedForceUpdater` that sets the value to force sending updates when the class is constructed, and then clears the update logic when that updater object goes out of scope. 
+
 ### Excluding Listeners
+
+It's also common to want to send update callbacks to all listeners except one -- for example, if I have a bit of code that's setting a value and that code is also listening to the value, there's no need to receive a callback; the code already knows what the new value is. The `cello::Value` class provides a method `void excludeListener (juce::ValueTree::Listener* listener)` for this purpose. 
 
 ## Objects
 
@@ -194,4 +207,6 @@ expectWithinAbsoluteError<float> (orig.imag (), retrieved.imag (), 0.001f);
 
 ### Persistence
 
-## Achnowledgements
+## Missing Pieces
+
+## Acknowledgements
