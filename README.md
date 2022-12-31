@@ -380,3 +380,6 @@ if (root.getCreationType () == cello::Object::CreationType::initialized)
 
 There are parts of the `juce::ValueTree` API that are not available through the `cello` API; these may be added later, or you can use them directly by accessing the `ValueTree` object that an `Object` already owns. 
 
+## Unit Tests
+
+There is a [separate repo](https://github.com/bgporter/cello_test) containing a small unit test runner; you can also add my [testSuite](https://github.com/bgporter/testSuite) JUCE module as a component in your application to execute the tests in your own app. 
