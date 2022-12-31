@@ -269,18 +269,18 @@ public:
     /**
      * @brief Sort this object's children using the provided comparison object.
      *
-     * The `sortFn` must use the signature:
+     * The `comp` object must contain a method that uses the signature:
      * `int compareElements (const ValueTree& first, const ValueTree& second)`
-     * and return
+     * and returns
      * * a value of < 0 if the first comes before the second
      * * a value of 0 if the two objects are equivalent
      * * a value of > 0 if the second comes before the first
      *
-     * @param sortFn
+     * @param comp
      * @param stableSort true to keep equivalent items in the same order after
      *                   sorting.
      */
-    template <typename Comparator> void sort (Comparator& sorte, bool stableSort);
+    template <typename Comparator> void sort (Comparator& comp, bool stableSort);
 
     ///@}
 
