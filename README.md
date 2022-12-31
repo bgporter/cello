@@ -188,6 +188,26 @@ It's also common to want to send update callbacks to all listeners except one --
 
 ### Creation Patterns: Creating vs Wrapping
 
+Since our objects rely on separate ValueTree objects for their storage, we need to support two different mechanisms for creating instances: 
+
+1. If the ValueTree doesn't exist yet, we need to create one and initialize it for use. 
+2. When the value tree already exists, we need to 'wrap' it to access its storage and capabilities. 
+
+The constructors of `cello::Object` handle both these cases for us, using the logic outlined below:
+
+* `Object (juce::Identifier type, Object* state);` (preferred)
+* `Object (juce::Identifier type, juce::ValueTree tree);`
+
+1. If the `state` or `tree` argument is of type `type`, wrap that inside the object being created. 
+2. If the `state` or `tree` arguments has a child of type `type`, wrap that child inside the object beng created. 
+3. Else, we create a new ValueTree of type `type` and initialize it as appropriate. If the `state` arg was not null (or the `tree` is valid), add this new tree as a child. 
+
+It is sometimes useful to know whether a new Object was created or wrapped -- for example, it might be an error in your application if a child that's expected to be present isn't. 
+
+You can test this at runtime using the method `Object::getCreationType()`, which will return either:
+* `Object::CreationType::initialized`
+* `Object::CreationType::wrapped`
+
 ### Undo/Redo
 
 Most ValueTree operations accept a pointer to a `juce::UndoManager` object as an argument to make those operations undoable/redoable. `cello::Object`s can maintain this manager for you: pass a pointer to `UndoManager` to a `cello::Object` using its `setUndoManager` method, and that object and any child/descendant objects that are added to it will become undoable. 
