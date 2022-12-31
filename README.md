@@ -10,7 +10,7 @@ brett@bgporter.net
 
 ### Confessions of a `ValueTree` Skeptic
 
-I've been using the JUCE framework for over a decade now, but there's a major component of JUCE that never clicked for me as a developer &mdash; ValueTrees. This wasn't a problem for me until I changed jobs and started needing to work on a mature codebase that made significant use of them. This code makes efforts to hide some of the more cumbersome or repetitive aspects of integrating ValueTrees into an application, but that `ValueTreeWrapper` class still seemed like it required too much effort to work with; where I'm used to thinking in terms of objects that contain values, any time I needed to get near data that's stored in a ValueTree, it was impossible to avoid the awareness that I was always working through an API to perform operations on data that should just be directly manipulable, and while the wrapper class approach mitigated this to some extent, there was still more boilerplate code to write than seems good to me, as well as other places where the gaps around the abstraction were more obvious than I like. 
+I've been using the JUCE framework for over a decade now, but there's a major component of JUCE that never clicked for me as a developer &mdash; ValueTrees. This wasn't a problem for me until I changed jobs and started needing to work on a mature codebase that made significant use of them. This code makes efforts to hide some of the more cumbersome or repetitive aspects of integrating ValueTrees into an application, but that `ValueTreeWrapper` class still seemed like it required too much effort to work with; where I'm used to thinking in terms of objects that contain values, any time I needed to get near data that's stored in a ValueTree, it was impossible to avoid the awareness that I was always working through an API to perform operations on data that should just be directly manipulable, and while the wrapper class approach mitigated this to some extent, there was still more boilerplate code to write than seems good to me, as well as other places where the gaps around the abstraction were more obvious than I like.; 
 
 I've always found that the only way for me to work through these issues when I encounter them is to sit down with a blank document in an editor and start enumerating the problems that I see with a system and use that as a guide to start thinking about ways that I can engineer around the parts that aren' tmy favorite, and sometimes how I can reframe my thinking to start seeing superpowers where I thought there were deficiencies. 
 
@@ -29,7 +29,7 @@ As I started listing the tradeoffs, I considered ways to work around the conveni
 
 At one level, you can look at Python as being nothing but a bunch of associative arrays (or in python, `dict`s) with the ability to be manipulated dynamically by code. Once I started thinking in those terms, the project became much more interesting. 
 
-As frequently happens with me, these thoughts sat collecting dust in a document until I hit upon a name for the project -- `cello`, short for 'cellophane' (since the code is wrapping a ValueTree)
+As frequently happens with me, these thoughts sat collecting dust in a document until I hit upon a name for the project &mdash; `cello`, short for 'cellophane' (since the code is wrapping a ValueTree)
 
 ### `cello`
 
@@ -106,7 +106,7 @@ myObj.x *= -3;
 ```
 ### `VariantConverter`s
 
-By defining a template specialization of the `juce::VariantConverter` struct, you can store more complex value types by cleverly packing them inside one of the more interesting `var` variants that exist -- in this example from the `cello` unit tests, we use the fact that an `Array` of `var`s is a `var`:
+By defining a template specialization of the `juce::VariantConverter` struct, you can store more complex value types by cleverly packing them inside one of the more interesting `var` variants that exist &mdash; in this example from the `cello` unit tests, we use the fact that an `Array` of `var`s is a `var`:
 
 ```cpp
 namespace juce
@@ -139,7 +139,7 @@ template <> struct VariantConverter<std::complex<float>>
 } // namespace juce
 ```
 
-Then we define a class that has a single public Value member that contains a `std::complex<float>` -- there's no additional work required to perform the conversions:
+Then we define a class that has a single public Value member that contains a `std::complex<float>` &mdash; there's no additional work required to perform the conversions:
 
 ```cpp
 class ObjectWithConvertibleObject : public cello::Object
@@ -167,7 +167,7 @@ expectWithinAbsoluteError<float> (orig.imag (), retrieved.imag (), 0.001f);
 ```
 ### Validator Functions
 
-If we're taking some inspiration from Python here, it's worth remembering that Python developers are in the practice of leaving all their class member variables public instead of hiding them behind a wall or privacy and forcing the usage of `getVariable()`/`setVariable()` methods to ensure the separation of interface from implementation -- much of the time, there's no reason to require those accessor/mutator methods, and when there is an actual reason (for example, to ensure the maintenance of a class invariant), it's easy to switch over to using a property to manage access to the underlying data. Bertrand Meyer, creator of the Eiffel programming language refers to this as the "Uniform Access Principle," that "...all services offered by a module should be available through a uniform notation, which does not betray whether they are implemented through storage or through computation."
+If we're taking some inspiration from Python here, it's worth remembering that Python developers are in the practice of leaving all their class member variables public instead of hiding them behind a wall or privacy and forcing the usage of `getVariable()`/`setVariable()` methods to ensure the separation of interface from implementation &mdash; much of the time, there's no reason to require those accessor/mutator methods, and when there is an actual reason (for example, to ensure the maintenance of a class invariant), it's easy to switch over to using a property to manage access to the underlying data. Bertrand Meyer, creator of the Eiffel programming language refers to this as the "Uniform Access Principle," that "...all services offered by a module should be available through a uniform notation, which does not betray whether they are implemented through storage or through computation."
 
 Each `cello::Value` object may have `ValidatePropertyFn` lambdas assigned to it (where that lambda accepts a const reference to `T` and returns a `T` by value) that are (`onSet`) called before that value is stored into the underlying ValueTree or (`onGet`) called after retrieving the property from the ValueTree but before returning the value to calling code. 
 
@@ -182,7 +182,7 @@ To simplify the common case where this behavior is only meant to be in force for
 
 ### Excluding Listeners
 
-It's also common to want to send update callbacks to all listeners except one -- for example, if I have a bit of code that's setting a value and that code is also listening to the value, there's no need to receive a callback; the code already knows what the new value is. The `cello::Value` class provides a method `void excludeListener (juce::ValueTree::Listener* listener)` for this purpose. 
+It's also common to want to send update callbacks to all listeners except one &mdash; for example, if I have a bit of code that's setting a value and that code is also listening to the value, there's no need to receive a callback; the code already knows what the new value is. The `cello::Value` class provides a method `void excludeListener (juce::ValueTree::Listener* listener)` for this purpose. 
 
 ## Objects
 
@@ -202,7 +202,7 @@ The constructors of `cello::Object` handle both these cases for us, using the lo
 2. If the `state` or `tree` arguments has a child of type `type`, wrap that child inside the object beng created. 
 3. Else, we create a new ValueTree of type `type` and initialize it as appropriate. If the `state` arg was not null (or the `tree` is valid), add this new tree as a child. 
 
-It is sometimes useful to know whether a new Object was created or wrapped -- for example, it might be an error in your application if a child that's expected to be present isn't. 
+It is sometimes useful to know whether a new Object was created or wrapped &mdash; for example, it might be an error in your application if a child that's expected to be present isn't. 
 
 You can test this at runtime using the method `Object::getCreationType()`, which will return either:
 * `Object::CreationType::initialized`
@@ -215,7 +215,7 @@ ValueTrees can contain other ValueTrees as children, and it's important to keep 
 * *Heterogeneous* The parent tree is a data structure that contains other (tree) data structures. Access the children by specifying their type. The children are stored in a list, but the sequence is not significant.
 * *Homogeneous* The parent tree contains a list of child trees, typically but not necessarily of the same type. Access the children by their index or iterating through them. 
 
-There's no mechanism to enforce this distinction -- if a list of different types makes sense in your application, there's a little more logic you'll need to write, but that's all. 
+There's no mechanism to enforce this distinction &mdash; if a list of different types makes sense in your application, there's a little more logic you'll need to write, but that's all. 
 
 #### Adding Children
 
@@ -313,8 +313,8 @@ You can register a callback for each named property of an object that will be ex
 
 There are two Object methods to register these callbacks:
 
-* `void onPropertyChange (juce::Identifier id, PropertyUpdateFn callback)` -- pass in the identifier of the attribute to watch
-* `void onPropertyChange (const ValueBase& val, PropertyUpdateFn callback);` -- pass in a reference to the `cello::Value` or `cello::Object` to watch. 
+* `void onPropertyChange (juce::Identifier id, PropertyUpdateFn callback)` &mdash; pass in the identifier of the attribute to watch
+* `void onPropertyChange (const ValueBase& val, PropertyUpdateFn callback);` &mdash; pass in a reference to the `cello::Value` or `cello::Object` to watch. 
 
 
 #### Child Changes
@@ -322,17 +322,17 @@ There are two Object methods to register these callbacks:
 
 Changes to children are broadcast using a `ChildUpdateFn` callback that has the signature `std::function<void (juce::ValueTree& child, int oldIndex, int newIndex)>;`
 
-* `onChildAdded` -- `oldIndex` will be -1, `newIndex` will be the index of the new child. 
-* `onChildRemoved` -- `oldIndex` will be the index of the child that was removed, `newIndex` will be -1.
-* `onChildMoved` -- `oldIndex` and `newIndex` are self-explanatory. 
+* `onChildAdded` &mdash; `oldIndex` will be -1, `newIndex` will be the index of the new child. 
+* `onChildRemoved` &mdash; `oldIndex` will be the index of the child that was removed, `newIndex` will be -1.
+* `onChildMoved` &mdash; `oldIndex` and `newIndex` are self-explanatory. 
 
 
 #### Tree Changes
 
 A `SelfUpdateFn` callback with the signature `std::function<void (void)>` will be called when:
 
-* `onParentChanged` -- this object has been adopted by a different parent tree.
-* `onTreeRedirected` -- the underlying value tree used by this object was replaced with a different one. 
+* `onParentChanged` &mdash; this object has been adopted by a different parent tree.
+* `onTreeRedirected` &mdash; the underlying value tree used by this object was replaced with a different one. 
 
 ### "Pythonesque" access
 
