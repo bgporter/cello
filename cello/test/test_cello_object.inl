@@ -16,6 +16,11 @@ public:
         val = value;
     }
 
+    OneValue (juce::ValueTree tree)
+    : cello::Object (classId, tree)
+    {
+    }
+
     OneValue (const OneValue& rhs)
     : cello::Object (rhs)
     {
@@ -531,6 +536,46 @@ public:
                   cello::Object child2 ("c1", &parent);
                   expect (child2.getCreationType () ==
                           cello::Object::CreationType::wrapped);
+              });
+
+        test ("sort children",
+              [&] ()
+              {
+                  cello::Object parent ("root", nullptr);
+                  const int childCount { 10 };
+
+                  // create list 9, 8, 7, ...
+                  for (int i { 0 }; i < childCount; ++i)
+                  {
+                      OneValue v { childCount - i - 1 };
+                      parent.append (&v);
+                  }
+
+                  struct ValSort
+                  {
+                      int compareElements (const juce::ValueTree& first,
+                                           const juce::ValueTree& second)
+                      {
+                          // convert the trees back into the Object type
+                          OneValue lhs (first);
+                          OneValue rhs (second);
+                          if (lhs.getValue () < rhs.getValue ())
+                              return -1;
+                          if (lhs.getValue () > rhs.getValue ())
+                              return 1;
+                          return 0;
+                      }
+                  };
+
+                  ValSort comp;
+                  parent.sort (comp, false);
+
+                  // check the sorting.
+                  for (int i { 0 }; i < childCount; ++i)
+                  {
+                      OneValue val { parent[i] };
+                      expectEquals (val.getValue (), i);
+                  }
               });
     }
 
