@@ -190,6 +190,18 @@ It's also common to want to send update callbacks to all listeners except one --
 
 ### Undo/Redo
 
+Most ValueTree operations accept a pointer to a `juce::UndoManager` object as an argument to make those operations undoable/redoable. `cello::Object`s can maintain this manager for you: pass a pointer to `UndoManager` to a `cello::Object` using its `setUndoManager` method, and that object and any child/descendant objects that are added to it will become undoable. 
+
+The following undo/redo methods are available directly from `cello::Object`: 
+
+* `bool canUndo () const;`
+* `bool undo ();`
+* `bool canRedo () const;`
+* `bool redo ();`
+* `void clearUndoHistory ();`
+
+You can also retrieve a pointer to the UndoManager (using `juce::UndoManager* getUndoManager()`) for any of its other operations that we don't expose directly.
+
 ### Working with Children
 
 ### Change Callbacks
