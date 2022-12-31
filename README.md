@@ -65,7 +65,7 @@ demoObject.x = 100;
 - can be set to always update their listeners when the value is set, even if the underlying value wasn't changed. 
 - can be given validator functions that will be called when the value is set or retrieved.
 - arithmetic types have all of the in-place operators (`++`, `--`, `+=`, `-=`, `*=`, `/=`) defined.
-- Can be used to access any C++ value data type for which a `juce::VariantConverter` struct has been defined. 
+- can be used to access any C++ value data type for which a `juce::VariantConverter` struct has been defined. 
 
 `cello::Value` objects only make sense as members of a class derived from `cello::Object` (below). The signature of the Value constuctor is:
 
@@ -208,6 +208,84 @@ You can test this at runtime using the method `Object::getCreationType()`, which
 * `Object::CreationType::initialized`
 * `Object::CreationType::wrapped`
 
+### Working with Children
+
+ValueTrees can contain other ValueTrees as children, and it's important to keep in mind that there are two different modes for this containment:
+
+* *Heterogeneous* The parent tree is a data structure that contains other (tree) data structures. Access the children by specifying their type. The children are stored in a list, but the sequence is not significant.
+* *Homogeneous* The parent tree contains a list of child trees, typically but not necessarily of the same type. Access the children by their index or iterating through them. 
+
+There's no mechanism to enforce this distinction -- if a list of different types makes sense in your application, there's a little more logic you'll need to write, but that's all. 
+
+#### Adding Children
+
+`void append (Object* object);` adds the child to the end of this object's child list. 
+
+`void insert (Object* object, int index);` adds the child at a specific index in the list; if `index` is out of range (less than zero or greater than the current number of children), the child will be appended to the list. 
+
+
+#### Removing Children
+
+To remove a child that's already wrapped in an Object, use 
+
+```cpp
+ Object* remove (Object* object);
+ ```
+
+ On success, this will return the same pointer you passed it; if that Object was not actually a child of this object, will return `nullptr`. 
+
+ To remove a child by its index: 
+
+ ```cpp
+juce::ValueTree remove (int index);
+```
+
+This will return the raw ValueTree used by that child on success, or an invalid ValueTree on failure. 
+
+#### Finding Children
+
+We provide an `operator[]` to access children by their index:
+
+```cpp
+juce::ValueTree operator[] (int index) const;
+```
+
+You can also iterate through an Object's children:
+
+```cpp
+for (auto childTree: someObject)
+{
+    // work with the raw ValueTree here, maybe using it to instantiate an object...
+}
+```
+
+#### Moving / Sorting Children
+
+You can change the position of an individual child using the method
+
+```cpp
+void move (int fromIndex, int toIndex);
+```
+
+...and sort all the children with the method: 
+
+```cpp
+template <typename Comparator> 
+void sort (Comparator& comp, bool stableSort);
+```
+
+where `Comparator` is an object that contains a method
+```cpp
+int compareElements (const ValueTree& first, const ValueTree& second);
+```
+
+that returns 
+* a value of < 0 if the first comes before the second
+* a value of 0 if the two objects are equivalent
+* a value of > 0 if the second comes before the first
+
+The `stableSort` argument specifies whether the sort algorithm should guarantee that equivalent children remain in their original order after the sort. 
+  
 ### Undo/Redo
 
 Most ValueTree operations accept a pointer to a `juce::UndoManager` object as an argument to make those operations undoable/redoable. `cello::Object`s can maintain this manager for you: pass a pointer to `UndoManager` to a `cello::Object` using its `setUndoManager` method, and that object and any child/descendant objects that are added to it will become undoable. 
@@ -222,7 +300,6 @@ The following undo/redo methods are available directly from `cello::Object`:
 
 You can also retrieve a pointer to the UndoManager (using `juce::UndoManager* getUndoManager()`) for any of its other operations that we don't expose directly.
 
-### Working with Children
 
 ### Change Callbacks
 

@@ -186,6 +186,11 @@ void Object::move (int fromIndex, int toIndex)
     data.moveChild (fromIndex, toIndex, getUndoManager ());
 }
 
+template <typename Comparator> void Object::sort (Comparator& comp, bool stableSort)
+{
+    data.sort (comp, getUndoManager (), stableSort);
+}
+
 juce::UndoManager* Object::getUndoManager () const
 {
     return undoManager;

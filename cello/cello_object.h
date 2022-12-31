@@ -266,6 +266,22 @@ public:
      */
     void move (int fromIndex, int toIndex);
 
+    /**
+     * @brief Sort this object's children using the provided comparison object.
+     *
+     * The `sortFn` must use the signature:
+     * `int compareElements (const ValueTree& first, const ValueTree& second)`
+     * and return
+     * * a value of < 0 if the first comes before the second
+     * * a value of 0 if the two objects are equivalent
+     * * a value of > 0 if the second comes before the first
+     *
+     * @param sortFn
+     * @param stableSort true to keep equivalent items in the same order after
+     *                   sorting.
+     */
+    template <typename Comparator> void sort (Comparator& sorte, bool stableSort);
+
     ///@}
 
     /**
