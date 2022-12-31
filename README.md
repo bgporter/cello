@@ -303,19 +303,80 @@ You can also retrieve a pointer to the UndoManager (using `juce::UndoManager* ge
 
 ### Change Callbacks
 
-#### `onPropertyChange`
+The `cello::Object` class defines a set of `std::function`s that can be installed as callbacks to be executed when properties or children of an object are changed:
 
-#### `onChildAdded`
-#### `onChildRemoved`
-#### `onChildMoved`
+#### Property Changes
 
-#### `onParentChanged`
-#### `onTreeRedirected`
+`PropertyUpdateFn` signature: `std::function<void(juce::Identifier)>`
+
+You can register a callback for each named property of an object that will be executed when the value of that property is changed. You can also register a wildcard callback using the identifier of the object itself that will be called when an attribute changes but there was no specific handler for it. 
+
+There are two Object methods to register these callbacks:
+
+* `void onPropertyChange (juce::Identifier id, PropertyUpdateFn callback)` -- pass in the identifier of the attribute to watch
+* `void onPropertyChange (const ValueBase& val, PropertyUpdateFn callback);` -- pass in a reference to the `cello::Value` or `cello::Object` to watch. 
+
+
+#### Child Changes
+
+
+Changes to children are broadcast using a `ChildUpdateFn` callback that has the signature `std::function<void (juce::ValueTree& child, int oldIndex, int newIndex)>;`
+
+* `onChildAdded` -- `oldIndex` will be -1, `newIndex` will be the index of the new child. 
+* `onChildRemoved` -- `oldIndex` will be the index of the child that was removed, `newIndex` will be -1.
+* `onChildMoved` -- `oldIndex` and `newIndex` are self-explanatory. 
+
+
+#### Tree Changes
+
+A `SelfUpdateFn` callback with the signature `std::function<void (void)>` will be called when:
+
+* `onParentChanged` -- this object has been adopted by a different parent tree.
+* `onTreeRedirected` -- the underlying value tree used by this object was replaced with a different one. 
 
 ### "Pythonesque" access
 
+Not everything can or should be done with the kind of compile-time API `cello` was written to support. These methods take their names and inspriation from similar methods in the Python object model.
+
+These methods do provide some level of type-safety and type-coercion using `VariantConverter`s that our `Value` types have.
+
+* `bool hasattr (const juce::Identifier& attr) const` tests an object to see if it has an attribute/property of the specified type (enabling what the Python world would call 'Look Before You Leap' programming)
+* `template <typename T> Object& setattr (const juce::Identifier& attr, const T& attrVal);` sets the value of the specified attribute in the object. We return a reference to the current Object so that multiple calls to this method can be chained together. 
+* `template <typename T> T getattr (const juce::Identifier& attr, const T& defaultVal) const` either returns the current value of the specified attribute, or a default value if it's not present. 
+
+
 ### Persistence
+
+`cello::Object` instances can be persisted to or from disk in any of the three formats that ValueTrees support:
+* text/XML
+* (JUCE proprietary) binary
+* binary, compressed with GZIP. 
+
+To save a file, use the `bool save (juce::File file, FileFormat format = FileFormat::xml) const` method, which will write out that tree and all its descendants into the specified file. 
+
+Loading a file is a little more complex; we use a static method `static juce::ValueTree load (juce::File file, FileFormat format = FileFormat::xml)` that attempts to load and return a ValueTree from the specified file; you should then pass that ValueTree (if valid) to the constructor of your application's root Object type and verify that the constructor was able to wrap the tree it was given, code like:
+
+```cpp
+
+const juce::File filePath { "/path/to/my/file.xml" };
+auto loadedTree { cello::Object::load(filePath) };
+
+if (! loadedTree.isValid ())
+{
+    // failed to load the expected file. Maybe this is an error in your app?
+    // if so, handle it! 
+}
+
+MyRootObject root { loadedTree };
+if (root.getCreationType () == cello::Object::CreationType::initialized)
+{
+    // we didn't load successfully -- if this is an error in your app, 
+    // handle it. 
+}
+// else, we've re-loaded -- carry on! 
+```
 
 ## Missing Pieces
 
-## Acknowledgements
+There are parts of the `juce::ValueTree` API that are not available through the `cello` API; these may be added later, or you can use them directly by accessing the `ValueTree` object that an `Object` already owns. 
+
