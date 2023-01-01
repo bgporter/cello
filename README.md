@@ -6,6 +6,8 @@ Classes for working with juce ValueTree objects.
 
 brett@bgporter.net
 
+API docs available [here](https://bgporter.github.io/cello/)
+
 ## Motivation and Overview
 
 ### Confessions of a `ValueTree` Skeptic
