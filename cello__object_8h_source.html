@@ -9,10 +9,15 @@
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
+<link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="resize.js"></script>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
 <link href="search/search.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="search/searchdata.js"></script>
 <script type="text/javascript" src="search/search.js"></script>
 <link href="doxygen.css" rel="stylesheet" type="text/css" />
+<link href="doxygen-awesome.css" rel="stylesheet" type="text/css"/>
 </head>
 <body>
 <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
@@ -20,6 +25,7 @@
 <table cellspacing="0" cellpadding="0">
  <tbody>
  <tr id="projectrow">
+  <td id="projectlogo"><img alt="Logo" src="cello_cello.png"/></td>
   <td id="projectalign">
    <div id="projectname">cello
    </div>
@@ -47,6 +53,23 @@ $(function() {
 /* @license-end */
 </script>
 <div id="main-nav"></div>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(document).ready(function(){initNavTree('cello__object_8h_source.html',''); initResizable(); });
+/* @license-end */
+</script>
+<div id="doc-content">
 <!-- window showing the filter options -->
 <div id="MSearchSelectWindow"
      onmouseover="return searchBox.OnSearchSelectShow()"
@@ -68,237 +91,251 @@ $(function() {
 </div>
 </div>
 
-<div id="nav-path" class="navpath">
-  <ul>
-<li class="navelem"><a class="el" href="dir_edc25bb996467fc43b3ed414659f82cc.html">cello</a></li>  </ul>
-</div>
-</div><!-- top -->
 <div class="header">
   <div class="headertitle"><div class="title">cello_object.h</div></div>
 </div><!--header-->
 <div class="contents">
-<div class="fragment"><div class="line"><a id="l00001" name="l00001"></a><span class="lineno">    1</span><span class="comment">//</span></div>
-<div class="line"><a id="l00002" name="l00002"></a><span class="lineno">    2</span><span class="comment">// Copyright (c) 2022 Brett g Porter. All Rights Reserved.</span></div>
-<div class="line"><a id="l00003" name="l00003"></a><span class="lineno">    3</span><span class="comment">//</span></div>
-<div class="line"><a id="l00004" name="l00004"></a><span class="lineno">    4</span> </div>
-<div class="line"><a id="l00005" name="l00005"></a><span class="lineno">    5</span><span class="preprocessor">#pragma once</span></div>
-<div class="line"><a id="l00006" name="l00006"></a><span class="lineno">    6</span> </div>
-<div class="line"><a id="l00007" name="l00007"></a><span class="lineno">    7</span><span class="preprocessor">#include &lt;juce_core/juce_core.h&gt;</span></div>
-<div class="line"><a id="l00008" name="l00008"></a><span class="lineno">    8</span><span class="preprocessor">#include &lt;juce_data_structures/juce_data_structures.h&gt;</span></div>
-<div class="line"><a id="l00009" name="l00009"></a><span class="lineno">    9</span> </div>
-<div class="line"><a id="l00010" name="l00010"></a><span class="lineno">   10</span><span class="preprocessor">#include &quot;cello_update_source.h&quot;</span></div>
-<div class="line"><a id="l00011" name="l00011"></a><span class="lineno">   11</span><span class="keyword">namespace </span>cello</div>
-<div class="line"><a id="l00012" name="l00012"></a><span class="lineno">   12</span>{</div>
-<div class="line"><a id="l00013" name="l00013"></a><span class="lineno">   13</span><span class="keyword">class </span>ValueBase;</div>
-<div class="line"><a id="l00014" name="l00014"></a><span class="lineno">   14</span> </div>
-<div class="line"><a id="l00015" name="l00015"></a><span class="lineno"><a class="line" href="classcello_1_1_object.html">   15</a></span><span class="keyword">class </span><a class="code hl_class" href="classcello_1_1_object.html">Object</a> : <span class="keyword">public</span> <a class="code hl_class" href="classcello_1_1_update_source.html">UpdateSource</a>,</div>
-<div class="line"><a id="l00016" name="l00016"></a><span class="lineno">   16</span>               <span class="keyword">public</span> juce::ValueTree::Listener</div>
-<div class="line"><a id="l00017" name="l00017"></a><span class="lineno">   17</span>{</div>
-<div class="line"><a id="l00018" name="l00018"></a><span class="lineno">   18</span><span class="keyword">public</span>:</div>
-<div class="line"><a id="l00019" name="l00019"></a><span class="lineno">   19</span>    <span class="keyword">enum class</span> FileFormat</div>
-<div class="line"><a id="l00020" name="l00020"></a><span class="lineno">   20</span>    {</div>
-<div class="line"><a id="l00021" name="l00021"></a><span class="lineno">   21</span>        xml,    <span class="comment">// load/store as XML text.</span></div>
-<div class="line"><a id="l00022" name="l00022"></a><span class="lineno">   22</span>        binary, <span class="comment">// load/store in juce&#39;s binary format.</span></div>
-<div class="line"><a id="l00023" name="l00023"></a><span class="lineno">   23</span>        zipped  <span class="comment">// GZIPped juce binary.</span></div>
-<div class="line"><a id="l00024" name="l00024"></a><span class="lineno">   24</span>    };</div>
-<div class="line"><a id="l00025" name="l00025"></a><span class="lineno">   25</span> </div>
-<div class="line"><a id="l00026" name="l00026"></a><span class="lineno">   26</span>    <span class="keyword">enum class</span> CreationType</div>
-<div class="line"><a id="l00027" name="l00027"></a><span class="lineno">   27</span>    {</div>
-<div class="line"><a id="l00028" name="l00028"></a><span class="lineno">   28</span>        initialized, <span class="comment">// this object was default initialized when created.</span></div>
-<div class="line"><a id="l00029" name="l00029"></a><span class="lineno">   29</span>        wrapped      <span class="comment">// this object wrapped an existing tree.</span></div>
-<div class="line"><a id="l00030" name="l00030"></a><span class="lineno">   30</span>    };</div>
-<div class="line"><a id="l00031" name="l00031"></a><span class="lineno">   31</span> </div>
-<div class="line"><a id="l00048" name="l00048"></a><span class="lineno">   48</span>    <a class="code hl_class" href="classcello_1_1_object.html">Object</a> (juce::Identifier type, <a class="code hl_class" href="classcello_1_1_object.html">Object</a>* state);</div>
-<div class="line"><a id="l00049" name="l00049"></a><span class="lineno">   49</span> </div>
-<div class="line"><a id="l00062" name="l00062"></a><span class="lineno">   62</span>    <a class="code hl_class" href="classcello_1_1_object.html">Object</a> (juce::Identifier type, juce::ValueTree tree);</div>
-<div class="line"><a id="l00063" name="l00063"></a><span class="lineno">   63</span> </div>
-<div class="line"><a id="l00074" name="l00074"></a><span class="lineno">   74</span>    <a class="code hl_class" href="classcello_1_1_object.html">Object</a> (juce::Identifier type, juce::File file, FileFormat format = FileFormat::xml);</div>
-<div class="line"><a id="l00075" name="l00075"></a><span class="lineno">   75</span> </div>
-<div class="line"><a id="l00081" name="l00081"></a><span class="lineno">   81</span>    <a class="code hl_function" href="classcello_1_1_object.html#a34c001271075ceb3006e2fed75aef279">~Object</a> () <span class="keyword">override</span>;</div>
-<div class="line"><a id="l00082" name="l00082"></a><span class="lineno">   82</span> </div>
-<div class="line"><a id="l00090" name="l00090"></a><span class="lineno">   90</span>    <a class="code hl_class" href="classcello_1_1_object.html">Object</a> (<span class="keyword">const</span> <a class="code hl_class" href="classcello_1_1_object.html">Object</a>&amp; rhs);</div>
-<div class="line"><a id="l00091" name="l00091"></a><span class="lineno">   91</span> </div>
-<div class="line"><a id="l00099" name="l00099"></a><span class="lineno">   99</span>    <a class="code hl_class" href="classcello_1_1_object.html">Object</a>&amp; <a class="code hl_function" href="classcello_1_1_object.html#ad43381ba2a3be680f308b6d1bfc284e3">operator= </a>(<span class="keyword">const</span> <a class="code hl_class" href="classcello_1_1_object.html">Object</a>&amp; rhs);</div>
-<div class="line"><a id="l00100" name="l00100"></a><span class="lineno">  100</span> </div>
-<div class="line"><a id="l00110" name="l00110"></a><span class="lineno"><a class="line" href="classcello_1_1_object.html#a3fabc22c50460fc720c8be1c3384db70">  110</a></span>    <span class="keywordtype">bool</span> <a class="code hl_function" href="classcello_1_1_object.html#a3fabc22c50460fc720c8be1c3384db70">operator== </a>(<span class="keyword">const</span> juce::ValueTree&amp; rhs) <span class="keyword">const</span> <span class="keyword">noexcept</span> { <span class="keywordflow">return</span> <a class="code hl_variable" href="classcello_1_1_object.html#a368472e271247ac9336c4f8015270627">data</a> == rhs; }</div>
-<div class="line"><a id="l00111" name="l00111"></a><span class="lineno">  111</span> </div>
-<div class="line"><a id="l00112" name="l00112"></a><span class="lineno">  112</span>    <span class="keywordtype">bool</span> operator!= (<span class="keyword">const</span> juce::ValueTree&amp; rhs) <span class="keyword">const</span> <span class="keyword">noexcept</span> { <span class="keywordflow">return</span> <a class="code hl_variable" href="classcello_1_1_object.html#a368472e271247ac9336c4f8015270627">data</a> != rhs; }</div>
-<div class="line"><a id="l00113" name="l00113"></a><span class="lineno">  113</span> </div>
-<div class="line"><a id="l00119" name="l00119"></a><span class="lineno"><a class="line" href="classcello_1_1_object.html#a9365e8cc11d3d6ea98957cf150450b1a">  119</a></span>    juce::Identifier <a class="code hl_function" href="classcello_1_1_object.html#a9365e8cc11d3d6ea98957cf150450b1a">getType</a> ()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> <a class="code hl_variable" href="classcello_1_1_object.html#a368472e271247ac9336c4f8015270627">data</a>.getType (); }</div>
-<div class="line"><a id="l00120" name="l00120"></a><span class="lineno">  120</span> </div>
-<div class="line"><a id="l00132" name="l00132"></a><span class="lineno"><a class="line" href="classcello_1_1_object.html#ae04aa9d628d2ee279d9d467c8caf73d8">  132</a></span>    CreationType <a class="code hl_function" href="classcello_1_1_object.html#ae04aa9d628d2ee279d9d467c8caf73d8">getCreationType</a> ()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> <a class="code hl_variable" href="classcello_1_1_object.html#a9ef37de54c32241809154d63985719b3">creationType</a>; }</div>
-<div class="line"><a id="l00133" name="l00133"></a><span class="lineno">  133</span> </div>
-<div class="line"><a id="l00139" name="l00139"></a><span class="lineno"><a class="line" href="classcello_1_1_object.html#aab9527be361c6013e97bda636a549d6e">  139</a></span>    <span class="keyword">operator</span> juce::ValueTree ()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> <a class="code hl_variable" href="classcello_1_1_object.html#a368472e271247ac9336c4f8015270627">data</a>; }</div>
-<div class="line"><a id="l00140" name="l00140"></a><span class="lineno">  140</span> </div>
-<div class="line"><a id="l00145" name="l00145"></a><span class="lineno">  145</span> </div>
-<div class="line"><a id="l00152" name="l00152"></a><span class="lineno">  152</span>    <span class="keywordtype">void</span> <a class="code hl_function" href="classcello_1_1_object.html#a14e852dd0a299e2d72bf07dd8970b52a">setUndoManager</a> (juce::UndoManager* <a class="code hl_function" href="classcello_1_1_object.html#a9068e0306934dcbf2c24b71efe5c1024">undo</a>);</div>
-<div class="line"><a id="l00153" name="l00153"></a><span class="lineno">  153</span> </div>
-<div class="line"><a id="l00160" name="l00160"></a><span class="lineno">  160</span>    juce::UndoManager* <a class="code hl_function" href="classcello_1_1_object.html#aa19bde9dc0f5ae807641414d8e890d44">getUndoManager</a> () <span class="keyword">const</span>;</div>
-<div class="line"><a id="l00161" name="l00161"></a><span class="lineno">  161</span> </div>
-<div class="line"><a id="l00167" name="l00167"></a><span class="lineno">  167</span>    <span class="keywordtype">bool</span> <a class="code hl_function" href="classcello_1_1_object.html#a6cace96ea91fd79dfc17cb44b9c4fbf9">canUndo</a> () <span class="keyword">const</span>;</div>
+<div class="fragment"><div class="line"><a id="l00001" name="l00001"></a><span class="lineno">    1</span><span class="comment">/*</span></div>
+<div class="line"><a id="l00002" name="l00002"></a><span class="lineno">    2</span><span class="comment">    Copyright (c) 2023 Brett g Porter</span></div>
+<div class="line"><a id="l00003" name="l00003"></a><span class="lineno">    3</span><span class="comment">    Permission is hereby granted, free of charge, to any person obtaining a copy</span></div>
+<div class="line"><a id="l00004" name="l00004"></a><span class="lineno">    4</span><span class="comment">    of this software and associated documentation files (the &quot;Software&quot;), to deal</span></div>
+<div class="line"><a id="l00005" name="l00005"></a><span class="lineno">    5</span><span class="comment">    in the Software without restriction, including without limitation the rights</span></div>
+<div class="line"><a id="l00006" name="l00006"></a><span class="lineno">    6</span><span class="comment">    to use, copy, modify, merge, publish, distribute, sublicense, and/or sell</span></div>
+<div class="line"><a id="l00007" name="l00007"></a><span class="lineno">    7</span><span class="comment">    copies of the Software, and to permit persons to whom the Software is</span></div>
+<div class="line"><a id="l00008" name="l00008"></a><span class="lineno">    8</span><span class="comment">    furnished to do so, subject to the following conditions:</span></div>
+<div class="line"><a id="l00009" name="l00009"></a><span class="lineno">    9</span><span class="comment">    The above copyright notice and this permission notice shall be included in all</span></div>
+<div class="line"><a id="l00010" name="l00010"></a><span class="lineno">   10</span><span class="comment">    copies or substantial portions of the Software.</span></div>
+<div class="line"><a id="l00011" name="l00011"></a><span class="lineno">   11</span><span class="comment">    THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR</span></div>
+<div class="line"><a id="l00012" name="l00012"></a><span class="lineno">   12</span><span class="comment">    IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,</span></div>
+<div class="line"><a id="l00013" name="l00013"></a><span class="lineno">   13</span><span class="comment">    FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE</span></div>
+<div class="line"><a id="l00014" name="l00014"></a><span class="lineno">   14</span><span class="comment">    AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER</span></div>
+<div class="line"><a id="l00015" name="l00015"></a><span class="lineno">   15</span><span class="comment">    LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,</span></div>
+<div class="line"><a id="l00016" name="l00016"></a><span class="lineno">   16</span><span class="comment">    OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE</span></div>
+<div class="line"><a id="l00017" name="l00017"></a><span class="lineno">   17</span><span class="comment">    SOFTWARE.</span></div>
+<div class="line"><a id="l00018" name="l00018"></a><span class="lineno">   18</span><span class="comment">*/</span></div>
+<div class="line"><a id="l00019" name="l00019"></a><span class="lineno">   19</span> </div>
+<div class="line"><a id="l00020" name="l00020"></a><span class="lineno">   20</span><span class="preprocessor">#pragma once</span></div>
+<div class="line"><a id="l00021" name="l00021"></a><span class="lineno">   21</span> </div>
+<div class="line"><a id="l00022" name="l00022"></a><span class="lineno">   22</span><span class="preprocessor">#include &lt;juce_core/juce_core.h&gt;</span></div>
+<div class="line"><a id="l00023" name="l00023"></a><span class="lineno">   23</span><span class="preprocessor">#include &lt;juce_data_structures/juce_data_structures.h&gt;</span></div>
+<div class="line"><a id="l00024" name="l00024"></a><span class="lineno">   24</span> </div>
+<div class="line"><a id="l00025" name="l00025"></a><span class="lineno">   25</span><span class="preprocessor">#include &quot;cello_update_source.h&quot;</span></div>
+<div class="line"><a id="l00026" name="l00026"></a><span class="lineno">   26</span><span class="keyword">namespace </span>cello</div>
+<div class="line"><a id="l00027" name="l00027"></a><span class="lineno">   27</span>{</div>
+<div class="line"><a id="l00028" name="l00028"></a><span class="lineno">   28</span><span class="keyword">class </span>ValueBase;</div>
+<div class="line"><a id="l00029" name="l00029"></a><span class="lineno">   29</span> </div>
+<div class="line"><a id="l00030" name="l00030"></a><span class="lineno"><a class="line" href="classcello_1_1_object.html">   30</a></span><span class="keyword">class </span><a class="code hl_class" href="classcello_1_1_object.html">Object</a> : <span class="keyword">public</span> <a class="code hl_class" href="classcello_1_1_update_source.html">UpdateSource</a>,</div>
+<div class="line"><a id="l00031" name="l00031"></a><span class="lineno">   31</span>               <span class="keyword">public</span> juce::ValueTree::Listener</div>
+<div class="line"><a id="l00032" name="l00032"></a><span class="lineno">   32</span>{</div>
+<div class="line"><a id="l00033" name="l00033"></a><span class="lineno">   33</span><span class="keyword">public</span>:</div>
+<div class="line"><a id="l00034" name="l00034"></a><span class="lineno">   34</span>    <span class="keyword">enum class</span> FileFormat</div>
+<div class="line"><a id="l00035" name="l00035"></a><span class="lineno">   35</span>    {</div>
+<div class="line"><a id="l00036" name="l00036"></a><span class="lineno">   36</span>        xml,    <span class="comment">// load/store as XML text.</span></div>
+<div class="line"><a id="l00037" name="l00037"></a><span class="lineno">   37</span>        binary, <span class="comment">// load/store in juce&#39;s binary format.</span></div>
+<div class="line"><a id="l00038" name="l00038"></a><span class="lineno">   38</span>        zipped  <span class="comment">// GZIPped juce binary.</span></div>
+<div class="line"><a id="l00039" name="l00039"></a><span class="lineno">   39</span>    };</div>
+<div class="line"><a id="l00040" name="l00040"></a><span class="lineno">   40</span> </div>
+<div class="line"><a id="l00041" name="l00041"></a><span class="lineno">   41</span>    <span class="keyword">enum class</span> CreationType</div>
+<div class="line"><a id="l00042" name="l00042"></a><span class="lineno">   42</span>    {</div>
+<div class="line"><a id="l00043" name="l00043"></a><span class="lineno">   43</span>        initialized, <span class="comment">// this object was default initialized when created.</span></div>
+<div class="line"><a id="l00044" name="l00044"></a><span class="lineno">   44</span>        wrapped      <span class="comment">// this object wrapped an existing tree.</span></div>
+<div class="line"><a id="l00045" name="l00045"></a><span class="lineno">   45</span>    };</div>
+<div class="line"><a id="l00046" name="l00046"></a><span class="lineno">   46</span> </div>
+<div class="line"><a id="l00063" name="l00063"></a><span class="lineno">   63</span>    <a class="code hl_class" href="classcello_1_1_object.html">Object</a> (juce::Identifier type, <a class="code hl_class" href="classcello_1_1_object.html">Object</a>* state);</div>
+<div class="line"><a id="l00064" name="l00064"></a><span class="lineno">   64</span> </div>
+<div class="line"><a id="l00077" name="l00077"></a><span class="lineno">   77</span>    <a class="code hl_class" href="classcello_1_1_object.html">Object</a> (juce::Identifier type, juce::ValueTree tree);</div>
+<div class="line"><a id="l00078" name="l00078"></a><span class="lineno">   78</span> </div>
+<div class="line"><a id="l00089" name="l00089"></a><span class="lineno">   89</span>    <a class="code hl_class" href="classcello_1_1_object.html">Object</a> (juce::Identifier type, juce::File file, FileFormat format = FileFormat::xml);</div>
+<div class="line"><a id="l00090" name="l00090"></a><span class="lineno">   90</span> </div>
+<div class="line"><a id="l00096" name="l00096"></a><span class="lineno">   96</span>    <a class="code hl_function" href="classcello_1_1_object.html#a34c001271075ceb3006e2fed75aef279">~Object</a> () <span class="keyword">override</span>;</div>
+<div class="line"><a id="l00097" name="l00097"></a><span class="lineno">   97</span> </div>
+<div class="line"><a id="l00105" name="l00105"></a><span class="lineno">  105</span>    <a class="code hl_class" href="classcello_1_1_object.html">Object</a> (<span class="keyword">const</span> <a class="code hl_class" href="classcello_1_1_object.html">Object</a>&amp; rhs);</div>
+<div class="line"><a id="l00106" name="l00106"></a><span class="lineno">  106</span> </div>
+<div class="line"><a id="l00114" name="l00114"></a><span class="lineno">  114</span>    <a class="code hl_class" href="classcello_1_1_object.html">Object</a>&amp; <a class="code hl_function" href="classcello_1_1_object.html#ad43381ba2a3be680f308b6d1bfc284e3">operator= </a>(<span class="keyword">const</span> <a class="code hl_class" href="classcello_1_1_object.html">Object</a>&amp; rhs);</div>
+<div class="line"><a id="l00115" name="l00115"></a><span class="lineno">  115</span> </div>
+<div class="line"><a id="l00125" name="l00125"></a><span class="lineno"><a class="line" href="classcello_1_1_object.html#a3fabc22c50460fc720c8be1c3384db70">  125</a></span>    <span class="keywordtype">bool</span> <a class="code hl_function" href="classcello_1_1_object.html#a3fabc22c50460fc720c8be1c3384db70">operator== </a>(<span class="keyword">const</span> juce::ValueTree&amp; rhs) <span class="keyword">const</span> <span class="keyword">noexcept</span> { <span class="keywordflow">return</span> <a class="code hl_variable" href="classcello_1_1_object.html#a368472e271247ac9336c4f8015270627">data</a> == rhs; }</div>
+<div class="line"><a id="l00126" name="l00126"></a><span class="lineno">  126</span> </div>
+<div class="line"><a id="l00127" name="l00127"></a><span class="lineno">  127</span>    <span class="keywordtype">bool</span> operator!= (<span class="keyword">const</span> juce::ValueTree&amp; rhs) <span class="keyword">const</span> <span class="keyword">noexcept</span> { <span class="keywordflow">return</span> <a class="code hl_variable" href="classcello_1_1_object.html#a368472e271247ac9336c4f8015270627">data</a> != rhs; }</div>
+<div class="line"><a id="l00128" name="l00128"></a><span class="lineno">  128</span> </div>
+<div class="line"><a id="l00134" name="l00134"></a><span class="lineno"><a class="line" href="classcello_1_1_object.html#a9365e8cc11d3d6ea98957cf150450b1a">  134</a></span>    juce::Identifier <a class="code hl_function" href="classcello_1_1_object.html#a9365e8cc11d3d6ea98957cf150450b1a">getType</a> ()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> <a class="code hl_variable" href="classcello_1_1_object.html#a368472e271247ac9336c4f8015270627">data</a>.getType (); }</div>
+<div class="line"><a id="l00135" name="l00135"></a><span class="lineno">  135</span> </div>
+<div class="line"><a id="l00147" name="l00147"></a><span class="lineno"><a class="line" href="classcello_1_1_object.html#ae04aa9d628d2ee279d9d467c8caf73d8">  147</a></span>    CreationType <a class="code hl_function" href="classcello_1_1_object.html#ae04aa9d628d2ee279d9d467c8caf73d8">getCreationType</a> ()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> <a class="code hl_variable" href="classcello_1_1_object.html#a9ef37de54c32241809154d63985719b3">creationType</a>; }</div>
+<div class="line"><a id="l00148" name="l00148"></a><span class="lineno">  148</span> </div>
+<div class="line"><a id="l00154" name="l00154"></a><span class="lineno"><a class="line" href="classcello_1_1_object.html#aab9527be361c6013e97bda636a549d6e">  154</a></span>    <span class="keyword">operator</span> juce::ValueTree ()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> <a class="code hl_variable" href="classcello_1_1_object.html#a368472e271247ac9336c4f8015270627">data</a>; }</div>
+<div class="line"><a id="l00155" name="l00155"></a><span class="lineno">  155</span> </div>
+<div class="line"><a id="l00160" name="l00160"></a><span class="lineno">  160</span> </div>
+<div class="line"><a id="l00167" name="l00167"></a><span class="lineno">  167</span>    <span class="keywordtype">void</span> <a class="code hl_function" href="classcello_1_1_object.html#a14e852dd0a299e2d72bf07dd8970b52a">setUndoManager</a> (juce::UndoManager* <a class="code hl_function" href="classcello_1_1_object.html#a9068e0306934dcbf2c24b71efe5c1024">undo</a>);</div>
 <div class="line"><a id="l00168" name="l00168"></a><span class="lineno">  168</span> </div>
-<div class="line"><a id="l00175" name="l00175"></a><span class="lineno">  175</span>    <span class="keywordtype">bool</span> <a class="code hl_function" href="classcello_1_1_object.html#a9068e0306934dcbf2c24b71efe5c1024">undo</a> ();</div>
+<div class="line"><a id="l00175" name="l00175"></a><span class="lineno">  175</span>    juce::UndoManager* <a class="code hl_function" href="classcello_1_1_object.html#aa19bde9dc0f5ae807641414d8e890d44">getUndoManager</a> () <span class="keyword">const</span>;</div>
 <div class="line"><a id="l00176" name="l00176"></a><span class="lineno">  176</span> </div>
-<div class="line"><a id="l00182" name="l00182"></a><span class="lineno">  182</span>    <span class="keywordtype">bool</span> <a class="code hl_function" href="classcello_1_1_object.html#a887fbb6f22d47fc6e2cdfec57c320efe">canRedo</a> () <span class="keyword">const</span>;</div>
+<div class="line"><a id="l00182" name="l00182"></a><span class="lineno">  182</span>    <span class="keywordtype">bool</span> <a class="code hl_function" href="classcello_1_1_object.html#a6cace96ea91fd79dfc17cb44b9c4fbf9">canUndo</a> () <span class="keyword">const</span>;</div>
 <div class="line"><a id="l00183" name="l00183"></a><span class="lineno">  183</span> </div>
-<div class="line"><a id="l00190" name="l00190"></a><span class="lineno">  190</span>    <span class="keywordtype">bool</span> <a class="code hl_function" href="classcello_1_1_object.html#a534edaa253affc488dba210e86e55ccf">redo</a> ();</div>
+<div class="line"><a id="l00190" name="l00190"></a><span class="lineno">  190</span>    <span class="keywordtype">bool</span> <a class="code hl_function" href="classcello_1_1_object.html#a9068e0306934dcbf2c24b71efe5c1024">undo</a> ();</div>
 <div class="line"><a id="l00191" name="l00191"></a><span class="lineno">  191</span> </div>
-<div class="line"><a id="l00195" name="l00195"></a><span class="lineno">  195</span>    <span class="keywordtype">void</span> <a class="code hl_function" href="classcello_1_1_object.html#abd126a66992806eca5aaecea0d5f71d1">clearUndoHistory</a> ();</div>
-<div class="line"><a id="l00197" name="l00197"></a><span class="lineno">  197</span> </div>
-<div class="line"><a id="l00203" name="l00203"></a><span class="lineno">  203</span> </div>
-<div class="line"><a id="l00204" name="l00204"></a><span class="lineno">  204</span>    <span class="comment">// An iterator to access child objects; note that it works in terms</span></div>
-<div class="line"><a id="l00205" name="l00205"></a><span class="lineno">  205</span>    <span class="comment">// of ValueTrees, not objects (since our list of children can be</span></div>
-<div class="line"><a id="l00206" name="l00206"></a><span class="lineno">  206</span>    <span class="comment">// heterogeneous)</span></div>
-<div class="line"><a id="l00207" name="l00207"></a><span class="lineno">  207</span>    <span class="keyword">using </span>Iterator = juce::ValueTree::Iterator;</div>
-<div class="line"><a id="l00208" name="l00208"></a><span class="lineno">  208</span>    Iterator begin () { <span class="keywordflow">return</span> <a class="code hl_variable" href="classcello_1_1_object.html#a368472e271247ac9336c4f8015270627">data</a>.begin (); }</div>
-<div class="line"><a id="l00209" name="l00209"></a><span class="lineno">  209</span>    Iterator end () { <span class="keywordflow">return</span> <a class="code hl_variable" href="classcello_1_1_object.html#a368472e271247ac9336c4f8015270627">data</a>.end (); }</div>
-<div class="line"><a id="l00210" name="l00210"></a><span class="lineno">  210</span> </div>
-<div class="line"><a id="l00221" name="l00221"></a><span class="lineno">  221</span>    juce::ValueTree <a class="code hl_function" href="classcello_1_1_object.html#ad8cf02406e7aa4127d4c4f9117123fa9">operator[] </a>(<span class="keywordtype">int</span> index) <span class="keyword">const</span>;</div>
-<div class="line"><a id="l00222" name="l00222"></a><span class="lineno">  222</span> </div>
-<div class="line"><a id="l00228" name="l00228"></a><span class="lineno">  228</span>    <span class="keywordtype">int</span> <a class="code hl_function" href="classcello_1_1_object.html#a86a5f2f969546e15cf78507a09b5b0dd">getNumChildren</a> () <span class="keyword">const</span>;</div>
-<div class="line"><a id="l00229" name="l00229"></a><span class="lineno">  229</span> </div>
-<div class="line"><a id="l00235" name="l00235"></a><span class="lineno">  235</span>    <span class="keywordtype">void</span> <a class="code hl_function" href="classcello_1_1_object.html#accfacbf6d9bcd8f237fda4cc91d1816b">append</a> (Object* <span class="keywordtype">object</span>);</div>
-<div class="line"><a id="l00236" name="l00236"></a><span class="lineno">  236</span> </div>
-<div class="line"><a id="l00243" name="l00243"></a><span class="lineno">  243</span>    <span class="keywordtype">void</span> <a class="code hl_function" href="classcello_1_1_object.html#ae45a38a610eadc3fcf2bb9a358c7befa">insert</a> (Object* <span class="keywordtype">object</span>, <span class="keywordtype">int</span> index);</div>
+<div class="line"><a id="l00197" name="l00197"></a><span class="lineno">  197</span>    <span class="keywordtype">bool</span> <a class="code hl_function" href="classcello_1_1_object.html#a887fbb6f22d47fc6e2cdfec57c320efe">canRedo</a> () <span class="keyword">const</span>;</div>
+<div class="line"><a id="l00198" name="l00198"></a><span class="lineno">  198</span> </div>
+<div class="line"><a id="l00205" name="l00205"></a><span class="lineno">  205</span>    <span class="keywordtype">bool</span> <a class="code hl_function" href="classcello_1_1_object.html#a534edaa253affc488dba210e86e55ccf">redo</a> ();</div>
+<div class="line"><a id="l00206" name="l00206"></a><span class="lineno">  206</span> </div>
+<div class="line"><a id="l00210" name="l00210"></a><span class="lineno">  210</span>    <span class="keywordtype">void</span> <a class="code hl_function" href="classcello_1_1_object.html#abd126a66992806eca5aaecea0d5f71d1">clearUndoHistory</a> ();</div>
+<div class="line"><a id="l00212" name="l00212"></a><span class="lineno">  212</span> </div>
+<div class="line"><a id="l00218" name="l00218"></a><span class="lineno">  218</span> </div>
+<div class="line"><a id="l00219" name="l00219"></a><span class="lineno">  219</span>    <span class="comment">// An iterator to access child objects; note that it works in terms</span></div>
+<div class="line"><a id="l00220" name="l00220"></a><span class="lineno">  220</span>    <span class="comment">// of ValueTrees, not objects (since our list of children can be</span></div>
+<div class="line"><a id="l00221" name="l00221"></a><span class="lineno">  221</span>    <span class="comment">// heterogeneous)</span></div>
+<div class="line"><a id="l00222" name="l00222"></a><span class="lineno">  222</span>    <span class="keyword">using </span>Iterator = juce::ValueTree::Iterator;</div>
+<div class="line"><a id="l00223" name="l00223"></a><span class="lineno">  223</span>    Iterator begin () { <span class="keywordflow">return</span> <a class="code hl_variable" href="classcello_1_1_object.html#a368472e271247ac9336c4f8015270627">data</a>.begin (); }</div>
+<div class="line"><a id="l00224" name="l00224"></a><span class="lineno">  224</span>    Iterator end () { <span class="keywordflow">return</span> <a class="code hl_variable" href="classcello_1_1_object.html#a368472e271247ac9336c4f8015270627">data</a>.end (); }</div>
+<div class="line"><a id="l00225" name="l00225"></a><span class="lineno">  225</span> </div>
+<div class="line"><a id="l00236" name="l00236"></a><span class="lineno">  236</span>    juce::ValueTree <a class="code hl_function" href="classcello_1_1_object.html#ad8cf02406e7aa4127d4c4f9117123fa9">operator[] </a>(<span class="keywordtype">int</span> index) <span class="keyword">const</span>;</div>
+<div class="line"><a id="l00237" name="l00237"></a><span class="lineno">  237</span> </div>
+<div class="line"><a id="l00243" name="l00243"></a><span class="lineno">  243</span>    <span class="keywordtype">int</span> <a class="code hl_function" href="classcello_1_1_object.html#a86a5f2f969546e15cf78507a09b5b0dd">getNumChildren</a> () <span class="keyword">const</span>;</div>
 <div class="line"><a id="l00244" name="l00244"></a><span class="lineno">  244</span> </div>
-<div class="line"><a id="l00251" name="l00251"></a><span class="lineno">  251</span>    <a class="code hl_function" href="classcello_1_1_object.html#a0e7dcedd63ad88da5024fbbe12fbd638">Object</a>* <a class="code hl_function" href="classcello_1_1_object.html#ab91a10de733ff8c8bc3fa3729fd036a0">remove</a> (Object* <span class="keywordtype">object</span>);</div>
-<div class="line"><a id="l00252" name="l00252"></a><span class="lineno">  252</span> </div>
-<div class="line"><a id="l00259" name="l00259"></a><span class="lineno">  259</span>    juce::ValueTree <a class="code hl_function" href="classcello_1_1_object.html#ab91a10de733ff8c8bc3fa3729fd036a0">remove</a> (<span class="keywordtype">int</span> index);</div>
-<div class="line"><a id="l00260" name="l00260"></a><span class="lineno">  260</span> </div>
-<div class="line"><a id="l00267" name="l00267"></a><span class="lineno">  267</span>    <span class="keywordtype">void</span> <a class="code hl_function" href="classcello_1_1_object.html#a05e394127066a7e14788dcf97b663ff1">move</a> (<span class="keywordtype">int</span> fromIndex, <span class="keywordtype">int</span> toIndex);</div>
-<div class="line"><a id="l00268" name="l00268"></a><span class="lineno">  268</span> </div>
-<div class="line"><a id="l00283" name="l00283"></a><span class="lineno">  283</span>    <span class="keyword">template</span> &lt;<span class="keyword">typename</span> Comparator&gt; <span class="keywordtype">void</span> <a class="code hl_function" href="classcello_1_1_object.html#a16f55b2f7ddbfa99ad014da938144f1b">sort</a> (Comparator&amp; comp, <span class="keywordtype">bool</span> stableSort);</div>
-<div class="line"><a id="l00284" name="l00284"></a><span class="lineno">  284</span> </div>
-<div class="line"><a id="l00286" name="l00286"></a><span class="lineno">  286</span> </div>
-<div class="line"><a id="l00292" name="l00292"></a><span class="lineno"><a class="line" href="classcello_1_1_object.html#a4b25ab25ee62b03dda46143a20054c02">  292</a></span>    <span class="keywordtype">void</span> <a class="code hl_function" href="classcello_1_1_object.html#a4b25ab25ee62b03dda46143a20054c02">excludeListener</a> (juce::ValueTree::Listener* listener)</div>
-<div class="line"><a id="l00293" name="l00293"></a><span class="lineno">  293</span>    {</div>
-<div class="line"><a id="l00294" name="l00294"></a><span class="lineno">  294</span>        <a class="code hl_variable" href="classcello_1_1_object.html#a7c69af2cea29bfd1b1459bf262d58611">excludedListener</a> = listener;</div>
-<div class="line"><a id="l00295" name="l00295"></a><span class="lineno">  295</span>    }</div>
-<div class="line"><a id="l00296" name="l00296"></a><span class="lineno">  296</span> </div>
-<div class="line"><a id="l00302" name="l00302"></a><span class="lineno"><a class="line" href="classcello_1_1_object.html#a36491bac36514cc7e88454d8444d0a0f">  302</a></span>    juce::ValueTree::Listener* <a class="code hl_function" href="classcello_1_1_object.html#a36491bac36514cc7e88454d8444d0a0f">getExcludedListener</a> ()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> <a class="code hl_variable" href="classcello_1_1_object.html#a7c69af2cea29bfd1b1459bf262d58611">excludedListener</a>; }</div>
-<div class="line"><a id="l00303" name="l00303"></a><span class="lineno">  303</span> </div>
-<div class="line"><a id="l00308" name="l00308"></a><span class="lineno">  308</span> </div>
-<div class="line"><a id="l00309" name="l00309"></a><span class="lineno">  309</span>    <span class="keyword">using </span>PropertyUpdateFn = std::function&lt;void (juce::Identifier)&gt;;</div>
-<div class="line"><a id="l00319" name="l00319"></a><span class="lineno">  319</span>    <span class="keywordtype">void</span> <a class="code hl_function" href="classcello_1_1_object.html#a2af14feec2238a3318bbfcd8954025ac">onPropertyChange</a> (juce::Identifier <span class="keywordtype">id</span>, PropertyUpdateFn callback);</div>
-<div class="line"><a id="l00320" name="l00320"></a><span class="lineno">  320</span> </div>
-<div class="line"><a id="l00328" name="l00328"></a><span class="lineno">  328</span>    <span class="keywordtype">void</span> <a class="code hl_function" href="classcello_1_1_object.html#a2af14feec2238a3318bbfcd8954025ac">onPropertyChange</a> (<span class="keyword">const</span> <a class="code hl_class" href="classcello_1_1_value_base.html">ValueBase</a>&amp; val, PropertyUpdateFn callback);</div>
-<div class="line"><a id="l00329" name="l00329"></a><span class="lineno">  329</span> </div>
-<div class="line"><a id="l00330" name="l00330"></a><span class="lineno">  330</span>    <span class="keyword">using </span>ChildUpdateFn =</div>
-<div class="line"><a id="l00331" name="l00331"></a><span class="lineno">  331</span>        std::function&lt;void (juce::ValueTree&amp; child, <span class="keywordtype">int</span> oldIndex, <span class="keywordtype">int</span> newIndex)&gt;;</div>
-<div class="line"><a id="l00332" name="l00332"></a><span class="lineno">  332</span> </div>
-<div class="line"><a id="l00333" name="l00333"></a><span class="lineno">  333</span>    ChildUpdateFn onChildAdded;</div>
-<div class="line"><a id="l00334" name="l00334"></a><span class="lineno">  334</span>    ChildUpdateFn onChildRemoved;</div>
-<div class="line"><a id="l00335" name="l00335"></a><span class="lineno">  335</span>    ChildUpdateFn onChildMoved;</div>
-<div class="line"><a id="l00336" name="l00336"></a><span class="lineno">  336</span> </div>
-<div class="line"><a id="l00337" name="l00337"></a><span class="lineno">  337</span>    <span class="keyword">using </span>SelfUpdateFn = std::function&lt;void (<span class="keywordtype">void</span>)&gt;;</div>
-<div class="line"><a id="l00338" name="l00338"></a><span class="lineno">  338</span> </div>
-<div class="line"><a id="l00339" name="l00339"></a><span class="lineno">  339</span>    SelfUpdateFn onParentChanged;</div>
-<div class="line"><a id="l00340" name="l00340"></a><span class="lineno">  340</span>    SelfUpdateFn onTreeRedirected;</div>
-<div class="line"><a id="l00341" name="l00341"></a><span class="lineno">  341</span> </div>
-<div class="line"><a id="l00343" name="l00343"></a><span class="lineno">  343</span> </div>
-<div class="line"><a id="l00355" name="l00355"></a><span class="lineno">  355</span> </div>
-<div class="line"><a id="l00365" name="l00365"></a><span class="lineno">  365</span>    <span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt;</div>
-<div class="line"><a id="l00366" name="l00366"></a><span class="lineno">  366</span>    T <a class="code hl_function" href="classcello_1_1_object.html#a6a23c8172d0df906594e9d222dd6e441">getattr</a> (<span class="keyword">const</span> juce::Identifier&amp; attr, <span class="keyword">const</span> T&amp; defaultVal) <span class="keyword">const</span>;</div>
-<div class="line"><a id="l00367" name="l00367"></a><span class="lineno">  367</span> </div>
-<div class="line"><a id="l00375" name="l00375"></a><span class="lineno">  375</span>    <span class="keywordtype">bool</span> <a class="code hl_function" href="classcello_1_1_object.html#a556d736691db1d05b208a8b3c6f58ebd">hasattr</a> (<span class="keyword">const</span> juce::Identifier&amp; attr) <span class="keyword">const</span>;</div>
-<div class="line"><a id="l00376" name="l00376"></a><span class="lineno">  376</span> </div>
-<div class="line"><a id="l00385" name="l00385"></a><span class="lineno">  385</span>    <span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt;</div>
-<div class="line"><a id="l00386" name="l00386"></a><span class="lineno">  386</span>    <a class="code hl_class" href="classcello_1_1_object.html">Object</a>&amp; <a class="code hl_function" href="classcello_1_1_object.html#a39df4cb5bd79fd770ad23184d5ef8c87">setattr</a> (<span class="keyword">const</span> juce::Identifier&amp; attr, <span class="keyword">const</span> T&amp; attrVal);</div>
-<div class="line"><a id="l00387" name="l00387"></a><span class="lineno">  387</span> </div>
-<div class="line"><a id="l00392" name="l00392"></a><span class="lineno">  392</span>    <span class="keywordtype">void</span> <a class="code hl_function" href="classcello_1_1_object.html#a7fd4f6b747c7c120ded85f09765378af">delattr</a> (<span class="keyword">const</span> juce::Identifier&amp; attr);</div>
-<div class="line"><a id="l00393" name="l00393"></a><span class="lineno">  393</span> </div>
-<div class="line"><a id="l00395" name="l00395"></a><span class="lineno">  395</span> </div>
-<div class="line"><a id="l00401" name="l00401"></a><span class="lineno">  401</span> </div>
-<div class="line"><a id="l00410" name="l00410"></a><span class="lineno">  410</span>    <span class="keyword">static</span> juce::ValueTree <a class="code hl_function" href="classcello_1_1_object.html#ad05bcbdf54e3587a9060dba4caeba462">load</a> (juce::File file, FileFormat format = FileFormat::xml);</div>
-<div class="line"><a id="l00411" name="l00411"></a><span class="lineno">  411</span> </div>
-<div class="line"><a id="l00419" name="l00419"></a><span class="lineno">  419</span>    <span class="keywordtype">bool</span> <a class="code hl_function" href="classcello_1_1_object.html#aa95d1de2cad7ce93e4ea89d06b1b7e76">save</a> (juce::File file, FileFormat format = FileFormat::xml) <span class="keyword">const</span>;</div>
-<div class="line"><a id="l00420" name="l00420"></a><span class="lineno">  420</span> </div>
-<div class="line"><a id="l00422" name="l00422"></a><span class="lineno">  422</span><span class="keyword">private</span>:</div>
-<div class="line"><a id="l00436" name="l00436"></a><span class="lineno">  436</span>    <span class="keywordtype">void</span> valueTreePropertyChanged (juce::ValueTree&amp; treeWhosePropertyHasChanged,</div>
-<div class="line"><a id="l00437" name="l00437"></a><span class="lineno">  437</span>                                   <span class="keyword">const</span> juce::Identifier&amp; property) <span class="keyword">override</span>;</div>
-<div class="line"><a id="l00438" name="l00438"></a><span class="lineno">  438</span> </div>
-<div class="line"><a id="l00445" name="l00445"></a><span class="lineno">  445</span>    <span class="keywordtype">void</span> valueTreeChildAdded (juce::ValueTree&amp; parentTree,</div>
-<div class="line"><a id="l00446" name="l00446"></a><span class="lineno">  446</span>                              juce::ValueTree&amp; childTree) <span class="keyword">override</span>;</div>
-<div class="line"><a id="l00447" name="l00447"></a><span class="lineno">  447</span> </div>
-<div class="line"><a id="l00455" name="l00455"></a><span class="lineno">  455</span>    <span class="keywordtype">void</span> valueTreeChildRemoved (juce::ValueTree&amp; parentTree, juce::ValueTree&amp; childTree,</div>
-<div class="line"><a id="l00456" name="l00456"></a><span class="lineno">  456</span>                                <span class="keywordtype">int</span> index) <span class="keyword">override</span>;</div>
-<div class="line"><a id="l00457" name="l00457"></a><span class="lineno">  457</span> </div>
-<div class="line"><a id="l00465" name="l00465"></a><span class="lineno">  465</span>    <span class="keywordtype">void</span> valueTreeChildOrderChanged (juce::ValueTree&amp; childTree, <span class="keywordtype">int</span> oldIndex,</div>
-<div class="line"><a id="l00466" name="l00466"></a><span class="lineno">  466</span>                                     <span class="keywordtype">int</span> newIndex) <span class="keyword">override</span>;</div>
-<div class="line"><a id="l00467" name="l00467"></a><span class="lineno">  467</span> </div>
-<div class="line"><a id="l00473" name="l00473"></a><span class="lineno">  473</span>    <span class="keywordtype">void</span> valueTreeParentChanged (juce::ValueTree&amp; tree) <span class="keyword">override</span>;</div>
-<div class="line"><a id="l00474" name="l00474"></a><span class="lineno">  474</span> </div>
-<div class="line"><a id="l00480" name="l00480"></a><span class="lineno">  480</span>    <span class="keywordtype">void</span> valueTreeRedirected (juce::ValueTree&amp; tree) <span class="keyword">override</span>;</div>
-<div class="line"><a id="l00481" name="l00481"></a><span class="lineno">  481</span> </div>
-<div class="line"><a id="l00482" name="l00482"></a><span class="lineno">  482</span><span class="keyword">protected</span>:</div>
-<div class="line"><a id="l00484" name="l00484"></a><span class="lineno"><a class="line" href="classcello_1_1_object.html#a368472e271247ac9336c4f8015270627">  484</a></span>    juce::ValueTree <a class="code hl_variable" href="classcello_1_1_object.html#a368472e271247ac9336c4f8015270627">data</a>;</div>
-<div class="line"><a id="l00485" name="l00485"></a><span class="lineno">  485</span> </div>
-<div class="line"><a id="l00487" name="l00487"></a><span class="lineno"><a class="line" href="classcello_1_1_object.html#a8f7ad57b7ba52f9a06b121b367d825b0">  487</a></span>    juce::UndoManager* <a class="code hl_variable" href="classcello_1_1_object.html#a8f7ad57b7ba52f9a06b121b367d825b0">undoManager</a> { <span class="keyword">nullptr</span> };</div>
-<div class="line"><a id="l00488" name="l00488"></a><span class="lineno">  488</span> </div>
-<div class="line"><a id="l00490" name="l00490"></a><span class="lineno"><a class="line" href="classcello_1_1_object.html#a9ef37de54c32241809154d63985719b3">  490</a></span>    CreationType <a class="code hl_variable" href="classcello_1_1_object.html#a9ef37de54c32241809154d63985719b3">creationType</a> { CreationType::wrapped };</div>
-<div class="line"><a id="l00491" name="l00491"></a><span class="lineno">  491</span> </div>
-<div class="line"><a id="l00493" name="l00493"></a><span class="lineno"><a class="line" href="classcello_1_1_object.html#a7c69af2cea29bfd1b1459bf262d58611">  493</a></span>    juce::ValueTree::Listener* <a class="code hl_variable" href="classcello_1_1_object.html#a7c69af2cea29bfd1b1459bf262d58611">excludedListener</a> { <span class="keyword">nullptr</span> };</div>
-<div class="line"><a id="l00494" name="l00494"></a><span class="lineno">  494</span> </div>
-<div class="line"><a id="l00497" name="l00497"></a><span class="lineno"><a class="line" href="classcello_1_1_object.html#acd1018e5ee26cdd37c7208b37fb26485">  497</a></span>    <span class="keywordtype">bool</span> <a class="code hl_variable" href="classcello_1_1_object.html#acd1018e5ee26cdd37c7208b37fb26485">doForceUpdates</a> { <span class="keyword">false</span> };</div>
-<div class="line"><a id="l00498" name="l00498"></a><span class="lineno">  498</span> </div>
-<div class="line"><a id="l00499" name="l00499"></a><span class="lineno">  499</span><span class="keyword">private</span>:</div>
-<div class="line"><a id="l00506" name="l00506"></a><span class="lineno">  506</span>    <span class="keyword">struct </span>PropertyUpdate</div>
-<div class="line"><a id="l00507" name="l00507"></a><span class="lineno">  507</span>    {</div>
-<div class="line"><a id="l00508" name="l00508"></a><span class="lineno">  508</span>        PropertyUpdate (juce::Identifier id_, PropertyUpdateFn fn_)</div>
-<div class="line"><a id="l00509" name="l00509"></a><span class="lineno">  509</span>        : id { id_ }</div>
-<div class="line"><a id="l00510" name="l00510"></a><span class="lineno">  510</span>        , fn { fn_ }</div>
-<div class="line"><a id="l00511" name="l00511"></a><span class="lineno">  511</span>        {</div>
-<div class="line"><a id="l00512" name="l00512"></a><span class="lineno">  512</span>        }</div>
+<div class="line"><a id="l00250" name="l00250"></a><span class="lineno">  250</span>    <span class="keywordtype">void</span> <a class="code hl_function" href="classcello_1_1_object.html#accfacbf6d9bcd8f237fda4cc91d1816b">append</a> (Object* <span class="keywordtype">object</span>);</div>
+<div class="line"><a id="l00251" name="l00251"></a><span class="lineno">  251</span> </div>
+<div class="line"><a id="l00258" name="l00258"></a><span class="lineno">  258</span>    <span class="keywordtype">void</span> <a class="code hl_function" href="classcello_1_1_object.html#ae45a38a610eadc3fcf2bb9a358c7befa">insert</a> (Object* <span class="keywordtype">object</span>, <span class="keywordtype">int</span> index);</div>
+<div class="line"><a id="l00259" name="l00259"></a><span class="lineno">  259</span> </div>
+<div class="line"><a id="l00266" name="l00266"></a><span class="lineno">  266</span>    <a class="code hl_function" href="classcello_1_1_object.html#a0e7dcedd63ad88da5024fbbe12fbd638">Object</a>* <a class="code hl_function" href="classcello_1_1_object.html#ab91a10de733ff8c8bc3fa3729fd036a0">remove</a> (Object* <span class="keywordtype">object</span>);</div>
+<div class="line"><a id="l00267" name="l00267"></a><span class="lineno">  267</span> </div>
+<div class="line"><a id="l00274" name="l00274"></a><span class="lineno">  274</span>    juce::ValueTree <a class="code hl_function" href="classcello_1_1_object.html#ab91a10de733ff8c8bc3fa3729fd036a0">remove</a> (<span class="keywordtype">int</span> index);</div>
+<div class="line"><a id="l00275" name="l00275"></a><span class="lineno">  275</span> </div>
+<div class="line"><a id="l00282" name="l00282"></a><span class="lineno">  282</span>    <span class="keywordtype">void</span> <a class="code hl_function" href="classcello_1_1_object.html#a05e394127066a7e14788dcf97b663ff1">move</a> (<span class="keywordtype">int</span> fromIndex, <span class="keywordtype">int</span> toIndex);</div>
+<div class="line"><a id="l00283" name="l00283"></a><span class="lineno">  283</span> </div>
+<div class="line"><a id="l00298" name="l00298"></a><span class="lineno">  298</span>    <span class="keyword">template</span> &lt;<span class="keyword">typename</span> Comparator&gt; <span class="keywordtype">void</span> <a class="code hl_function" href="classcello_1_1_object.html#a16f55b2f7ddbfa99ad014da938144f1b">sort</a> (Comparator&amp; comp, <span class="keywordtype">bool</span> stableSort);</div>
+<div class="line"><a id="l00299" name="l00299"></a><span class="lineno">  299</span> </div>
+<div class="line"><a id="l00301" name="l00301"></a><span class="lineno">  301</span> </div>
+<div class="line"><a id="l00307" name="l00307"></a><span class="lineno"><a class="line" href="classcello_1_1_object.html#a4b25ab25ee62b03dda46143a20054c02">  307</a></span>    <span class="keywordtype">void</span> <a class="code hl_function" href="classcello_1_1_object.html#a4b25ab25ee62b03dda46143a20054c02">excludeListener</a> (juce::ValueTree::Listener* listener)</div>
+<div class="line"><a id="l00308" name="l00308"></a><span class="lineno">  308</span>    {</div>
+<div class="line"><a id="l00309" name="l00309"></a><span class="lineno">  309</span>        <a class="code hl_variable" href="classcello_1_1_object.html#a7c69af2cea29bfd1b1459bf262d58611">excludedListener</a> = listener;</div>
+<div class="line"><a id="l00310" name="l00310"></a><span class="lineno">  310</span>    }</div>
+<div class="line"><a id="l00311" name="l00311"></a><span class="lineno">  311</span> </div>
+<div class="line"><a id="l00317" name="l00317"></a><span class="lineno"><a class="line" href="classcello_1_1_object.html#a36491bac36514cc7e88454d8444d0a0f">  317</a></span>    juce::ValueTree::Listener* <a class="code hl_function" href="classcello_1_1_object.html#a36491bac36514cc7e88454d8444d0a0f">getExcludedListener</a> ()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> <a class="code hl_variable" href="classcello_1_1_object.html#a7c69af2cea29bfd1b1459bf262d58611">excludedListener</a>; }</div>
+<div class="line"><a id="l00318" name="l00318"></a><span class="lineno">  318</span> </div>
+<div class="line"><a id="l00323" name="l00323"></a><span class="lineno">  323</span> </div>
+<div class="line"><a id="l00324" name="l00324"></a><span class="lineno">  324</span>    <span class="keyword">using </span>PropertyUpdateFn = std::function&lt;void (juce::Identifier)&gt;;</div>
+<div class="line"><a id="l00334" name="l00334"></a><span class="lineno">  334</span>    <span class="keywordtype">void</span> <a class="code hl_function" href="classcello_1_1_object.html#a2af14feec2238a3318bbfcd8954025ac">onPropertyChange</a> (juce::Identifier <span class="keywordtype">id</span>, PropertyUpdateFn callback);</div>
+<div class="line"><a id="l00335" name="l00335"></a><span class="lineno">  335</span> </div>
+<div class="line"><a id="l00343" name="l00343"></a><span class="lineno">  343</span>    <span class="keywordtype">void</span> <a class="code hl_function" href="classcello_1_1_object.html#a2af14feec2238a3318bbfcd8954025ac">onPropertyChange</a> (<span class="keyword">const</span> <a class="code hl_class" href="classcello_1_1_value_base.html">ValueBase</a>&amp; val, PropertyUpdateFn callback);</div>
+<div class="line"><a id="l00344" name="l00344"></a><span class="lineno">  344</span> </div>
+<div class="line"><a id="l00345" name="l00345"></a><span class="lineno">  345</span>    <span class="keyword">using </span>ChildUpdateFn =</div>
+<div class="line"><a id="l00346" name="l00346"></a><span class="lineno">  346</span>        std::function&lt;void (juce::ValueTree&amp; child, <span class="keywordtype">int</span> oldIndex, <span class="keywordtype">int</span> newIndex)&gt;;</div>
+<div class="line"><a id="l00347" name="l00347"></a><span class="lineno">  347</span> </div>
+<div class="line"><a id="l00348" name="l00348"></a><span class="lineno">  348</span>    ChildUpdateFn onChildAdded;</div>
+<div class="line"><a id="l00349" name="l00349"></a><span class="lineno">  349</span>    ChildUpdateFn onChildRemoved;</div>
+<div class="line"><a id="l00350" name="l00350"></a><span class="lineno">  350</span>    ChildUpdateFn onChildMoved;</div>
+<div class="line"><a id="l00351" name="l00351"></a><span class="lineno">  351</span> </div>
+<div class="line"><a id="l00352" name="l00352"></a><span class="lineno">  352</span>    <span class="keyword">using </span>SelfUpdateFn = std::function&lt;void (<span class="keywordtype">void</span>)&gt;;</div>
+<div class="line"><a id="l00353" name="l00353"></a><span class="lineno">  353</span> </div>
+<div class="line"><a id="l00354" name="l00354"></a><span class="lineno">  354</span>    SelfUpdateFn onParentChanged;</div>
+<div class="line"><a id="l00355" name="l00355"></a><span class="lineno">  355</span>    SelfUpdateFn onTreeRedirected;</div>
+<div class="line"><a id="l00356" name="l00356"></a><span class="lineno">  356</span> </div>
+<div class="line"><a id="l00358" name="l00358"></a><span class="lineno">  358</span> </div>
+<div class="line"><a id="l00370" name="l00370"></a><span class="lineno">  370</span> </div>
+<div class="line"><a id="l00380" name="l00380"></a><span class="lineno">  380</span>    <span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt;</div>
+<div class="line"><a id="l00381" name="l00381"></a><span class="lineno">  381</span>    T <a class="code hl_function" href="classcello_1_1_object.html#a6a23c8172d0df906594e9d222dd6e441">getattr</a> (<span class="keyword">const</span> juce::Identifier&amp; attr, <span class="keyword">const</span> T&amp; defaultVal) <span class="keyword">const</span>;</div>
+<div class="line"><a id="l00382" name="l00382"></a><span class="lineno">  382</span> </div>
+<div class="line"><a id="l00390" name="l00390"></a><span class="lineno">  390</span>    <span class="keywordtype">bool</span> <a class="code hl_function" href="classcello_1_1_object.html#a556d736691db1d05b208a8b3c6f58ebd">hasattr</a> (<span class="keyword">const</span> juce::Identifier&amp; attr) <span class="keyword">const</span>;</div>
+<div class="line"><a id="l00391" name="l00391"></a><span class="lineno">  391</span> </div>
+<div class="line"><a id="l00400" name="l00400"></a><span class="lineno">  400</span>    <span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt;</div>
+<div class="line"><a id="l00401" name="l00401"></a><span class="lineno">  401</span>    <a class="code hl_class" href="classcello_1_1_object.html">Object</a>&amp; <a class="code hl_function" href="classcello_1_1_object.html#a39df4cb5bd79fd770ad23184d5ef8c87">setattr</a> (<span class="keyword">const</span> juce::Identifier&amp; attr, <span class="keyword">const</span> T&amp; attrVal);</div>
+<div class="line"><a id="l00402" name="l00402"></a><span class="lineno">  402</span> </div>
+<div class="line"><a id="l00407" name="l00407"></a><span class="lineno">  407</span>    <span class="keywordtype">void</span> <a class="code hl_function" href="classcello_1_1_object.html#a7fd4f6b747c7c120ded85f09765378af">delattr</a> (<span class="keyword">const</span> juce::Identifier&amp; attr);</div>
+<div class="line"><a id="l00408" name="l00408"></a><span class="lineno">  408</span> </div>
+<div class="line"><a id="l00410" name="l00410"></a><span class="lineno">  410</span> </div>
+<div class="line"><a id="l00416" name="l00416"></a><span class="lineno">  416</span> </div>
+<div class="line"><a id="l00425" name="l00425"></a><span class="lineno">  425</span>    <span class="keyword">static</span> juce::ValueTree <a class="code hl_function" href="classcello_1_1_object.html#ad05bcbdf54e3587a9060dba4caeba462">load</a> (juce::File file, FileFormat format = FileFormat::xml);</div>
+<div class="line"><a id="l00426" name="l00426"></a><span class="lineno">  426</span> </div>
+<div class="line"><a id="l00434" name="l00434"></a><span class="lineno">  434</span>    <span class="keywordtype">bool</span> <a class="code hl_function" href="classcello_1_1_object.html#aa95d1de2cad7ce93e4ea89d06b1b7e76">save</a> (juce::File file, FileFormat format = FileFormat::xml) <span class="keyword">const</span>;</div>
+<div class="line"><a id="l00435" name="l00435"></a><span class="lineno">  435</span> </div>
+<div class="line"><a id="l00437" name="l00437"></a><span class="lineno">  437</span><span class="keyword">private</span>:</div>
+<div class="line"><a id="l00451" name="l00451"></a><span class="lineno">  451</span>    <span class="keywordtype">void</span> valueTreePropertyChanged (juce::ValueTree&amp; treeWhosePropertyHasChanged,</div>
+<div class="line"><a id="l00452" name="l00452"></a><span class="lineno">  452</span>                                   <span class="keyword">const</span> juce::Identifier&amp; property) <span class="keyword">override</span>;</div>
+<div class="line"><a id="l00453" name="l00453"></a><span class="lineno">  453</span> </div>
+<div class="line"><a id="l00460" name="l00460"></a><span class="lineno">  460</span>    <span class="keywordtype">void</span> valueTreeChildAdded (juce::ValueTree&amp; parentTree,</div>
+<div class="line"><a id="l00461" name="l00461"></a><span class="lineno">  461</span>                              juce::ValueTree&amp; childTree) <span class="keyword">override</span>;</div>
+<div class="line"><a id="l00462" name="l00462"></a><span class="lineno">  462</span> </div>
+<div class="line"><a id="l00470" name="l00470"></a><span class="lineno">  470</span>    <span class="keywordtype">void</span> valueTreeChildRemoved (juce::ValueTree&amp; parentTree, juce::ValueTree&amp; childTree,</div>
+<div class="line"><a id="l00471" name="l00471"></a><span class="lineno">  471</span>                                <span class="keywordtype">int</span> index) <span class="keyword">override</span>;</div>
+<div class="line"><a id="l00472" name="l00472"></a><span class="lineno">  472</span> </div>
+<div class="line"><a id="l00480" name="l00480"></a><span class="lineno">  480</span>    <span class="keywordtype">void</span> valueTreeChildOrderChanged (juce::ValueTree&amp; childTree, <span class="keywordtype">int</span> oldIndex,</div>
+<div class="line"><a id="l00481" name="l00481"></a><span class="lineno">  481</span>                                     <span class="keywordtype">int</span> newIndex) <span class="keyword">override</span>;</div>
+<div class="line"><a id="l00482" name="l00482"></a><span class="lineno">  482</span> </div>
+<div class="line"><a id="l00488" name="l00488"></a><span class="lineno">  488</span>    <span class="keywordtype">void</span> valueTreeParentChanged (juce::ValueTree&amp; tree) <span class="keyword">override</span>;</div>
+<div class="line"><a id="l00489" name="l00489"></a><span class="lineno">  489</span> </div>
+<div class="line"><a id="l00495" name="l00495"></a><span class="lineno">  495</span>    <span class="keywordtype">void</span> valueTreeRedirected (juce::ValueTree&amp; tree) <span class="keyword">override</span>;</div>
+<div class="line"><a id="l00496" name="l00496"></a><span class="lineno">  496</span> </div>
+<div class="line"><a id="l00497" name="l00497"></a><span class="lineno">  497</span><span class="keyword">protected</span>:</div>
+<div class="line"><a id="l00499" name="l00499"></a><span class="lineno"><a class="line" href="classcello_1_1_object.html#a368472e271247ac9336c4f8015270627">  499</a></span>    juce::ValueTree <a class="code hl_variable" href="classcello_1_1_object.html#a368472e271247ac9336c4f8015270627">data</a>;</div>
+<div class="line"><a id="l00500" name="l00500"></a><span class="lineno">  500</span> </div>
+<div class="line"><a id="l00502" name="l00502"></a><span class="lineno"><a class="line" href="classcello_1_1_object.html#a8f7ad57b7ba52f9a06b121b367d825b0">  502</a></span>    juce::UndoManager* <a class="code hl_variable" href="classcello_1_1_object.html#a8f7ad57b7ba52f9a06b121b367d825b0">undoManager</a> { <span class="keyword">nullptr</span> };</div>
+<div class="line"><a id="l00503" name="l00503"></a><span class="lineno">  503</span> </div>
+<div class="line"><a id="l00505" name="l00505"></a><span class="lineno"><a class="line" href="classcello_1_1_object.html#a9ef37de54c32241809154d63985719b3">  505</a></span>    CreationType <a class="code hl_variable" href="classcello_1_1_object.html#a9ef37de54c32241809154d63985719b3">creationType</a> { CreationType::wrapped };</div>
+<div class="line"><a id="l00506" name="l00506"></a><span class="lineno">  506</span> </div>
+<div class="line"><a id="l00508" name="l00508"></a><span class="lineno"><a class="line" href="classcello_1_1_object.html#a7c69af2cea29bfd1b1459bf262d58611">  508</a></span>    juce::ValueTree::Listener* <a class="code hl_variable" href="classcello_1_1_object.html#a7c69af2cea29bfd1b1459bf262d58611">excludedListener</a> { <span class="keyword">nullptr</span> };</div>
+<div class="line"><a id="l00509" name="l00509"></a><span class="lineno">  509</span> </div>
+<div class="line"><a id="l00512" name="l00512"></a><span class="lineno"><a class="line" href="classcello_1_1_object.html#acd1018e5ee26cdd37c7208b37fb26485">  512</a></span>    <span class="keywordtype">bool</span> <a class="code hl_variable" href="classcello_1_1_object.html#acd1018e5ee26cdd37c7208b37fb26485">doForceUpdates</a> { <span class="keyword">false</span> };</div>
 <div class="line"><a id="l00513" name="l00513"></a><span class="lineno">  513</span> </div>
-<div class="line"><a id="l00514" name="l00514"></a><span class="lineno">  514</span>        juce::Identifier id;</div>
-<div class="line"><a id="l00515" name="l00515"></a><span class="lineno">  515</span>        PropertyUpdateFn fn;</div>
-<div class="line"><a id="l00516" name="l00516"></a><span class="lineno">  516</span>    };</div>
-<div class="line"><a id="l00517" name="l00517"></a><span class="lineno">  517</span> </div>
-<div class="line"><a id="l00518" name="l00518"></a><span class="lineno">  518</span>    std::vector&lt;PropertyUpdate&gt; propertyUpdaters;</div>
-<div class="line"><a id="l00519" name="l00519"></a><span class="lineno">  519</span>};</div>
-<div class="line"><a id="l00520" name="l00520"></a><span class="lineno">  520</span> </div>
-<div class="line"><a id="l00521" name="l00521"></a><span class="lineno">  521</span>} <span class="comment">// namespace cello</span></div>
-<div class="ttc" id="aclasscello_1_1_object_html"><div class="ttname"><a href="classcello_1_1_object.html">cello::Object</a></div><div class="ttdef"><b>Definition:</b> cello_object.h:17</div></div>
-<div class="ttc" id="aclasscello_1_1_object_html_a05e394127066a7e14788dcf97b663ff1"><div class="ttname"><a href="classcello_1_1_object.html#a05e394127066a7e14788dcf97b663ff1">cello::Object::move</a></div><div class="ttdeci">void move(int fromIndex, int toIndex)</div><div class="ttdoc">Change the position of one of this object's children.</div><div class="ttdef"><b>Definition:</b> cello_object.cpp:184</div></div>
-<div class="ttc" id="aclasscello_1_1_object_html_a0e7dcedd63ad88da5024fbbe12fbd638"><div class="ttname"><a href="classcello_1_1_object.html#a0e7dcedd63ad88da5024fbbe12fbd638">cello::Object::Object</a></div><div class="ttdeci">Object(juce::Identifier type, Object *state)</div><div class="ttdoc">Construct a new cello::Object object, which will attempt to initialize from the 'state' parameter....</div><div class="ttdef"><b>Definition:</b> cello_object.cpp:12</div></div>
-<div class="ttc" id="aclasscello_1_1_object_html_a14e852dd0a299e2d72bf07dd8970b52a"><div class="ttname"><a href="classcello_1_1_object.html#a14e852dd0a299e2d72bf07dd8970b52a">cello::Object::setUndoManager</a></div><div class="ttdeci">void setUndoManager(juce::UndoManager *undo)</div><div class="ttdoc">Set the undo manager to use in this object (and others created from it).</div><div class="ttdef"><b>Definition:</b> cello_object.cpp:83</div></div>
-<div class="ttc" id="aclasscello_1_1_object_html_a16f55b2f7ddbfa99ad014da938144f1b"><div class="ttname"><a href="classcello_1_1_object.html#a16f55b2f7ddbfa99ad014da938144f1b">cello::Object::sort</a></div><div class="ttdeci">void sort(Comparator &amp;comp, bool stableSort)</div><div class="ttdoc">Sort this object's children using the provided comparison object.</div><div class="ttdef"><b>Definition:</b> cello_object.cpp:189</div></div>
-<div class="ttc" id="aclasscello_1_1_object_html_a2af14feec2238a3318bbfcd8954025ac"><div class="ttname"><a href="classcello_1_1_object.html#a2af14feec2238a3318bbfcd8954025ac">cello::Object::onPropertyChange</a></div><div class="ttdeci">void onPropertyChange(juce::Identifier id, PropertyUpdateFn callback)</div><div class="ttdoc">Install (or clear) a function to be called when one of this Object's properties changes....</div><div class="ttdef"><b>Definition:</b> cello_object.cpp:199</div></div>
-<div class="ttc" id="aclasscello_1_1_object_html_a34c001271075ceb3006e2fed75aef279"><div class="ttname"><a href="classcello_1_1_object.html#a34c001271075ceb3006e2fed75aef279">cello::Object::~Object</a></div><div class="ttdeci">~Object() override</div><div class="ttdoc">Destroy the Object object The important thing done here is to remove ourselves as a listener to the v...</div><div class="ttdef"><b>Definition:</b> cello_object.cpp:78</div></div>
-<div class="ttc" id="aclasscello_1_1_object_html_a36491bac36514cc7e88454d8444d0a0f"><div class="ttname"><a href="classcello_1_1_object.html#a36491bac36514cc7e88454d8444d0a0f">cello::Object::getExcludedListener</a></div><div class="ttdeci">juce::ValueTree::Listener * getExcludedListener() const</div><div class="ttdoc">Get a pointer to the listener to exclude from property change updates.</div><div class="ttdef"><b>Definition:</b> cello_object.h:302</div></div>
-<div class="ttc" id="aclasscello_1_1_object_html_a368472e271247ac9336c4f8015270627"><div class="ttname"><a href="classcello_1_1_object.html#a368472e271247ac9336c4f8015270627">cello::Object::data</a></div><div class="ttdeci">juce::ValueTree data</div><div class="ttdoc">The tree where our data lives.</div><div class="ttdef"><b>Definition:</b> cello_object.h:484</div></div>
-<div class="ttc" id="aclasscello_1_1_object_html_a39df4cb5bd79fd770ad23184d5ef8c87"><div class="ttname"><a href="classcello_1_1_object.html#a39df4cb5bd79fd770ad23184d5ef8c87">cello::Object::setattr</a></div><div class="ttdeci">Object &amp; setattr(const juce::Identifier &amp;attr, const T &amp;attrVal)</div><div class="ttdoc">Set a new value for the specified attribute/property. We return a reference to this object so that se...</div><div class="ttdef"><b>Definition:</b> cello_object.cpp:232</div></div>
-<div class="ttc" id="aclasscello_1_1_object_html_a3fabc22c50460fc720c8be1c3384db70"><div class="ttname"><a href="classcello_1_1_object.html#a3fabc22c50460fc720c8be1c3384db70">cello::Object::operator==</a></div><div class="ttdeci">bool operator==(const juce::ValueTree &amp;rhs) const noexcept</div><div class="ttdoc">test for true equivalence: does this object point to the same underlying tree as the tree on the righ...</div><div class="ttdef"><b>Definition:</b> cello_object.h:110</div></div>
-<div class="ttc" id="aclasscello_1_1_object_html_a4b25ab25ee62b03dda46143a20054c02"><div class="ttname"><a href="classcello_1_1_object.html#a4b25ab25ee62b03dda46143a20054c02">cello::Object::excludeListener</a></div><div class="ttdeci">void excludeListener(juce::ValueTree::Listener *listener)</div><div class="ttdoc">A listener to exclude from property change updates.</div><div class="ttdef"><b>Definition:</b> cello_object.h:292</div></div>
-<div class="ttc" id="aclasscello_1_1_object_html_a534edaa253affc488dba210e86e55ccf"><div class="ttname"><a href="classcello_1_1_object.html#a534edaa253affc488dba210e86e55ccf">cello::Object::redo</a></div><div class="ttdeci">bool redo()</div><div class="ttdoc">Attempt to redo the last transaction.</div><div class="ttdef"><b>Definition:</b> cello_object.cpp:109</div></div>
-<div class="ttc" id="aclasscello_1_1_object_html_a556d736691db1d05b208a8b3c6f58ebd"><div class="ttname"><a href="classcello_1_1_object.html#a556d736691db1d05b208a8b3c6f58ebd">cello::Object::hasattr</a></div><div class="ttdeci">bool hasattr(const juce::Identifier &amp;attr) const</div><div class="ttdoc">test the object to see if it has an attribute with this id.</div><div class="ttdef"><b>Definition:</b> cello_object.cpp:226</div></div>
-<div class="ttc" id="aclasscello_1_1_object_html_a6a23c8172d0df906594e9d222dd6e441"><div class="ttname"><a href="classcello_1_1_object.html#a6a23c8172d0df906594e9d222dd6e441">cello::Object::getattr</a></div><div class="ttdeci">T getattr(const juce::Identifier &amp;attr, const T &amp;defaultVal) const</div><div class="ttdoc">Get a property value from this object, or default if it doesn't have a property with that name.</div><div class="ttdef"><b>Definition:</b> cello_object.cpp:220</div></div>
-<div class="ttc" id="aclasscello_1_1_object_html_a6cace96ea91fd79dfc17cb44b9c4fbf9"><div class="ttname"><a href="classcello_1_1_object.html#a6cace96ea91fd79dfc17cb44b9c4fbf9">cello::Object::canUndo</a></div><div class="ttdeci">bool canUndo() const</div><div class="ttdoc">Test whether this object/tree has anything that can be undone.</div><div class="ttdef"><b>Definition:</b> cello_object.cpp:88</div></div>
-<div class="ttc" id="aclasscello_1_1_object_html_a7c69af2cea29bfd1b1459bf262d58611"><div class="ttname"><a href="classcello_1_1_object.html#a7c69af2cea29bfd1b1459bf262d58611">cello::Object::excludedListener</a></div><div class="ttdeci">juce::ValueTree::Listener * excludedListener</div><div class="ttdoc">a listener to not update when properties change.</div><div class="ttdef"><b>Definition:</b> cello_object.h:493</div></div>
-<div class="ttc" id="aclasscello_1_1_object_html_a7fd4f6b747c7c120ded85f09765378af"><div class="ttname"><a href="classcello_1_1_object.html#a7fd4f6b747c7c120ded85f09765378af">cello::Object::delattr</a></div><div class="ttdeci">void delattr(const juce::Identifier &amp;attr)</div><div class="ttdoc">Remove the specified property from this object.</div><div class="ttdef"><b>Definition:</b> cello_object.cpp:239</div></div>
-<div class="ttc" id="aclasscello_1_1_object_html_a86a5f2f969546e15cf78507a09b5b0dd"><div class="ttname"><a href="classcello_1_1_object.html#a86a5f2f969546e15cf78507a09b5b0dd">cello::Object::getNumChildren</a></div><div class="ttdeci">int getNumChildren() const</div><div class="ttdoc">Check how many children this object has.</div><div class="ttdef"><b>Definition:</b> cello_object.cpp:122</div></div>
-<div class="ttc" id="aclasscello_1_1_object_html_a887fbb6f22d47fc6e2cdfec57c320efe"><div class="ttname"><a href="classcello_1_1_object.html#a887fbb6f22d47fc6e2cdfec57c320efe">cello::Object::canRedo</a></div><div class="ttdeci">bool canRedo() const</div><div class="ttdoc">Test whether this object/tree has anything that can be redone.</div><div class="ttdef"><b>Definition:</b> cello_object.cpp:102</div></div>
-<div class="ttc" id="aclasscello_1_1_object_html_a8f7ad57b7ba52f9a06b121b367d825b0"><div class="ttname"><a href="classcello_1_1_object.html#a8f7ad57b7ba52f9a06b121b367d825b0">cello::Object::undoManager</a></div><div class="ttdeci">juce::UndoManager * undoManager</div><div class="ttdoc">The undo manager to use for set() operations.</div><div class="ttdef"><b>Definition:</b> cello_object.h:487</div></div>
-<div class="ttc" id="aclasscello_1_1_object_html_a9068e0306934dcbf2c24b71efe5c1024"><div class="ttname"><a href="classcello_1_1_object.html#a9068e0306934dcbf2c24b71efe5c1024">cello::Object::undo</a></div><div class="ttdeci">bool undo()</div><div class="ttdoc">Attempt to undo the last transaction.</div><div class="ttdef"><b>Definition:</b> cello_object.cpp:95</div></div>
-<div class="ttc" id="aclasscello_1_1_object_html_a9365e8cc11d3d6ea98957cf150450b1a"><div class="ttname"><a href="classcello_1_1_object.html#a9365e8cc11d3d6ea98957cf150450b1a">cello::Object::getType</a></div><div class="ttdeci">juce::Identifier getType() const</div><div class="ttdoc">Get the type of this object.</div><div class="ttdef"><b>Definition:</b> cello_object.h:119</div></div>
-<div class="ttc" id="aclasscello_1_1_object_html_a9ef37de54c32241809154d63985719b3"><div class="ttname"><a href="classcello_1_1_object.html#a9ef37de54c32241809154d63985719b3">cello::Object::creationType</a></div><div class="ttdeci">CreationType creationType</div><div class="ttdoc">Remember how this Object was created.</div><div class="ttdef"><b>Definition:</b> cello_object.h:490</div></div>
-<div class="ttc" id="aclasscello_1_1_object_html_aa19bde9dc0f5ae807641414d8e890d44"><div class="ttname"><a href="classcello_1_1_object.html#aa19bde9dc0f5ae807641414d8e890d44">cello::Object::getUndoManager</a></div><div class="ttdeci">juce::UndoManager * getUndoManager() const</div><div class="ttdoc">Get the current undo manager; only useful to this object's Value objects and when creating other Obje...</div><div class="ttdef"><b>Definition:</b> cello_object.cpp:194</div></div>
-<div class="ttc" id="aclasscello_1_1_object_html_aa95d1de2cad7ce93e4ea89d06b1b7e76"><div class="ttname"><a href="classcello_1_1_object.html#aa95d1de2cad7ce93e4ea89d06b1b7e76">cello::Object::save</a></div><div class="ttdeci">bool save(juce::File file, FileFormat format=FileFormat::xml) const</div><div class="ttdoc">Save the object tree to disk.</div><div class="ttdef"><b>Definition:</b> cello_object.cpp:269</div></div>
-<div class="ttc" id="aclasscello_1_1_object_html_ab91a10de733ff8c8bc3fa3729fd036a0"><div class="ttname"><a href="classcello_1_1_object.html#ab91a10de733ff8c8bc3fa3729fd036a0">cello::Object::remove</a></div><div class="ttdeci">Object * remove(Object *object)</div><div class="ttdoc">Attempt to remove a child object from this.</div><div class="ttdef"><b>Definition:</b> cello_object.cpp:165</div></div>
-<div class="ttc" id="aclasscello_1_1_object_html_abd126a66992806eca5aaecea0d5f71d1"><div class="ttname"><a href="classcello_1_1_object.html#abd126a66992806eca5aaecea0d5f71d1">cello::Object::clearUndoHistory</a></div><div class="ttdeci">void clearUndoHistory()</div><div class="ttdoc">reset the undo manager</div><div class="ttdef"><b>Definition:</b> cello_object.cpp:116</div></div>
-<div class="ttc" id="aclasscello_1_1_object_html_accfacbf6d9bcd8f237fda4cc91d1816b"><div class="ttname"><a href="classcello_1_1_object.html#accfacbf6d9bcd8f237fda4cc91d1816b">cello::Object::append</a></div><div class="ttdeci">void append(Object *object)</div><div class="ttdoc">Add a new child object to the end of our child object list,.</div><div class="ttdef"><b>Definition:</b> cello_object.cpp:135</div></div>
-<div class="ttc" id="aclasscello_1_1_object_html_acd1018e5ee26cdd37c7208b37fb26485"><div class="ttname"><a href="classcello_1_1_object.html#acd1018e5ee26cdd37c7208b37fb26485">cello::Object::doForceUpdates</a></div><div class="ttdeci">bool doForceUpdates</div><div class="ttdef"><b>Definition:</b> cello_object.h:497</div></div>
-<div class="ttc" id="aclasscello_1_1_object_html_ad05bcbdf54e3587a9060dba4caeba462"><div class="ttname"><a href="classcello_1_1_object.html#ad05bcbdf54e3587a9060dba4caeba462">cello::Object::load</a></div><div class="ttdeci">static juce::ValueTree load(juce::File file, FileFormat format=FileFormat::xml)</div><div class="ttdoc">Reload data from disk. Used in the ctor that accepts file name and format.</div><div class="ttdef"><b>Definition:</b> cello_object.cpp:244</div></div>
-<div class="ttc" id="aclasscello_1_1_object_html_ad43381ba2a3be680f308b6d1bfc284e3"><div class="ttname"><a href="classcello_1_1_object.html#ad43381ba2a3be680f308b6d1bfc284e3">cello::Object::operator=</a></div><div class="ttdeci">Object &amp; operator=(const Object &amp;rhs)</div><div class="ttdoc">set this object to use a different Object's value tree, which we will begin listening to....</div><div class="ttdef"><b>Definition:</b> cello_object.cpp:70</div></div>
-<div class="ttc" id="aclasscello_1_1_object_html_ad8cf02406e7aa4127d4c4f9117123fa9"><div class="ttname"><a href="classcello_1_1_object.html#ad8cf02406e7aa4127d4c4f9117123fa9">cello::Object::operator[]</a></div><div class="ttdeci">juce::ValueTree operator[](int index) const</div><div class="ttdoc">return a child tree of this object by its index. NOTE that it does not return an object; to work with...</div><div class="ttdef"><b>Definition:</b> cello_object.cpp:127</div></div>
-<div class="ttc" id="aclasscello_1_1_object_html_ae04aa9d628d2ee279d9d467c8caf73d8"><div class="ttname"><a href="classcello_1_1_object.html#ae04aa9d628d2ee279d9d467c8caf73d8">cello::Object::getCreationType</a></div><div class="ttdeci">CreationType getCreationType() const</div><div class="ttdoc">Determine how this object was created, which will be one of:</div><div class="ttdef"><b>Definition:</b> cello_object.h:132</div></div>
-<div class="ttc" id="aclasscello_1_1_object_html_ae45a38a610eadc3fcf2bb9a358c7befa"><div class="ttname"><a href="classcello_1_1_object.html#ae45a38a610eadc3fcf2bb9a358c7befa">cello::Object::insert</a></div><div class="ttdeci">void insert(Object *object, int index)</div><div class="ttdoc">add a new child object at a specific index in the list.</div><div class="ttdef"><b>Definition:</b> cello_object.cpp:140</div></div>
-<div class="ttc" id="aclasscello_1_1_update_source_html"><div class="ttname"><a href="classcello_1_1_update_source.html">cello::UpdateSource</a></div><div class="ttdef"><b>Definition:</b> cello_update_source.h:10</div></div>
-<div class="ttc" id="aclasscello_1_1_value_base_html"><div class="ttname"><a href="classcello_1_1_value_base.html">cello::ValueBase</a></div><div class="ttdef"><b>Definition:</b> cello_value.h:15</div></div>
+<div class="line"><a id="l00514" name="l00514"></a><span class="lineno">  514</span><span class="keyword">private</span>:</div>
+<div class="line"><a id="l00521" name="l00521"></a><span class="lineno">  521</span>    <span class="keyword">struct </span>PropertyUpdate</div>
+<div class="line"><a id="l00522" name="l00522"></a><span class="lineno">  522</span>    {</div>
+<div class="line"><a id="l00523" name="l00523"></a><span class="lineno">  523</span>        PropertyUpdate (juce::Identifier id_, PropertyUpdateFn fn_)</div>
+<div class="line"><a id="l00524" name="l00524"></a><span class="lineno">  524</span>        : id { id_ }</div>
+<div class="line"><a id="l00525" name="l00525"></a><span class="lineno">  525</span>        , fn { fn_ }</div>
+<div class="line"><a id="l00526" name="l00526"></a><span class="lineno">  526</span>        {</div>
+<div class="line"><a id="l00527" name="l00527"></a><span class="lineno">  527</span>        }</div>
+<div class="line"><a id="l00528" name="l00528"></a><span class="lineno">  528</span> </div>
+<div class="line"><a id="l00529" name="l00529"></a><span class="lineno">  529</span>        juce::Identifier id;</div>
+<div class="line"><a id="l00530" name="l00530"></a><span class="lineno">  530</span>        PropertyUpdateFn fn;</div>
+<div class="line"><a id="l00531" name="l00531"></a><span class="lineno">  531</span>    };</div>
+<div class="line"><a id="l00532" name="l00532"></a><span class="lineno">  532</span> </div>
+<div class="line"><a id="l00533" name="l00533"></a><span class="lineno">  533</span>    std::vector&lt;PropertyUpdate&gt; propertyUpdaters;</div>
+<div class="line"><a id="l00534" name="l00534"></a><span class="lineno">  534</span>};</div>
+<div class="line"><a id="l00535" name="l00535"></a><span class="lineno">  535</span> </div>
+<div class="line"><a id="l00536" name="l00536"></a><span class="lineno">  536</span>} <span class="comment">// namespace cello</span></div>
+<div class="ttc" id="aclasscello_1_1_object_html"><div class="ttname"><a href="classcello_1_1_object.html">cello::Object</a></div><div class="ttdef"><b>Definition:</b> cello_object.h:32</div></div>
+<div class="ttc" id="aclasscello_1_1_object_html_a05e394127066a7e14788dcf97b663ff1"><div class="ttname"><a href="classcello_1_1_object.html#a05e394127066a7e14788dcf97b663ff1">cello::Object::move</a></div><div class="ttdeci">void move(int fromIndex, int toIndex)</div><div class="ttdoc">Change the position of one of this object's children.</div><div class="ttdef"><b>Definition:</b> cello_object.cpp:199</div></div>
+<div class="ttc" id="aclasscello_1_1_object_html_a0e7dcedd63ad88da5024fbbe12fbd638"><div class="ttname"><a href="classcello_1_1_object.html#a0e7dcedd63ad88da5024fbbe12fbd638">cello::Object::Object</a></div><div class="ttdeci">Object(juce::Identifier type, Object *state)</div><div class="ttdoc">Construct a new cello::Object object, which will attempt to initialize from the 'state' parameter....</div><div class="ttdef"><b>Definition:</b> cello_object.cpp:27</div></div>
+<div class="ttc" id="aclasscello_1_1_object_html_a14e852dd0a299e2d72bf07dd8970b52a"><div class="ttname"><a href="classcello_1_1_object.html#a14e852dd0a299e2d72bf07dd8970b52a">cello::Object::setUndoManager</a></div><div class="ttdeci">void setUndoManager(juce::UndoManager *undo)</div><div class="ttdoc">Set the undo manager to use in this object (and others created from it).</div><div class="ttdef"><b>Definition:</b> cello_object.cpp:98</div></div>
+<div class="ttc" id="aclasscello_1_1_object_html_a16f55b2f7ddbfa99ad014da938144f1b"><div class="ttname"><a href="classcello_1_1_object.html#a16f55b2f7ddbfa99ad014da938144f1b">cello::Object::sort</a></div><div class="ttdeci">void sort(Comparator &amp;comp, bool stableSort)</div><div class="ttdoc">Sort this object's children using the provided comparison object.</div><div class="ttdef"><b>Definition:</b> cello_object.cpp:204</div></div>
+<div class="ttc" id="aclasscello_1_1_object_html_a2af14feec2238a3318bbfcd8954025ac"><div class="ttname"><a href="classcello_1_1_object.html#a2af14feec2238a3318bbfcd8954025ac">cello::Object::onPropertyChange</a></div><div class="ttdeci">void onPropertyChange(juce::Identifier id, PropertyUpdateFn callback)</div><div class="ttdoc">Install (or clear) a function to be called when one of this Object's properties changes....</div><div class="ttdef"><b>Definition:</b> cello_object.cpp:214</div></div>
+<div class="ttc" id="aclasscello_1_1_object_html_a34c001271075ceb3006e2fed75aef279"><div class="ttname"><a href="classcello_1_1_object.html#a34c001271075ceb3006e2fed75aef279">cello::Object::~Object</a></div><div class="ttdeci">~Object() override</div><div class="ttdoc">Destroy the Object object The important thing done here is to remove ourselves as a listener to the v...</div><div class="ttdef"><b>Definition:</b> cello_object.cpp:93</div></div>
+<div class="ttc" id="aclasscello_1_1_object_html_a36491bac36514cc7e88454d8444d0a0f"><div class="ttname"><a href="classcello_1_1_object.html#a36491bac36514cc7e88454d8444d0a0f">cello::Object::getExcludedListener</a></div><div class="ttdeci">juce::ValueTree::Listener * getExcludedListener() const</div><div class="ttdoc">Get a pointer to the listener to exclude from property change updates.</div><div class="ttdef"><b>Definition:</b> cello_object.h:317</div></div>
+<div class="ttc" id="aclasscello_1_1_object_html_a368472e271247ac9336c4f8015270627"><div class="ttname"><a href="classcello_1_1_object.html#a368472e271247ac9336c4f8015270627">cello::Object::data</a></div><div class="ttdeci">juce::ValueTree data</div><div class="ttdoc">The tree where our data lives.</div><div class="ttdef"><b>Definition:</b> cello_object.h:499</div></div>
+<div class="ttc" id="aclasscello_1_1_object_html_a39df4cb5bd79fd770ad23184d5ef8c87"><div class="ttname"><a href="classcello_1_1_object.html#a39df4cb5bd79fd770ad23184d5ef8c87">cello::Object::setattr</a></div><div class="ttdeci">Object &amp; setattr(const juce::Identifier &amp;attr, const T &amp;attrVal)</div><div class="ttdoc">Set a new value for the specified attribute/property. We return a reference to this object so that se...</div><div class="ttdef"><b>Definition:</b> cello_object.cpp:247</div></div>
+<div class="ttc" id="aclasscello_1_1_object_html_a3fabc22c50460fc720c8be1c3384db70"><div class="ttname"><a href="classcello_1_1_object.html#a3fabc22c50460fc720c8be1c3384db70">cello::Object::operator==</a></div><div class="ttdeci">bool operator==(const juce::ValueTree &amp;rhs) const noexcept</div><div class="ttdoc">test for true equivalence: does this object point to the same underlying tree as the tree on the righ...</div><div class="ttdef"><b>Definition:</b> cello_object.h:125</div></div>
+<div class="ttc" id="aclasscello_1_1_object_html_a4b25ab25ee62b03dda46143a20054c02"><div class="ttname"><a href="classcello_1_1_object.html#a4b25ab25ee62b03dda46143a20054c02">cello::Object::excludeListener</a></div><div class="ttdeci">void excludeListener(juce::ValueTree::Listener *listener)</div><div class="ttdoc">A listener to exclude from property change updates.</div><div class="ttdef"><b>Definition:</b> cello_object.h:307</div></div>
+<div class="ttc" id="aclasscello_1_1_object_html_a534edaa253affc488dba210e86e55ccf"><div class="ttname"><a href="classcello_1_1_object.html#a534edaa253affc488dba210e86e55ccf">cello::Object::redo</a></div><div class="ttdeci">bool redo()</div><div class="ttdoc">Attempt to redo the last transaction.</div><div class="ttdef"><b>Definition:</b> cello_object.cpp:124</div></div>
+<div class="ttc" id="aclasscello_1_1_object_html_a556d736691db1d05b208a8b3c6f58ebd"><div class="ttname"><a href="classcello_1_1_object.html#a556d736691db1d05b208a8b3c6f58ebd">cello::Object::hasattr</a></div><div class="ttdeci">bool hasattr(const juce::Identifier &amp;attr) const</div><div class="ttdoc">test the object to see if it has an attribute with this id.</div><div class="ttdef"><b>Definition:</b> cello_object.cpp:241</div></div>
+<div class="ttc" id="aclasscello_1_1_object_html_a6a23c8172d0df906594e9d222dd6e441"><div class="ttname"><a href="classcello_1_1_object.html#a6a23c8172d0df906594e9d222dd6e441">cello::Object::getattr</a></div><div class="ttdeci">T getattr(const juce::Identifier &amp;attr, const T &amp;defaultVal) const</div><div class="ttdoc">Get a property value from this object, or default if it doesn't have a property with that name.</div><div class="ttdef"><b>Definition:</b> cello_object.cpp:235</div></div>
+<div class="ttc" id="aclasscello_1_1_object_html_a6cace96ea91fd79dfc17cb44b9c4fbf9"><div class="ttname"><a href="classcello_1_1_object.html#a6cace96ea91fd79dfc17cb44b9c4fbf9">cello::Object::canUndo</a></div><div class="ttdeci">bool canUndo() const</div><div class="ttdoc">Test whether this object/tree has anything that can be undone.</div><div class="ttdef"><b>Definition:</b> cello_object.cpp:103</div></div>
+<div class="ttc" id="aclasscello_1_1_object_html_a7c69af2cea29bfd1b1459bf262d58611"><div class="ttname"><a href="classcello_1_1_object.html#a7c69af2cea29bfd1b1459bf262d58611">cello::Object::excludedListener</a></div><div class="ttdeci">juce::ValueTree::Listener * excludedListener</div><div class="ttdoc">a listener to not update when properties change.</div><div class="ttdef"><b>Definition:</b> cello_object.h:508</div></div>
+<div class="ttc" id="aclasscello_1_1_object_html_a7fd4f6b747c7c120ded85f09765378af"><div class="ttname"><a href="classcello_1_1_object.html#a7fd4f6b747c7c120ded85f09765378af">cello::Object::delattr</a></div><div class="ttdeci">void delattr(const juce::Identifier &amp;attr)</div><div class="ttdoc">Remove the specified property from this object.</div><div class="ttdef"><b>Definition:</b> cello_object.cpp:254</div></div>
+<div class="ttc" id="aclasscello_1_1_object_html_a86a5f2f969546e15cf78507a09b5b0dd"><div class="ttname"><a href="classcello_1_1_object.html#a86a5f2f969546e15cf78507a09b5b0dd">cello::Object::getNumChildren</a></div><div class="ttdeci">int getNumChildren() const</div><div class="ttdoc">Check how many children this object has.</div><div class="ttdef"><b>Definition:</b> cello_object.cpp:137</div></div>
+<div class="ttc" id="aclasscello_1_1_object_html_a887fbb6f22d47fc6e2cdfec57c320efe"><div class="ttname"><a href="classcello_1_1_object.html#a887fbb6f22d47fc6e2cdfec57c320efe">cello::Object::canRedo</a></div><div class="ttdeci">bool canRedo() const</div><div class="ttdoc">Test whether this object/tree has anything that can be redone.</div><div class="ttdef"><b>Definition:</b> cello_object.cpp:117</div></div>
+<div class="ttc" id="aclasscello_1_1_object_html_a8f7ad57b7ba52f9a06b121b367d825b0"><div class="ttname"><a href="classcello_1_1_object.html#a8f7ad57b7ba52f9a06b121b367d825b0">cello::Object::undoManager</a></div><div class="ttdeci">juce::UndoManager * undoManager</div><div class="ttdoc">The undo manager to use for set() operations.</div><div class="ttdef"><b>Definition:</b> cello_object.h:502</div></div>
+<div class="ttc" id="aclasscello_1_1_object_html_a9068e0306934dcbf2c24b71efe5c1024"><div class="ttname"><a href="classcello_1_1_object.html#a9068e0306934dcbf2c24b71efe5c1024">cello::Object::undo</a></div><div class="ttdeci">bool undo()</div><div class="ttdoc">Attempt to undo the last transaction.</div><div class="ttdef"><b>Definition:</b> cello_object.cpp:110</div></div>
+<div class="ttc" id="aclasscello_1_1_object_html_a9365e8cc11d3d6ea98957cf150450b1a"><div class="ttname"><a href="classcello_1_1_object.html#a9365e8cc11d3d6ea98957cf150450b1a">cello::Object::getType</a></div><div class="ttdeci">juce::Identifier getType() const</div><div class="ttdoc">Get the type of this object.</div><div class="ttdef"><b>Definition:</b> cello_object.h:134</div></div>
+<div class="ttc" id="aclasscello_1_1_object_html_a9ef37de54c32241809154d63985719b3"><div class="ttname"><a href="classcello_1_1_object.html#a9ef37de54c32241809154d63985719b3">cello::Object::creationType</a></div><div class="ttdeci">CreationType creationType</div><div class="ttdoc">Remember how this Object was created.</div><div class="ttdef"><b>Definition:</b> cello_object.h:505</div></div>
+<div class="ttc" id="aclasscello_1_1_object_html_aa19bde9dc0f5ae807641414d8e890d44"><div class="ttname"><a href="classcello_1_1_object.html#aa19bde9dc0f5ae807641414d8e890d44">cello::Object::getUndoManager</a></div><div class="ttdeci">juce::UndoManager * getUndoManager() const</div><div class="ttdoc">Get the current undo manager; only useful to this object's Value objects and when creating other Obje...</div><div class="ttdef"><b>Definition:</b> cello_object.cpp:209</div></div>
+<div class="ttc" id="aclasscello_1_1_object_html_aa95d1de2cad7ce93e4ea89d06b1b7e76"><div class="ttname"><a href="classcello_1_1_object.html#aa95d1de2cad7ce93e4ea89d06b1b7e76">cello::Object::save</a></div><div class="ttdeci">bool save(juce::File file, FileFormat format=FileFormat::xml) const</div><div class="ttdoc">Save the object tree to disk.</div><div class="ttdef"><b>Definition:</b> cello_object.cpp:284</div></div>
+<div class="ttc" id="aclasscello_1_1_object_html_ab91a10de733ff8c8bc3fa3729fd036a0"><div class="ttname"><a href="classcello_1_1_object.html#ab91a10de733ff8c8bc3fa3729fd036a0">cello::Object::remove</a></div><div class="ttdeci">Object * remove(Object *object)</div><div class="ttdoc">Attempt to remove a child object from this.</div><div class="ttdef"><b>Definition:</b> cello_object.cpp:180</div></div>
+<div class="ttc" id="aclasscello_1_1_object_html_abd126a66992806eca5aaecea0d5f71d1"><div class="ttname"><a href="classcello_1_1_object.html#abd126a66992806eca5aaecea0d5f71d1">cello::Object::clearUndoHistory</a></div><div class="ttdeci">void clearUndoHistory()</div><div class="ttdoc">reset the undo manager</div><div class="ttdef"><b>Definition:</b> cello_object.cpp:131</div></div>
+<div class="ttc" id="aclasscello_1_1_object_html_accfacbf6d9bcd8f237fda4cc91d1816b"><div class="ttname"><a href="classcello_1_1_object.html#accfacbf6d9bcd8f237fda4cc91d1816b">cello::Object::append</a></div><div class="ttdeci">void append(Object *object)</div><div class="ttdoc">Add a new child object to the end of our child object list,.</div><div class="ttdef"><b>Definition:</b> cello_object.cpp:150</div></div>
+<div class="ttc" id="aclasscello_1_1_object_html_acd1018e5ee26cdd37c7208b37fb26485"><div class="ttname"><a href="classcello_1_1_object.html#acd1018e5ee26cdd37c7208b37fb26485">cello::Object::doForceUpdates</a></div><div class="ttdeci">bool doForceUpdates</div><div class="ttdef"><b>Definition:</b> cello_object.h:512</div></div>
+<div class="ttc" id="aclasscello_1_1_object_html_ad05bcbdf54e3587a9060dba4caeba462"><div class="ttname"><a href="classcello_1_1_object.html#ad05bcbdf54e3587a9060dba4caeba462">cello::Object::load</a></div><div class="ttdeci">static juce::ValueTree load(juce::File file, FileFormat format=FileFormat::xml)</div><div class="ttdoc">Reload data from disk. Used in the ctor that accepts file name and format.</div><div class="ttdef"><b>Definition:</b> cello_object.cpp:259</div></div>
+<div class="ttc" id="aclasscello_1_1_object_html_ad43381ba2a3be680f308b6d1bfc284e3"><div class="ttname"><a href="classcello_1_1_object.html#ad43381ba2a3be680f308b6d1bfc284e3">cello::Object::operator=</a></div><div class="ttdeci">Object &amp; operator=(const Object &amp;rhs)</div><div class="ttdoc">set this object to use a different Object's value tree, which we will begin listening to....</div><div class="ttdef"><b>Definition:</b> cello_object.cpp:85</div></div>
+<div class="ttc" id="aclasscello_1_1_object_html_ad8cf02406e7aa4127d4c4f9117123fa9"><div class="ttname"><a href="classcello_1_1_object.html#ad8cf02406e7aa4127d4c4f9117123fa9">cello::Object::operator[]</a></div><div class="ttdeci">juce::ValueTree operator[](int index) const</div><div class="ttdoc">return a child tree of this object by its index. NOTE that it does not return an object; to work with...</div><div class="ttdef"><b>Definition:</b> cello_object.cpp:142</div></div>
+<div class="ttc" id="aclasscello_1_1_object_html_ae04aa9d628d2ee279d9d467c8caf73d8"><div class="ttname"><a href="classcello_1_1_object.html#ae04aa9d628d2ee279d9d467c8caf73d8">cello::Object::getCreationType</a></div><div class="ttdeci">CreationType getCreationType() const</div><div class="ttdoc">Determine how this object was created, which will be one of:</div><div class="ttdef"><b>Definition:</b> cello_object.h:147</div></div>
+<div class="ttc" id="aclasscello_1_1_object_html_ae45a38a610eadc3fcf2bb9a358c7befa"><div class="ttname"><a href="classcello_1_1_object.html#ae45a38a610eadc3fcf2bb9a358c7befa">cello::Object::insert</a></div><div class="ttdeci">void insert(Object *object, int index)</div><div class="ttdoc">add a new child object at a specific index in the list.</div><div class="ttdef"><b>Definition:</b> cello_object.cpp:155</div></div>
+<div class="ttc" id="aclasscello_1_1_update_source_html"><div class="ttname"><a href="classcello_1_1_update_source.html">cello::UpdateSource</a></div><div class="ttdef"><b>Definition:</b> cello_update_source.h:25</div></div>
+<div class="ttc" id="aclasscello_1_1_value_base_html"><div class="ttname"><a href="classcello_1_1_value_base.html">cello::ValueBase</a></div><div class="ttdef"><b>Definition:</b> cello_value.h:30</div></div>
 </div><!-- fragment --></div><!-- contents -->
+</div><!-- doc-content -->
 <!-- start footer part -->
-<hr class="footer"/><address class="footer"><small>
-Generated by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.6
-</small></address>
+<div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+  <ul>
+    <li class="navelem"><a class="el" href="dir_edc25bb996467fc43b3ed414659f82cc.html">cello</a></li><li class="navelem"><b>cello_object.h</b></li>
+    <li class="footer">Generated by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.6 </li>
+  </ul>
+</div>
 </body>
 </html>

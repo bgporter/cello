@@ -9,10 +9,15 @@
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
+<link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="resize.js"></script>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
 <link href="search/search.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="search/searchdata.js"></script>
 <script type="text/javascript" src="search/search.js"></script>
 <link href="doxygen.css" rel="stylesheet" type="text/css" />
+<link href="doxygen-awesome.css" rel="stylesheet" type="text/css"/>
 </head>
 <body>
 <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
@@ -20,6 +25,7 @@
 <table cellspacing="0" cellpadding="0">
  <tbody>
  <tr id="projectrow">
+  <td id="projectlogo"><img alt="Logo" src="cello_cello.png"/></td>
   <td id="projectalign">
    <div id="projectname">cello
    </div>
@@ -47,6 +53,23 @@ $(function() {
 /* @license-end */
 </script>
 <div id="main-nav"></div>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(document).ready(function(){initNavTree('md__r_e_a_d_m_e.html',''); initResizable(); });
+/* @license-end */
+</script>
+<div id="doc-content">
 <!-- window showing the filter options -->
 <div id="MSearchSelectWindow"
      onmouseover="return searchBox.OnSearchSelectShow()"
@@ -68,7 +91,6 @@ $(function() {
 </div>
 </div>
 
-</div><!-- top -->
 <div><div class="header">
   <div class="headertitle"><div class="title">Cello </div></div>
 </div><!--header-->
@@ -119,8 +141,8 @@ Confessions of a &lt;tt&gt;ValueTree&lt;/tt&gt; Skeptic</h2>
 <div class="line"> </div>
 <div class="line"><span class="comment">// after executing this line, stdout should print: &quot;x changed to 100&quot;</span></div>
 <div class="line">demoObject.x = 100;</div>
-<div class="ttc" id="aclasscello_1_1_object_html"><div class="ttname"><a href="classcello_1_1_object.html">cello::Object</a></div><div class="ttdef"><b>Definition:</b> cello_object.h:17</div></div>
-<div class="ttc" id="aclasscello_1_1_value_html"><div class="ttname"><a href="classcello_1_1_value.html">cello::Value</a></div><div class="ttdoc">A class to abstract away the issues around storing and retrieving a value from a ValueTree....</div><div class="ttdef"><b>Definition:</b> cello_value.h:53</div></div>
+<div class="ttc" id="aclasscello_1_1_object_html"><div class="ttname"><a href="classcello_1_1_object.html">cello::Object</a></div><div class="ttdef"><b>Definition:</b> cello_object.h:32</div></div>
+<div class="ttc" id="aclasscello_1_1_value_html"><div class="ttname"><a href="classcello_1_1_value.html">cello::Value</a></div><div class="ttdoc">A class to abstract away the issues around storing and retrieving a value from a ValueTree....</div><div class="ttdef"><b>Definition:</b> cello_value.h:68</div></div>
 </div><!-- fragment --> <h1><a class="anchor" id="autotoc_md4"></a>
 Values</h1>
 <ul>
@@ -347,18 +369,32 @@ Persistence</h2>
 <div class="line">    <span class="comment">// handle it. </span></div>
 <div class="line">}</div>
 <div class="line"><span class="comment">// else, we&#39;ve re-loaded -- carry on! </span></div>
-<div class="ttc" id="aclasscello_1_1_object_html_ad05bcbdf54e3587a9060dba4caeba462"><div class="ttname"><a href="classcello_1_1_object.html#ad05bcbdf54e3587a9060dba4caeba462">cello::Object::load</a></div><div class="ttdeci">static juce::ValueTree load(juce::File file, FileFormat format=FileFormat::xml)</div><div class="ttdoc">Reload data from disk. Used in the ctor that accepts file name and format.</div><div class="ttdef"><b>Definition:</b> cello_object.cpp:244</div></div>
+<div class="ttc" id="aclasscello_1_1_object_html_ad05bcbdf54e3587a9060dba4caeba462"><div class="ttname"><a href="classcello_1_1_object.html#ad05bcbdf54e3587a9060dba4caeba462">cello::Object::load</a></div><div class="ttdeci">static juce::ValueTree load(juce::File file, FileFormat format=FileFormat::xml)</div><div class="ttdoc">Reload data from disk. Used in the ctor that accepts file name and format.</div><div class="ttdef"><b>Definition:</b> cello_object.cpp:259</div></div>
 </div><!-- fragment --><h1><a class="anchor" id="autotoc_md23"></a>
 Missing Pieces</h1>
 <p>There are parts of the <code>juce::ValueTree</code> API that are not available through the <code>cello</code> API; these may be added later, or you can use them directly by accessing the <code>ValueTree</code> object that an <code>Object</code> already owns.</p>
 <h1><a class="anchor" id="autotoc_md24"></a>
 Unit Tests</h1>
-<p>There is a <a href="https://github.com/bgporter/cello_test">separate repo</a> containing a small unit test runner; you can also add my <a href="https://github.com/bgporter/testSuite">testSuite</a> JUCE module as a component in your application to execute the tests in your own app. </p>
+<p>There is a <a href="https://github.com/bgporter/cello_test">separate repo</a> containing a small unit test runner; you can also add my <a href="https://github.com/bgporter/testSuite">testSuite</a> JUCE module as a component in your application to execute the tests in your own app.</p>
+<h1><a class="anchor" id="autotoc_md25"></a>
+Release Notes</h1>
+<h2><a class="anchor" id="autotoc_md26"></a>
+Release 1.0.1 * 05 Feb 2023</h2>
+<ul>
+<li>added MIT license text to all source files.</li>
+<li>added <a href="https://github.com/jothepro/doxygen-awesome-css">Doxygen Awesome</a> CSS/etc to document generation.</li>
+</ul>
+<h2><a class="anchor" id="autotoc_md27"></a>
+Release 1.0.0 * 01 Jan 2023</h2>
+<p>Original release. </p>
 </div></div><!-- contents -->
 </div><!-- PageDoc -->
+</div><!-- doc-content -->
 <!-- start footer part -->
-<hr class="footer"/><address class="footer"><small>
-Generated by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.6
-</small></address>
+<div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+  <ul>
+    <li class="footer">Generated by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.6 </li>
+  </ul>
+</div>
 </body>
 </html>
