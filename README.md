@@ -385,3 +385,18 @@ There are parts of the `juce::ValueTree` API that are not available through the 
 ## Unit Tests
 
 There is a [separate repo](https://github.com/bgporter/cello_test) containing a small unit test runner; you can also add my [testSuite](https://github.com/bgporter/testSuite) JUCE module as a component in your application to execute the tests in your own app. 
+
+
+## Release Notes
+
+### Release 1.0.1 * 05 Feb 2023
+
+- added MIT license text to all source files. 
+- added [Doxygen Awesome](https://github.com/jothepro/doxygen-awesome-css) CSS/etc to document generation.
+
+
+
+### Release 1.0.0 * 01 Jan 2023
+
+Original release. 
+
