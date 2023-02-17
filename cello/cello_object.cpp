@@ -95,6 +95,11 @@ Object::~Object ()
     data.removeListener (this);
 }
 
+juce::ValueTree Object::find (const cello::Query& query, bool deep)
+{
+    return query.search (data, deep);
+}
+
 void Object::setUndoManager (juce::UndoManager* undo)
 {
     undoManager = undo;

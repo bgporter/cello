@@ -23,9 +23,11 @@
 #include <juce_data_structures/juce_data_structures.h>
 
 #include "cello_update_source.h"
+
 namespace cello
 {
 class ValueBase;
+class Query;
 
 class Object : public UpdateSource,
                public juce::ValueTree::Listener
@@ -152,6 +154,18 @@ public:
      * @return juce::ValueTree
      */
     operator juce::ValueTree () const { return data; }
+
+    /**
+     * @brief Perform a query against the children of this Object, returning
+     * a new ValueTree containing zero or more copies of child trees that
+     * match the query, possibly sorted into a different order than they
+     * exist in this tree.
+     *
+     * @param query
+     * @param deep
+     * @return juce::ValueTree
+     */
+    juce::ValueTree find (const cello::Query& query, bool deep);
 
     /**
      * @name Undo/redo functionality

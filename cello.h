@@ -36,5 +36,6 @@ END_JUCE_MODULE_DECLARATION
 */
 
 #include "cello/cello_object.h"
+#include "cello/cello_query.h"
 #include "cello/cello_update_source.h"
 #include "cello/cello_value.h"

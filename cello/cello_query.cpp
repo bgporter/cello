@@ -17,16 +17,45 @@
     SOFTWARE.
 */
 
-#ifdef CELLO_H_INCLUDED
-/* When you add this cpp file to your project, you mustn't include it in a file where
-   you've already included any other headers - just put it inside a file on its own,
-   possibly with your config flags preceding it, but don't include anything else. That
-   also includes avoiding any automatic prefix header files that the compiler may be
-   using.
-*/
-#error "Incorrect use of JUCE cpp file"
-#endif
+#include "cello_query.h"
 
-#include "cello/cello_object.cpp"
-#include "cello/cello_query.cpp"
-#include "cello/cello_value.cpp"
+namespace cello
+{
+Query::Query (const juce::Identifier& resultType)
+: type { resultType }
+{
+}
+
+Query& Query::addFilter (Predicate filter)
+{
+    return *this;
+}
+
+juce::ValueTree Query::search (juce::ValueTree tree, bool deep) const
+{
+    // error for now; return an empty tree.
+    juce::ValueTree result { type };
+    if (filters.size () == 0)
+    {
+        for (auto child : tree)
+        {
+            auto childCopy { juce::ValueTree { child.getType () } };
+            if (deep)
+                childCopy.copyPropertiesAndChildrenFrom (child, nullptr);
+            else
+                childCopy.copyPropertiesFrom (child, nullptr);
+            result.appendChild (childCopy, nullptr);
+        }
+    }
+    else
+    {
+        // todo: execute the query predicates!
+    }
+    // todo: sort
+    return result;
+}
+} // namespace cello
+
+#if RUN_UNIT_TESTS
+#include "test/test_cello_query.inl"
+#endif
