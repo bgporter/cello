@@ -27,16 +27,35 @@ namespace cello
 class Query
 {
 public:
+    /// The default identifier for the query results tree.
+    static inline const juce::Identifier Result { "result" };
+
+    // query function, returns true if the tree it is pass should
+    // be included in the result set.
+    using Predicate = std::function<bool (juce::ValueTree)>;
+
     /**
      * @brief Construct a new Query object.
      *
      * @param resultType type id of the ValueTree that we should return.
      */
-    Query (const juce::Identifier& resultType);
+    Query (const juce::Identifier& resultType = Result);
 
-    ~Query () = default;
+    /**
+     * @brief Construct a new Query object that has a single filter predicate
+     * ready to run.
+     *
+     * @param filter Predicate function to run. You can add additional predicates
+     * (that will be logically ANDed) with the `addFilter` method.
+     * @param resultType
+     */
+    Query (Predicate filter, const juce::Identifier& resultType = Result);
 
-    using Predicate = std::function<bool (juce::ValueTree)>;
+    ~Query ()                       = default;
+    Query (const Query&)            = default;
+    Query& operator= (const Query&) = default;
+    Query (Query&&)                 = default;
+    Query& operator= (Query&&)      = default;
 
     /**
      * @brief Append a filter predicate to the end of our list; these are
@@ -60,6 +79,16 @@ public:
      * @return juce::ValueTree with query results.
      */
     juce::ValueTree search (juce::ValueTree tree, bool deep) const;
+
+private:
+    /**
+     * @brief Execute the filter predicates against this child tree, and return
+     * false as soon as we know that we should filter it out.
+     *
+     * @param tree
+     * @return true to include this item in the search results.
+     */
+    bool filter (juce::ValueTree tree) const;
 
 private:
     /// @brief The type of the return data ValueTree

@@ -12,8 +12,6 @@ public:
 
     void runTest () override
     {
-        beginTest ("!!! WRITE SOME TESTS FOR THE cello_query Class !!!");
-
         // replace the tree with an empty one.
         tearDown ([this] () { parentTree = {}; });
 
@@ -39,29 +37,76 @@ public:
                   cello::Object root { "root", parentTree };
                   expectEquals (parentTree.getNumChildren (), 100);
 
-                  cello::Query query { "result" };
+                  cello::Query query;
+
                   // a query with no predicates means select all...
                   auto result { root.find (query, false) };
-                  expect (result.hasType ("result"));
+                  expect (result.hasType (cello::Query::Result));
                   expectEquals (result.getNumChildren (), 100);
               });
 
-        /*
-          To create a test, call `test("testName", testLambda);`
-          To (temporarily) skip a test, call `skipTest("testName", testLambda);`
-          To define setup for a block of tests, call `setup(setupLambda);`
-          To define cleanup for a block of tests, call `tearDown(tearDownLambda);`
+        test ("select none",
+              [this] ()
+              {
+                  cello::Object root { "root", parentTree };
+                  cello::Query query { [] (juce::ValueTree tree)
+                                       {
+                                           cello::Object o ("data", tree);
+                                           return o.getattr ("val", 0.f) < 0;
+                                       } };
+                  //   query.addFilter (
+                  //       [] (juce::ValueTree tree)
+                  //       {
+                  //           cello::Object o ("data", tree);
+                  //           return o.getattr ("val", 0.f) < 0;
+                  //       });
+                  auto result { root.find (query, false) };
+                  DBG (result.toXmlString ());
+                  expect (result.hasType ("result"));
+                  expectEquals (result.getNumChildren (), 0);
 
-          Setup and TearDown lambdas will be called before/after each test that
-          is executed, and remain in effect until explicitly replaced.
+                  cello::Query q2 { "result" };
+                  q2.addFilter (
+                      [] (juce::ValueTree tree)
+                      {
+                          cello::Object o ("data", tree);
+                          auto val = o.getattr ("val", 0.f);
+                          return val > 1.f;
+                      });
 
-          All the functionality of the JUCE `UnitTest` class is available from
-          within these tests.
-        */
+                  result = root.find (q2, false);
+                  expect (result.hasType ("result"));
+                  expectEquals (result.getNumChildren (), 0);
+              });
+
+        test ("select some",
+              [this] ()
+              {
+                  cello::Object root { "root", parentTree };
+                  cello::Query lo { "result" };
+                  lo.addFilter (
+                      [] (juce::ValueTree tree)
+                      {
+                          cello::Object o ("data", tree);
+                          return o.getattr ("val", 0.f) < 0.5f;
+                      });
+                  cello::Query hi { "result" };
+                  hi.addFilter (
+                      [] (juce::ValueTree tree)
+                      {
+                          cello::Object o ("data", tree);
+                          return o.getattr ("val", 0.f) >= 0.5f;
+                      });
+
+                  auto loResult = root.find (lo, false);
+                  auto hiResult = root.find (hi, false);
+
+                  expectEquals (loResult.getNumChildren () + hiResult.getNumChildren (),
+                                root.getNumChildren ());
+              });
     }
 
 private:
-    // !!! test class member vars here...
     juce::ValueTree parentTree;
 };
 

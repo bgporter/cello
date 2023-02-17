@@ -26,8 +26,15 @@ Query::Query (const juce::Identifier& resultType)
 {
 }
 
+Query::Query (Predicate filter, const juce::Identifier& resultType)
+: Query { resultType }
+{
+    addFilter (filter);
+}
+
 Query& Query::addFilter (Predicate filter)
 {
+    filters.push_back (filter);
     return *this;
 }
 
@@ -35,9 +42,9 @@ juce::ValueTree Query::search (juce::ValueTree tree, bool deep) const
 {
     // error for now; return an empty tree.
     juce::ValueTree result { type };
-    if (filters.size () == 0)
+    for (auto child : tree)
     {
-        for (auto child : tree)
+        if (filter (child))
         {
             auto childCopy { juce::ValueTree { child.getType () } };
             if (deep)
@@ -47,13 +54,23 @@ juce::ValueTree Query::search (juce::ValueTree tree, bool deep) const
             result.appendChild (childCopy, nullptr);
         }
     }
-    else
-    {
-        // todo: execute the query predicates!
-    }
     // todo: sort
     return result;
 }
+
+bool Query::filter (juce::ValueTree tree) const
+{
+    if (filters.size () == 0)
+        return true;
+
+    for (auto fn : filters)
+    {
+        if (!fn (tree))
+            return false;
+    }
+    return true;
+}
+
 } // namespace cello
 
 #if RUN_UNIT_TESTS
