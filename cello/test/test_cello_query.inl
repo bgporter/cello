@@ -1,6 +1,28 @@
-
-
 #include <juce_core/juce_core.h>
+
+#include "../cello_value.h"
+namespace
+{
+class Data : public cello::Object
+{
+public:
+    Data (juce::ValueTree tree)
+    : cello::Object ("data", tree)
+    {
+    }
+
+    Data (float value, bool isOdd)
+    : cello::Object ("data", nullptr)
+    {
+        val = value;
+        odd = isOdd;
+    }
+
+    MAKE_VALUE_MEMBER (float, val, {});
+    MAKE_VALUE_MEMBER (bool, odd, false);
+};
+
+} // namespace
 
 class Test_cello_query : public TestSuite
 {
@@ -24,9 +46,7 @@ public:
                 auto& r = juce::Random::getSystemRandom ();
                 for (int i { 0 }; i < 100; ++i)
                 {
-                    cello::Object d { "data", nullptr };
-                    d.setattr ("val", r.nextFloat ());
-                    d.setattr ("odd", static_cast<bool> (i % 2));
+                    Data d { r.nextFloat (), i % 2 == 1 };
                     root.append (&d);
                 }
                 parentTree = root;
@@ -52,15 +72,9 @@ public:
                   cello::Object root { "root", parentTree };
                   cello::Query query { [] (juce::ValueTree tree)
                                        {
-                                           cello::Object o ("data", tree);
-                                           return o.getattr ("val", 0.f) < 0;
+                                           Data d { tree };
+                                           return d.val < 0.f;
                                        } };
-                  //   query.addFilter (
-                  //       [] (juce::ValueTree tree)
-                  //       {
-                  //           cello::Object o ("data", tree);
-                  //           return o.getattr ("val", 0.f) < 0;
-                  //       });
                   auto result { root.find (query, false) };
                   DBG (result.toXmlString ());
                   expect (result.hasType ("result"));
@@ -70,9 +84,8 @@ public:
                   q2.addFilter (
                       [] (juce::ValueTree tree)
                       {
-                          cello::Object o ("data", tree);
-                          auto val = o.getattr ("val", 0.f);
-                          return val > 1.f;
+                          Data d { tree };
+                          return d.val > 1.f;
                       });
 
                   result = root.find (q2, false);
@@ -88,15 +101,15 @@ public:
                   lo.addFilter (
                       [] (juce::ValueTree tree)
                       {
-                          cello::Object o ("data", tree);
-                          return o.getattr ("val", 0.f) < 0.5f;
+                          Data d { tree };
+                          return d.val < 0.5f;
                       });
                   cello::Query hi { "result" };
                   hi.addFilter (
                       [] (juce::ValueTree tree)
                       {
-                          cello::Object o ("data", tree);
-                          return o.getattr ("val", 0.f) >= 0.5f;
+                          Data d { tree };
+                          return d.val >= 0.5f;
                       });
 
                   auto loResult = root.find (lo, false);
@@ -112,13 +125,13 @@ public:
                   cello::Object root { "root", parentTree };
                   cello::Query::Predicate p1 { [] (juce::ValueTree tree)
                                                {
-                                                   cello::Object o ("data", tree);
-                                                   return o.getattr ("val", 0.f) < 0.5f;
+                                                   Data d { tree };
+                                                   return d.val < 0.5f;
                                                } };
                   cello::Query::Predicate p2 { [] (juce::ValueTree tree)
                                                {
-                                                   cello::Object o ("data", tree);
-                                                   return o.getattr ("odd", 0) == 1;
+                                                   Data d { tree };
+                                                   return d.odd;
                                                } };
                   cello::Query query { p1 };
                   auto result1 { root.find (query) };
@@ -126,8 +139,8 @@ public:
                   auto result2 { root.find (query) };
                   expect (result2.getNumChildren () < result1.getNumChildren ());
               });
-#if 0 
-        // temp: create 100K entries
+#if 1
+        // temp: create 100K entries so we can time speed
         setup (
             [this] ()
             {
@@ -135,9 +148,7 @@ public:
                 auto& r = juce::Random::getSystemRandom ();
                 for (int i { 0 }; i < 100000; ++i)
                 {
-                    cello::Object d { "data", nullptr };
-                    d.setattr ("val", r.nextFloat ());
-                    d.setattr ("odd", static_cast<bool> (i % 2));
+                    Data d (r.nextFloat (), i % 2 == 1);
                     root.append (&d);
                 }
                 parentTree = root;
@@ -149,8 +160,8 @@ public:
                   cello::Object root { "root", parentTree };
                   cello::Query::Predicate p1 { [] (juce::ValueTree tree)
                                                {
-                                                   cello::Object o ("data", tree);
-                                                   return o.getattr ("val", 0.f) < 0.5f;
+                                                   Data d { tree };
+                                                   return d.val < 0.5f;
                                                } };
                   cello::Query query { p1 };
                   auto startTime { juce::Time::currentTimeMillis () };
