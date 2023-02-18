@@ -165,7 +165,7 @@ public:
      * @param deep
      * @return juce::ValueTree
      */
-    juce::ValueTree find (const cello::Query& query, bool deep);
+    juce::ValueTree find (const cello::Query& query, bool deep = false);
 
     /**
      * @name Undo/redo functionality

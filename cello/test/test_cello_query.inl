@@ -26,6 +26,7 @@ public:
                 {
                     cello::Object d { "data", nullptr };
                     d.setattr ("val", r.nextFloat ());
+                    d.setattr ("odd", static_cast<bool> (i % 2));
                     root.append (&d);
                 }
                 parentTree = root;
@@ -104,6 +105,62 @@ public:
                   expectEquals (loResult.getNumChildren () + hiResult.getNumChildren (),
                                 root.getNumChildren ());
               });
+
+        test ("multiple predicates",
+              [this] ()
+              {
+                  cello::Object root { "root", parentTree };
+                  cello::Query::Predicate p1 { [] (juce::ValueTree tree)
+                                               {
+                                                   cello::Object o ("data", tree);
+                                                   return o.getattr ("val", 0.f) < 0.5f;
+                                               } };
+                  cello::Query::Predicate p2 { [] (juce::ValueTree tree)
+                                               {
+                                                   cello::Object o ("data", tree);
+                                                   return o.getattr ("odd", 0) == 1;
+                                               } };
+                  cello::Query query { p1 };
+                  auto result1 { root.find (query) };
+                  query.addFilter (p2);
+                  auto result2 { root.find (query) };
+                  expect (result2.getNumChildren () < result1.getNumChildren ());
+              });
+#if 0 
+        // temp: create 100K entries
+        setup (
+            [this] ()
+            {
+                cello::Object root { "root", nullptr };
+                auto& r = juce::Random::getSystemRandom ();
+                for (int i { 0 }; i < 100000; ++i)
+                {
+                    cello::Object d { "data", nullptr };
+                    d.setattr ("val", r.nextFloat ());
+                    d.setattr ("odd", static_cast<bool> (i % 2));
+                    root.append (&d);
+                }
+                parentTree = root;
+            });
+
+        test ("timed test",
+              [this] ()
+              {
+                  cello::Object root { "root", parentTree };
+                  cello::Query::Predicate p1 { [] (juce::ValueTree tree)
+                                               {
+                                                   cello::Object o ("data", tree);
+                                                   return o.getattr ("val", 0.f) < 0.5f;
+                                               } };
+                  cello::Query query { p1 };
+                  auto startTime { juce::Time::currentTimeMillis () };
+                  auto result1 { root.find (query) };
+                  auto endTime { juce::Time::currentTimeMillis () };
+                  DBG ("searching " << parentTree.getNumChildren () << " records took "
+                                    << (endTime - startTime) << "ms to find "
+                                    << result1.getNumChildren () << " records");
+              });
+#endif
     }
 
 private:

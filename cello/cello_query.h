@@ -92,7 +92,7 @@ private:
 
 private:
     /// @brief The type of the return data ValueTree
-    const juce::Identifier type;
+     juce::Identifier type;
     /// @brief List of predicates to execute as a query.
     std::vector<Predicate> filters;
 };
