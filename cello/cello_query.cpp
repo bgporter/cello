@@ -54,23 +54,48 @@ juce::ValueTree Query::search (juce::ValueTree tree, bool deep) const
             result.appendChild (childCopy, nullptr);
         }
     }
-    // todo: sort
-    return result;
+    return sort (result);
+    // return result;
 }
 
 bool Query::filter (juce::ValueTree tree) const
 {
-    if (filters.size () == 0)
-        return true;
-
-    for (auto fn : filters)
+    if (filters.size () > 0)
     {
-        if (!fn (tree))
-            return false;
+        for (auto fn : filters)
+        {
+            if (!fn (tree))
+                return false;
+        }
     }
     return true;
 }
 
+Query& Query::addComparison (Comparison sorter)
+{
+    sorters.push_back (sorter);
+    return *this;
+}
+
+juce::ValueTree Query::sort (juce::ValueTree tree, juce::UndoManager* undo,
+                             bool stableSort) const
+{
+    if (sorters.size () > 0)
+        tree.sort (*this, undo, stableSort);
+    return tree;
+}
+
+int Query::compareElements (const juce::ValueTree& left,
+                            const juce::ValueTree& right) const
+{
+    for (auto sorter : sorters)
+    {
+        auto sortOrder { sorter (left, right) };
+        if (sortOrder != 0)
+            return sortOrder;
+    }
+    return 0;
+}
 } // namespace cello
 
 #if RUN_UNIT_TESTS

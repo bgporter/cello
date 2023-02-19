@@ -22,6 +22,28 @@ public:
     MAKE_VALUE_MEMBER (bool, odd, false);
 };
 
+cello::Query::Comparison valSort { [] (const juce::ValueTree& l, const juce::ValueTree& r)
+                                   {
+                                       Data lData { l };
+                                       Data rData { r };
+                                       if (lData.val < rData.val)
+                                           return -1;
+                                       if (lData.val > rData.val)
+                                           return 1;
+                                       return 0;
+                                   } };
+
+cello::Query::Comparison oddSort { [] (const juce::ValueTree& l, const juce::ValueTree& r)
+                                   {
+                                       Data lData { l };
+                                       Data rData { r };
+                                       if (lData.odd && (!rData.odd))
+                                           return 1;
+                                       if ((!lData.odd) && rData.odd)
+                                           return -1;
+                                       return 0;
+                                   } };
+
 } // namespace
 
 class Test_cello_query : public TestSuite
@@ -139,7 +161,36 @@ public:
                   auto result2 { root.find (query) };
                   expect (result2.getNumChildren () < result1.getNumChildren ());
               });
-#if 1
+
+        test ("sort by val",
+              [this] ()
+              {
+                  cello::Object root { "root", parentTree };
+                  cello::Query sortQuery;
+                  sortQuery.addComparison (valSort);
+                  auto sorted { root.find (sortQuery) };
+
+                  for (int i { 0 }; i < sorted.getNumChildren () - 1; ++i)
+                  {
+                      Data d1 { sorted.getChild (i) };
+                      Data d2 { sorted.getChild (i + 1) };
+                      expect (d1.val < d2.val);
+                  }
+              });
+
+        test ("double sort",
+              [this] ()
+              {
+                  cello::Object root { "root", parentTree };
+                  cello::Query sortQuery;
+                  // first sort into even/odd, and within that in ascending
+                  // order.
+                  sortQuery.addComparison (oddSort).addComparison (valSort);
+                  auto sorted { root.find (sortQuery) };
+                  DBG (sorted.toXmlString ());
+              });
+#if 0
+        // re-enable this to explore speed of queries/sorting.
         // temp: create 100K entries so we can time speed
         setup (
             [this] ()

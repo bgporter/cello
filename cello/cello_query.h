@@ -34,6 +34,13 @@ public:
     // be included in the result set.
     using Predicate = std::function<bool (juce::ValueTree)>;
 
+    // comparison/sort function.
+    // return 0 if the two trees should sort equally.
+    // return -1 if left should come before right
+    // return +1 if right should come before left.
+    using Comparison =
+        std::function<int (const juce::ValueTree&, const juce::ValueTree&)>;
+
     /**
      * @brief Construct a new Query object.
      *
@@ -80,6 +87,28 @@ public:
      */
     juce::ValueTree search (juce::ValueTree tree, bool deep) const;
 
+    /**
+     * @brief Add a comparison function to the list we use to sort a list
+     * of children.
+     *
+     * @param sorter
+     * @return Query& so we can chain these calls together.
+     */
+    Query& addComparison (Comparison sorter);
+
+    /**
+     * @brief Use the list of comparison functions to sort the tree arg into
+     * its desired order.
+     *
+     * @param tree  Tree to sort.
+     * @param undo optional undo manager.
+     * @param stableSort if true, retain the current order of elements that compare as
+     *      equal. This is slower, so only use it if needed.
+     * @return juce::ValueTree
+     */
+    juce::ValueTree sort (juce::ValueTree tree, juce::UndoManager* undo = nullptr,
+                          bool stableSort = false) const;
+
 private:
     /**
      * @brief Execute the filter predicates against this child tree, and return
@@ -90,11 +119,25 @@ private:
      */
     bool filter (juce::ValueTree tree) const;
 
+    // ValueTree needs to be able to use our compareElements method.
+    friend class juce::ValueTree;
+    /**
+     * @brief Method used by the ValueTree sort() method. Executes the sorter
+     * lambdas in sequence until the comparison is clear.
+     *
+     * @param left
+     * @param right
+     * @return int
+     */
+    int compareElements (const juce::ValueTree& left, const juce::ValueTree& right) const;
+
 private:
     /// @brief The type of the return data ValueTree
     juce::Identifier type;
     /// @brief List of predicates to execute as a query.
     std::vector<Predicate> filters;
+    /// @brief List of comparisons to use when sorting.
+    std::vector<Comparison> sorters;
 };
 
 } // namespace cello
