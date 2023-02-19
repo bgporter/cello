@@ -44,20 +44,27 @@ var NAVTREE =
           [ "Finding Children", "md__r_e_a_d_m_e.html#autotoc_md14", null ],
           [ "Moving / Sorting Children", "md__r_e_a_d_m_e.html#autotoc_md15", null ]
         ] ],
-        [ "Undo/Redo", "md__r_e_a_d_m_e.html#autotoc_md16", null ],
-        [ "Change Callbacks", "md__r_e_a_d_m_e.html#autotoc_md17", [
-          [ "Property Changes", "md__r_e_a_d_m_e.html#autotoc_md18", null ],
-          [ "Child Changes", "md__r_e_a_d_m_e.html#autotoc_md19", null ],
-          [ "Tree Changes", "md__r_e_a_d_m_e.html#autotoc_md20", null ]
+        [ "Database / Query", "md__r_e_a_d_m_e.html#autotoc_md16", [
+          [ "<tt>Query::Predicate</tt>", "md__r_e_a_d_m_e.html#autotoc_md17", null ],
+          [ "<tt>Query::Comparison</tt>", "md__r_e_a_d_m_e.html#autotoc_md18", null ],
+          [ "<tt>Object::find</tt>", "md__r_e_a_d_m_e.html#autotoc_md19", null ],
+          [ "<tt>Object::upsert</tt> and <tt>Object::upsertAll</tt>", "md__r_e_a_d_m_e.html#autotoc_md20", null ]
         ] ],
-        [ "\"Pythonesque\" access", "md__r_e_a_d_m_e.html#autotoc_md21", null ],
-        [ "Persistence", "md__r_e_a_d_m_e.html#autotoc_md22", null ]
+        [ "Undo/Redo", "md__r_e_a_d_m_e.html#autotoc_md21", null ],
+        [ "Change Callbacks", "md__r_e_a_d_m_e.html#autotoc_md22", [
+          [ "Property Changes", "md__r_e_a_d_m_e.html#autotoc_md23", null ],
+          [ "Child Changes", "md__r_e_a_d_m_e.html#autotoc_md24", null ],
+          [ "Tree Changes", "md__r_e_a_d_m_e.html#autotoc_md25", null ]
+        ] ],
+        [ "\"Pythonesque\" access", "md__r_e_a_d_m_e.html#autotoc_md26", null ],
+        [ "Persistence", "md__r_e_a_d_m_e.html#autotoc_md27", null ]
       ] ],
-      [ "Missing Pieces", "md__r_e_a_d_m_e.html#autotoc_md23", null ],
-      [ "Unit Tests", "md__r_e_a_d_m_e.html#autotoc_md24", null ],
-      [ "Release Notes", "md__r_e_a_d_m_e.html#autotoc_md25", [
-        [ "Release 1.0.1 * 05 Feb 2023", "md__r_e_a_d_m_e.html#autotoc_md26", null ],
-        [ "Release 1.0.0 * 01 Jan 2023", "md__r_e_a_d_m_e.html#autotoc_md27", null ]
+      [ "Missing Pieces", "md__r_e_a_d_m_e.html#autotoc_md28", null ],
+      [ "Unit Tests", "md__r_e_a_d_m_e.html#autotoc_md29", null ],
+      [ "Release Notes", "md__r_e_a_d_m_e.html#autotoc_md30", [
+        [ "Release 1.1.0 * 19 Feb 2023", "md__r_e_a_d_m_e.html#autotoc_md31", null ],
+        [ "Release 1.0.1 * 05 Feb 2023", "md__r_e_a_d_m_e.html#autotoc_md32", null ],
+        [ "Release 1.0.0 * 01 Jan 2023", "md__r_e_a_d_m_e.html#autotoc_md33", null ]
       ] ]
     ] ],
     [ "Classes", "annotated.html", [

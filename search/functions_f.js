@@ -1,4 +1,5 @@
 var searchData=
 [
-  ['_7eobject_0',['~Object',['../classcello_1_1_object.html#a34c001271075ceb3006e2fed75aef279',1,'cello::Object']]]
+  ['value_0',['Value',['../classcello_1_1_value.html#add71af622cc2ffb6976336ac6be0f519',1,'cello::Value']]],
+  ['valuebase_1',['ValueBase',['../classcello_1_1_value_base.html#a4bc3f19e60ba3920dd64b97178ec9c74',1,'cello::ValueBase']]]
 ];

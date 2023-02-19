@@ -1,6 +1,6 @@
 var searchData=
 [
-  ['undo_0',['undo',['../classcello_1_1_object.html#a9068e0306934dcbf2c24b71efe5c1024',1,'cello::Object']]],
-  ['undomanager_1',['undoManager',['../classcello_1_1_object.html#a8f7ad57b7ba52f9a06b121b367d825b0',1,'cello::Object']]],
-  ['updatesource_2',['UpdateSource',['../classcello_1_1_update_source.html',1,'cello']]]
+  ['test_5fcello_5fobject_0',['Test_cello_object',['../classcello_1_1_test__cello__object.html',1,'cello']]],
+  ['test_5fcello_5fquery_1',['Test_cello_query',['../class_test__cello__query.html',1,'']]],
+  ['test_5fcello_5fvalue_2',['Test_cello_value',['../class_test__cello__value.html',1,'']]]
 ];

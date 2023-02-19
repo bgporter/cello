@@ -103,8 +103,8 @@ $(document).ready(function(){initNavTree('md__r_e_a_d_m_e.html',''); initResizab
 Motivation and Overview</h1>
 <h2><a class="anchor" id="autotoc_md2"></a>
 Confessions of a &lt;tt&gt;ValueTree&lt;/tt&gt; Skeptic</h2>
-<p>I've been using the JUCE framework for over a decade now, but there's a major component of JUCE that never clicked for me as a developer &mdash; ValueTrees. This wasn't a problem for me until I changed jobs and started needing to work on a mature codebase that made significant use of them. This code makes efforts to hide some of the more cumbersome or repetitive aspects of integrating ValueTrees into an application, but that <code>ValueTreeWrapper</code> class still seemed like it required too much effort to work with; where I'm used to thinking in terms of objects that contain values, any time I needed to get near data that's stored in a ValueTree, it was impossible to avoid the awareness that I was always working through an API to perform operations on data that should just be directly manipulable, and while the wrapper class approach mitigated this to some extent, there was still more boilerplate code to write than seems good to me, as well as other places where the gaps around the abstraction were more obvious than I like.;</p>
-<p>I've always found that the only way for me to work through these issues when I encounter them is to sit down with a blank document in an editor and start enumerating the problems that I see with a system and use that as a guide to start thinking about ways that I can engineer around the parts that aren' tmy favorite, and sometimes how I can reframe my thinking to start seeing superpowers where I thought there were deficiencies.</p>
+<p>I've been using the JUCE framework for over a decade now, but there's a major component of JUCE that never clicked for me as a developer &mdash; ValueTrees. This wasn't a problem for me until I changed jobs and started needing to work on a mature codebase that made significant use of them. This code makes efforts to hide some of the more cumbersome or repetitive aspects of integrating ValueTrees into an application, but that <code>ValueTreeWrapper</code> class still seemed like it required too much effort to work with; where I'm used to thinking in terms of objects that contain values, any time I needed to get near data that's stored in a ValueTree, it was impossible to avoid the awareness that I was always working through an API to perform operations on data that should just be directly manipulable, and while the wrapper class approach mitigated this to some extent, there was still more boilerplate code to write than seems good to me, as well as other places where the gaps around the abstraction were more obvious than I like.</p>
+<p>I've always found that the only way for me to work through these kinds of issues when I encounter them is to sit down with a blank document in an editor and start enumerating the problems that I see with a system and use that as a guide to start thinking about ways that I can engineer around the parts that aren't my favorite, and sometimes how I can reframe my thinking to start seeing superpowers where I thought there were deficiencies.</p>
 <p>One of my current teammates has expressed confusion that I wasn't immediately on board with ValueTrees, and his defense of them was key to my eventually starting this re-analysis. They give you:</p>
 <ul>
 <li>A really easy way to capture and pass around the entire state of your application's data at run time</li>
@@ -126,7 +126,7 @@ Confessions of a &lt;tt&gt;ValueTree&lt;/tt&gt; Skeptic</h2>
 <div class="fragment"><div class="line"><span class="comment">// define a struct with two members and then create an instance</span></div>
 <div class="line"><span class="keyword">struct </span>CelloDemo : <span class="keyword">public</span> <a class="code hl_class" href="classcello_1_1_object.html">cello::Object</a> </div>
 <div class="line">{</div>
-<div class="line">    <span class="comment">// we&#39;ll figure this type out shortly...</span></div>
+<div class="line">    <span class="comment">// we&#39;ll figure this `Value` type out shortly...</span></div>
 <div class="line">    <a class="code hl_class" href="classcello_1_1_value.html">cello::Value&lt;int&gt;</a> x;</div>
 <div class="line">    <a class="code hl_class" href="classcello_1_1_value.html">cello::Value&lt;float&gt;</a> y;</div>
 <div class="line">};</div>
@@ -141,12 +141,13 @@ Confessions of a &lt;tt&gt;ValueTree&lt;/tt&gt; Skeptic</h2>
 <div class="line"> </div>
 <div class="line"><span class="comment">// after executing this line, stdout should print: &quot;x changed to 100&quot;</span></div>
 <div class="line">demoObject.x = 100;</div>
-<div class="ttc" id="aclasscello_1_1_object_html"><div class="ttname"><a href="classcello_1_1_object.html">cello::Object</a></div><div class="ttdef"><b>Definition:</b> cello_object.h:32</div></div>
+<div class="ttc" id="aclasscello_1_1_object_html"><div class="ttname"><a href="classcello_1_1_object.html">cello::Object</a></div><div class="ttdef"><b>Definition:</b> cello_object.h:34</div></div>
 <div class="ttc" id="aclasscello_1_1_value_html"><div class="ttname"><a href="classcello_1_1_value.html">cello::Value</a></div><div class="ttdoc">A class to abstract away the issues around storing and retrieving a value from a ValueTree....</div><div class="ttdef"><b>Definition:</b> cello_value.h:68</div></div>
 </div><!-- fragment --> <h1><a class="anchor" id="autotoc_md4"></a>
 Values</h1>
 <ul>
 <li>actually, a proxy to a value. We store a <code>juce::Identifier</code> and a reference to a ValueTree that provides the actual storage; storing or retrieving the value through its variable needs to do so through the ValueTree API, but that's all kept out of sight.</li>
+<li>templated on an underlying data type to hide the fact that we're working with <code>juce::var</code> objects internally. <code><a class="el" href="classcello_1_1_value.html" title="A class to abstract away the issues around storing and retrieving a value from a ValueTree....">cello::Value</a></code> objects remove concerns about type-safety hat <code>var</code>s introduce.</li>
 <li>can be set to always update their listeners when the value is set, even if the underlying value wasn't changed.</li>
 <li>can be given validator functions that will be called when the value is set or retrieved.</li>
 <li>arithmetic types have all of the in-place operators (<code>++</code>, <code>--</code>, <code>+=</code>, <code>-=</code>, <code>*=</code>, <code>/=</code>) defined.</li>
@@ -199,18 +200,20 @@ Values</h1>
 <div class="line"> </div>
 <div class="line">} <span class="comment">// namespace juce</span></div>
 </div><!-- fragment --><p>Then we define a class that has a single public Value member that contains a <code>std::complex&lt;float&gt;</code> &mdash; there's no additional work required to perform the conversions:</p>
-<div class="fragment"><div class="line"><span class="keyword">class </span>ObjectWithConvertibleObject : <span class="keyword">public</span> <a class="code hl_class" href="classcello_1_1_object.html">cello::Object</a></div>
+<div class="fragment"><div class="line"><span class="keyword">class </span>ObjectWithConvertibleValue : <span class="keyword">public</span> <a class="code hl_class" href="classcello_1_1_object.html">cello::Object</a></div>
 <div class="line">{</div>
 <div class="line"><span class="keyword">public</span>:</div>
-<div class="line">    ObjectWithConvertibleObject ()</div>
+<div class="line">    ObjectWithConvertibleValue ()</div>
 <div class="line">    : cello::Object (<span class="stringliteral">&quot;convertible&quot;</span>, nullptr)</div>
 <div class="line">    {</div>
 <div class="line">    }</div>
-<div class="line">    <span class="comment">// verify the automatic use of variant converters.</span></div>
+<div class="line"> </div>
+<div class="line">    <span class="comment">// the `complexVal` member can be used as a `std::complex&lt;float&gt;`; the </span></div>
+<div class="line">    <span class="comment">// round-tripping through a juce::var is completely hidden. </span></div>
 <div class="line">    MAKE_VALUE_MEMBER (std::complex&lt;float&gt;, complexVal, {});</div>
 <div class="line">};</div>
 </div><!-- fragment --><p>Your code is then free to work with that value directly:</p>
-<div class="fragment"><div class="line">ObjectWithConvertibleObject o;</div>
+<div class="fragment"><div class="line">ObjectWithConvertibleValue o;</div>
 <div class="line">std::complex&lt;float&gt; orig { 2.f, 3.f };</div>
 <div class="line">o.complexVal = orig;</div>
 <div class="line"> </div>
@@ -260,7 +263,7 @@ Working with Children</h2>
 <li><em>Heterogeneous</em> The parent tree is a data structure that contains other (tree) data structures. Access the children by specifying their type. The children are stored in a list, but the sequence is not significant.</li>
 <li><em>Homogeneous</em> The parent tree contains a list of child trees, typically but not necessarily of the same type. Access the children by their index or iterating through them.</li>
 </ul>
-<p>There's no mechanism to enforce this distinction &mdash; if a list of different types makes sense in your application, there's a little more logic you'll need to write, but that's all.</p>
+<p>There's no mechanism to enforce this distinction&mdash;if a list of different types makes sense in your application, there's a little more logic you'll need to write, but that's all.</p>
 <h3><a class="anchor" id="autotoc_md12"></a>
 Adding Children</h3>
 <p><code>void append (Object* object);</code> adds the child to the end of this object's child list.</p>
@@ -296,7 +299,48 @@ Moving / Sorting Children</h3>
 <li>a value of &gt; 0 if the second comes before the first</li>
 </ul>
 <p>The <code>stableSort</code> argument specifies whether the sort algorithm should guarantee that equivalent children remain in their original order after the sort.</p>
+<p>After <code>cello</code> release 1.1, you may wish to instead use the new database/query features for searching and sorting.</p>
 <h2><a class="anchor" id="autotoc_md16"></a>
+Database / Query</h2>
+<p>Use the <code><a class="el" href="classcello_1_1_query.html">cello::Query</a></code> object to define a set of search and sort criteria to use to perform simple database-like operations. Instead of defining a query language, we've defined two function types that can be passed into a Query object to define its behavior at run time:</p>
+<h3><a class="anchor" id="autotoc_md17"></a>
+&lt;tt&gt;Query::Predicate&lt;/tt&gt;</h3>
+<div class="fragment"><div class="line"><span class="comment">// query function, returns true if the tree it is passed should</span></div>
+<div class="line"><span class="comment">// be included in the result set.</span></div>
+<div class="line"><span class="keyword">using </span>Predicate = std::function&lt;bool (juce::ValueTree)&gt;;</div>
+<div class="line"> </div>
+<div class="line">Query&amp; addFilter (Predicate filter);</div>
+</div><!-- fragment --><p>You can specify any number of predicate functions for a Query object to use; these functions accept a ValueTree as an argument and return a boolean to indicate whether this child tree should be included in the query search results.</p>
+<p>The search logic will execute these functions in the order they were added until encountering one that returns <code>false</code>. If all of the query predicates return <code>true</code>, a copy of this ValueTree will be added to the search results.</p>
+<p>If a query is run with no predicate functions defined, all children of the <code>Object</code> being searched will be copied and added to the search results.</p>
+<h3><a class="anchor" id="autotoc_md18"></a>
+&lt;tt&gt;Query::Comparison&lt;/tt&gt;</h3>
+<div class="fragment"><div class="line"><span class="comment">// comparison/sort function.</span></div>
+<div class="line"><span class="comment">// return 0 if the two trees should sort equally.</span></div>
+<div class="line"><span class="comment">// return -1 if left should come before right</span></div>
+<div class="line"><span class="comment">// return +1 if right should come before left.</span></div>
+<div class="line"><span class="keyword">using </span>Comparison = std::function&lt;int (<span class="keyword">const</span> juce::ValueTree&amp;, <span class="keyword">const</span> juce::ValueTree&amp;)&gt;;</div>
+<div class="line"> </div>
+<div class="line">Query&amp; addComparison (Comparison sorter);</div>
+</div><!-- fragment --><p>You can also specify comparison functions that will be used to sort the results list after a query is performed; if none are provided, the items in the search results will be in the same order they exist in the <code>Object</code> being queried.</p>
+<h3><a class="anchor" id="autotoc_md19"></a>
+&lt;tt&gt;Object::find&lt;/tt&gt;</h3>
+<div class="fragment"><div class="line"> </div>
+<div class="line">juce::ValueTree find (<span class="keyword">const</span> <a class="code hl_class" href="classcello_1_1_query.html">cello::Query</a>&amp; query, <span class="keywordtype">bool</span> deep = <span class="keyword">false</span>);</div>
+<div class="ttc" id="aclasscello_1_1_query_html"><div class="ttname"><a href="classcello_1_1_query.html">cello::Query</a></div><div class="ttdef"><b>Definition:</b> cello_query.h:28</div></div>
+</div><!-- fragment --><h3><a class="anchor" id="autotoc_md20"></a>
+&lt;tt&gt;Object::upsert&lt;/tt&gt; and &lt;tt&gt;Object::upsertAll&lt;/tt&gt;</h3>
+<p>These use a concept borrowed from the MongoDB NoSql database; an 'upsert` operation performs one of:</p><ul>
+<li>Update a record in place if possible</li>
+<li>Otherwise, add (insert) a new record to the object.</li>
+</ul>
+<p>The main use case here would be to</p><ol type="1">
+<li>Perform a query to get a list of (copies of) items</li>
+<li>Modify those copies in the result list</li>
+<li>Perform an upsert to apply the changes back into the original data.</li>
+</ol>
+<p>For this to work, your items must be defined such that each has a unique key value that can be used to link the update tree with the original one to be updated. In the unit tests for this function, our <code>Data</code> objects have an attribute <code>key</code> that is populated with a monotonically incremented integer when created. In production code, it would be better to use something more unique, like a <code>juce::Uuid</code>.</p>
+<h2><a class="anchor" id="autotoc_md21"></a>
 Undo/Redo</h2>
 <p>Most ValueTree operations accept a pointer to a <code>juce::UndoManager</code> object as an argument to make those operations undoable/redoable. <code><a class="el" href="classcello_1_1_object.html">cello::Object</a></code>s can maintain this manager for you: pass a pointer to <code>UndoManager</code> to a <code><a class="el" href="classcello_1_1_object.html">cello::Object</a></code> using its <code>setUndoManager</code> method, and that object and any child/descendant objects that are added to it will become undoable.</p>
 <p>The following undo/redo methods are available directly from <code><a class="el" href="classcello_1_1_object.html">cello::Object</a></code>:</p>
@@ -308,10 +352,10 @@ Undo/Redo</h2>
 <li><code>void clearUndoHistory ();</code></li>
 </ul>
 <p>You can also retrieve a pointer to the UndoManager (using <code>juce::UndoManager* getUndoManager()</code>) for any of its other operations that we don't expose directly.</p>
-<h2><a class="anchor" id="autotoc_md17"></a>
+<h2><a class="anchor" id="autotoc_md22"></a>
 Change Callbacks</h2>
 <p>The <code><a class="el" href="classcello_1_1_object.html">cello::Object</a></code> class defines a set of <code>std::function</code>s that can be installed as callbacks to be executed when properties or children of an object are changed:</p>
-<h3><a class="anchor" id="autotoc_md18"></a>
+<h3><a class="anchor" id="autotoc_md23"></a>
 Property Changes</h3>
 <p><code>PropertyUpdateFn</code> signature: <code>std::function&lt;void(juce::Identifier)&gt;</code></p>
 <p>You can register a callback for each named property of an object that will be executed when the value of that property is changed. You can also register a wildcard callback using the identifier of the object itself that will be called when an attribute changes but there was no specific handler for it.</p>
@@ -320,7 +364,7 @@ Property Changes</h3>
 <li><code>void onPropertyChange (juce::Identifier id, PropertyUpdateFn callback)</code> &mdash; pass in the identifier of the attribute to watch</li>
 <li><code>void onPropertyChange (const ValueBase&amp; val, PropertyUpdateFn callback);</code> &mdash; pass in a reference to the <code><a class="el" href="classcello_1_1_value.html" title="A class to abstract away the issues around storing and retrieving a value from a ValueTree....">cello::Value</a></code> or <code><a class="el" href="classcello_1_1_object.html">cello::Object</a></code> to watch.</li>
 </ul>
-<h3><a class="anchor" id="autotoc_md19"></a>
+<h3><a class="anchor" id="autotoc_md24"></a>
 Child Changes</h3>
 <p>Changes to children are broadcast using a <code>ChildUpdateFn</code> callback that has the signature <code>std::function&lt;void (juce::ValueTree&amp; child, int oldIndex, int newIndex)&gt;;</code></p>
 <ul>
@@ -328,14 +372,14 @@ Child Changes</h3>
 <li><code>onChildRemoved</code> &mdash; <code>oldIndex</code> will be the index of the child that was removed, <code>newIndex</code> will be -1.</li>
 <li><code>onChildMoved</code> &mdash; <code>oldIndex</code> and <code>newIndex</code> are self-explanatory.</li>
 </ul>
-<h3><a class="anchor" id="autotoc_md20"></a>
+<h3><a class="anchor" id="autotoc_md25"></a>
 Tree Changes</h3>
 <p>A <code>SelfUpdateFn</code> callback with the signature <code>std::function&lt;void (void)&gt;</code> will be called when:</p>
 <ul>
 <li><code>onParentChanged</code> &mdash; this object has been adopted by a different parent tree.</li>
 <li><code>onTreeRedirected</code> &mdash; the underlying value tree used by this object was replaced with a different one.</li>
 </ul>
-<h2><a class="anchor" id="autotoc_md21"></a>
+<h2><a class="anchor" id="autotoc_md26"></a>
 "Pythonesque" access</h2>
 <p>Not everything can or should be done with the kind of compile-time API <code>cello</code> was written to support. These methods take their names and inspriation from similar methods in the Python object model.</p>
 <p>These methods do provide some level of type-safety and type-coercion using <code>VariantConverter</code>s that our <code>Value</code> types have.</p>
@@ -344,7 +388,7 @@ Tree Changes</h3>
 <li><code>template &lt;typename T&gt; Object&amp; setattr (const juce::Identifier&amp; attr, const T&amp; attrVal);</code> sets the value of the specified attribute in the object. We return a reference to the current Object so that multiple calls to this method can be chained together.</li>
 <li><code>template &lt;typename T&gt; T getattr (const juce::Identifier&amp; attr, const T&amp; defaultVal) const</code> either returns the current value of the specified attribute, or a default value if it's not present.</li>
 </ul>
-<h2><a class="anchor" id="autotoc_md22"></a>
+<h2><a class="anchor" id="autotoc_md27"></a>
 Persistence</h2>
 <p><code><a class="el" href="classcello_1_1_object.html">cello::Object</a></code> instances can be persisted to or from disk in any of the three formats that ValueTrees support:</p><ul>
 <li>text/XML</li>
@@ -369,22 +413,27 @@ Persistence</h2>
 <div class="line">    <span class="comment">// handle it. </span></div>
 <div class="line">}</div>
 <div class="line"><span class="comment">// else, we&#39;ve re-loaded -- carry on! </span></div>
-<div class="ttc" id="aclasscello_1_1_object_html_ad05bcbdf54e3587a9060dba4caeba462"><div class="ttname"><a href="classcello_1_1_object.html#ad05bcbdf54e3587a9060dba4caeba462">cello::Object::load</a></div><div class="ttdeci">static juce::ValueTree load(juce::File file, FileFormat format=FileFormat::xml)</div><div class="ttdoc">Reload data from disk. Used in the ctor that accepts file name and format.</div><div class="ttdef"><b>Definition:</b> cello_object.cpp:259</div></div>
-</div><!-- fragment --><h1><a class="anchor" id="autotoc_md23"></a>
+<div class="ttc" id="aclasscello_1_1_object_html_ad05bcbdf54e3587a9060dba4caeba462"><div class="ttname"><a href="classcello_1_1_object.html#ad05bcbdf54e3587a9060dba4caeba462">cello::Object::load</a></div><div class="ttdeci">static juce::ValueTree load(juce::File file, FileFormat format=FileFormat::xml)</div><div class="ttdoc">Reload data from disk. Used in the ctor that accepts file name and format.</div><div class="ttdef"><b>Definition:</b> cello_object.cpp:309</div></div>
+</div><!-- fragment --><h1><a class="anchor" id="autotoc_md28"></a>
 Missing Pieces</h1>
 <p>There are parts of the <code>juce::ValueTree</code> API that are not available through the <code>cello</code> API; these may be added later, or you can use them directly by accessing the <code>ValueTree</code> object that an <code>Object</code> already owns.</p>
-<h1><a class="anchor" id="autotoc_md24"></a>
+<h1><a class="anchor" id="autotoc_md29"></a>
 Unit Tests</h1>
 <p>There is a <a href="https://github.com/bgporter/cello_test">separate repo</a> containing a small unit test runner; you can also add my <a href="https://github.com/bgporter/testSuite">testSuite</a> JUCE module as a component in your application to execute the tests in your own app.</p>
-<h1><a class="anchor" id="autotoc_md25"></a>
+<h1><a class="anchor" id="autotoc_md30"></a>
 Release Notes</h1>
-<h2><a class="anchor" id="autotoc_md26"></a>
+<h2><a class="anchor" id="autotoc_md31"></a>
+Release 1.1.0 * 19 Feb 2023</h2>
+<ul>
+<li>Added <code><a class="el" href="classcello_1_1_query.html">cello::Query</a></code> class and updates to <code><a class="el" href="classcello_1_1_object.html">cello::Object</a></code> to perform database-like queries and in-place updating of child objects. See the "Database / Query" section of this README document.</li>
+</ul>
+<h2><a class="anchor" id="autotoc_md32"></a>
 Release 1.0.1 * 05 Feb 2023</h2>
 <ul>
 <li>added MIT license text to all source files.</li>
 <li>added <a href="https://github.com/jothepro/doxygen-awesome-css">Doxygen Awesome</a> CSS/etc to document generation.</li>
 </ul>
-<h2><a class="anchor" id="autotoc_md27"></a>
+<h2><a class="anchor" id="autotoc_md33"></a>
 Release 1.0.0 * 01 Jan 2023</h2>
 <p>Original release. </p>
 </div></div><!-- contents -->

@@ -159,12 +159,25 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>operator!=</b> (const
 <tr class="memitem:aab9527be361c6013e97bda636a549d6e"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcello_1_1_object.html#aab9527be361c6013e97bda636a549d6e">operator juce::ValueTree</a> () const</td></tr>
 <tr class="memdesc:aab9527be361c6013e97bda636a549d6e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the ValueTree we're using as our data store.  <br /></td></tr>
 <tr class="separator:aab9527be361c6013e97bda636a549d6e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a62394b84057f6fce787bc8cf61c4facb"><td class="memItemLeft" align="right" valign="top">juce::ValueTree&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcello_1_1_object.html#a62394b84057f6fce787bc8cf61c4facb">clone</a> (bool deep) const</td></tr>
+<tr class="memdesc:a62394b84057f6fce787bc8cf61c4facb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Make and return a copy of our underlying value tree.  <br /></td></tr>
+<tr class="separator:a62394b84057f6fce787bc8cf61c4facb"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4b25ab25ee62b03dda46143a20054c02"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcello_1_1_object.html#a4b25ab25ee62b03dda46143a20054c02">excludeListener</a> (juce::ValueTree::Listener *listener)</td></tr>
 <tr class="memdesc:a4b25ab25ee62b03dda46143a20054c02"><td class="mdescLeft">&#160;</td><td class="mdescRight">A listener to exclude from property change updates.  <br /></td></tr>
 <tr class="separator:a4b25ab25ee62b03dda46143a20054c02"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a36491bac36514cc7e88454d8444d0a0f"><td class="memItemLeft" align="right" valign="top">juce::ValueTree::Listener *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcello_1_1_object.html#a36491bac36514cc7e88454d8444d0a0f">getExcludedListener</a> () const</td></tr>
 <tr class="memdesc:a36491bac36514cc7e88454d8444d0a0f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get a pointer to the listener to exclude from property change updates.  <br /></td></tr>
 <tr class="separator:a36491bac36514cc7e88454d8444d0a0f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr><td colspan="2"><div class="groupHeader">Database functionality</div></td></tr>
+<tr class="memitem:aa28a19ff0e4f6e6c826e7293e1937d23"><td class="memItemLeft" align="right" valign="top">juce::ValueTree&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcello_1_1_object.html#aa28a19ff0e4f6e6c826e7293e1937d23">find</a> (const <a class="el" href="classcello_1_1_query.html">cello::Query</a> &amp;query, bool deep=false)</td></tr>
+<tr class="memdesc:aa28a19ff0e4f6e6c826e7293e1937d23"><td class="mdescLeft">&#160;</td><td class="mdescRight">Perform a query against the children of this <a class="el" href="classcello_1_1_object.html">Object</a>, returning a new ValueTree containing zero or more copies of child trees that match the query, possibly sorted into a different order than they exist in this tree.  <br /></td></tr>
+<tr class="separator:aa28a19ff0e4f6e6c826e7293e1937d23"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a26a8d3a310c6ac67498f762224f09daf"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcello_1_1_object.html#a26a8d3a310c6ac67498f762224f09daf">upsert</a> (const <a class="el" href="classcello_1_1_object.html">Object</a> *object, const juce::Identifier &amp;key, bool deep=false)</td></tr>
+<tr class="memdesc:a26a8d3a310c6ac67498f762224f09daf"><td class="mdescLeft">&#160;</td><td class="mdescRight">Update or insert a child object (concept borrowed from MongoDB) Looks for a child with a 'key' value that matches the one found in the object we've been passed. If a match is found, we update the entry in place (update). If no match is found, we append a copy of <code>object</code> to our children.  <br /></td></tr>
+<tr class="separator:a26a8d3a310c6ac67498f762224f09daf"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae4f3e07c7db1d4d8af104d9ea5c63883"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcello_1_1_object.html#ae4f3e07c7db1d4d8af104d9ea5c63883">upsertAll</a> (const <a class="el" href="classcello_1_1_object.html">Object</a> *parent, const juce::Identifier &amp;key, bool deep=false)</td></tr>
+<tr class="memdesc:ae4f3e07c7db1d4d8af104d9ea5c63883"><td class="mdescLeft">&#160;</td><td class="mdescRight">Perform an upsert using each of the children of the parent being passed. Common workflow here:  <br /></td></tr>
+<tr class="separator:ae4f3e07c7db1d4d8af104d9ea5c63883"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr><td colspan="2"><div class="groupHeader">Undo/redo functionality</div></td></tr>
 <tr class="memitem:a14e852dd0a299e2d72bf07dd8970b52a"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcello_1_1_object.html#a14e852dd0a299e2d72bf07dd8970b52a">setUndoManager</a> (juce::UndoManager *<a class="el" href="classcello_1_1_object.html#a9068e0306934dcbf2c24b71efe5c1024">undo</a>)</td></tr>
 <tr class="memdesc:a14e852dd0a299e2d72bf07dd8970b52a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the undo manager to use in this object (and others created from it).  <br /></td></tr>
@@ -530,6 +543,33 @@ SelfUpdateFn&#160;</td><td class="memItemRight" valign="bottom"><b>onTreeRedirec
 
 </div>
 </div>
+<a id="a62394b84057f6fce787bc8cf61c4facb" name="a62394b84057f6fce787bc8cf61c4facb"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a62394b84057f6fce787bc8cf61c4facb">&#9670;&#160;</a></span>clone()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">juce::ValueTree cello::Object::clone </td>
+          <td>(</td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>deep</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Make and return a copy of our underlying value tree. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">deep</td><td>Include children? </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>a copy of this thing. </dd></dl>
+
+</div>
+</div>
 <a id="a7fd4f6b747c7c120ded85f09765378af" name="a7fd4f6b747c7c120ded85f09765378af"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a7fd4f6b747c7c120ded85f09765378af">&#9670;&#160;</a></span>delattr()</h2>
 
@@ -587,6 +627,44 @@ SelfUpdateFn&#160;</td><td class="memItemRight" valign="bottom"><b>onTreeRedirec
   </table>
   </dd>
 </dl>
+
+</div>
+</div>
+<a id="aa28a19ff0e4f6e6c826e7293e1937d23" name="aa28a19ff0e4f6e6c826e7293e1937d23"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa28a19ff0e4f6e6c826e7293e1937d23">&#9670;&#160;</a></span>find()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">juce::ValueTree cello::Object::find </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="classcello_1_1_query.html">cello::Query</a> &amp;&#160;</td>
+          <td class="paramname"><em>query</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>deep</em> = <code>false</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Perform a query against the children of this <a class="el" href="classcello_1_1_object.html">Object</a>, returning a new ValueTree containing zero or more copies of child trees that match the query, possibly sorted into a different order than they exist in this tree. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">query</td><td><a class="el" href="classcello_1_1_query.html">Query</a> object that defines the search/sort criteria </td></tr>
+    <tr><td class="paramname">deep</td><td>if true, also copy sub-items from object. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>juce::ValueTree </dd></dl>
 
 </div>
 </div>
@@ -1349,6 +1427,100 @@ template&lt;typename Comparator &gt; </div>
 
 <p>Attempt to undo the last transaction. </p>
 <dl class="section return"><dt>Returns</dt><dd>false if there's no undo manager, nothing to undo, or the attempt to undo fails. </dd></dl>
+
+</div>
+</div>
+<a id="a26a8d3a310c6ac67498f762224f09daf" name="a26a8d3a310c6ac67498f762224f09daf"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a26a8d3a310c6ac67498f762224f09daf">&#9670;&#160;</a></span>upsert()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool cello::Object::upsert </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="classcello_1_1_object.html">Object</a> *&#160;</td>
+          <td class="paramname"><em>object</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const juce::Identifier &amp;&#160;</td>
+          <td class="paramname"><em>key</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>deep</em> = <code>false</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Update or insert a child object (concept borrowed from MongoDB) Looks for a child with a 'key' value that matches the one found in the object we've been passed. If a match is found, we update the entry in place (update). If no match is found, we append a copy of <code>object</code> to our children. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">object</td><td><a class="el" href="classcello_1_1_object.html">Object</a> with data to update or add </td></tr>
+    <tr><td class="paramname">key</td><td>property name to use to match the two entries </td></tr>
+    <tr><td class="paramname">deep</td><td>if true, also copy sub-items from object. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>false if the object being added doesn't have the key property. </dd></dl>
+
+</div>
+</div>
+<a id="ae4f3e07c7db1d4d8af104d9ea5c63883" name="ae4f3e07c7db1d4d8af104d9ea5c63883"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae4f3e07c7db1d4d8af104d9ea5c63883">&#9670;&#160;</a></span>upsertAll()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void cello::Object::upsertAll </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="classcello_1_1_object.html">Object</a> *&#160;</td>
+          <td class="paramname"><em>parent</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const juce::Identifier &amp;&#160;</td>
+          <td class="paramname"><em>key</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>deep</em> = <code>false</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Perform an upsert using each of the children of the parent being passed. Common workflow here: </p>
+<ol type="1">
+<li>perform a query to get a list of copies of some children.</li>
+<li>modify those copies</li>
+<li>Update them in place in their original parent container.</li>
+</ol>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">parent</td><td>object with children to use as update sources </td></tr>
+    <tr><td class="paramname">key</td><td>key to match children together </td></tr>
+    <tr><td class="paramname">deep</td><td>copy subtrees as well? </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
