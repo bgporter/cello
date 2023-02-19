@@ -95,9 +95,54 @@ Object::~Object ()
     data.removeListener (this);
 }
 
+juce::ValueTree Object::clone (bool deep) const
+{
+    auto cloneTree { juce::ValueTree { getType () } };
+    if (deep)
+        cloneTree.copyPropertiesAndChildrenFrom (data, nullptr);
+    else
+        cloneTree.copyPropertiesFrom (data, nullptr);
+    return cloneTree;
+}
+
 juce::ValueTree Object::find (const cello::Query& query, bool deep)
 {
     return query.search (data, deep);
+}
+
+bool Object::upsert (const Object* object, const juce::Identifier& key, bool deep)
+{
+    if (!object->hasattr (key))
+        return false;
+
+    const auto val { object->data[key] };
+
+    auto existingItem { data.getChildWithProperty (key, val) };
+    if (existingItem.isValid ())
+    {
+        // we found the match -- update in place.
+        if (deep)
+            existingItem.copyPropertiesAndChildrenFrom (*object, getUndoManager ());
+        else
+            existingItem.copyPropertiesFrom (*object, getUndoManager ());
+        return true;
+    }
+    // else, we need to add a copy to the end of our children.
+    data.appendChild (object->clone (deep), getUndoManager ());
+    return true;
+}
+
+void Object::upsertAll (const Object* parent, const juce::Identifier& key, bool deep)
+{
+    juce::ValueTree parentTree { *parent };
+    for (const auto& child : parentTree)
+    {
+        const auto type { child.getType () };
+        Object item { type, child };
+
+        if (!upsert (&item, key, deep))
+            jassertfalse;
+    }
 }
 
 void Object::setUndoManager (juce::UndoManager* undo)

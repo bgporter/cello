@@ -16,10 +16,16 @@ public:
     {
         val = value;
         odd = isOdd;
+        key = lastKey++;
     }
 
     MAKE_VALUE_MEMBER (float, val, {});
     MAKE_VALUE_MEMBER (bool, odd, false);
+    MAKE_VALUE_MEMBER (int, key, -1);
+    // every data object we create gets the next key value.
+    // You probably shouldn't use this technique in production code if you
+    // want unique keys
+    inline static int lastKey { 0 };
 };
 
 cello::Query::Comparison valSort { [] (const juce::ValueTree& l, const juce::ValueTree& r)
@@ -43,6 +49,12 @@ cello::Query::Comparison oddSort { [] (const juce::ValueTree& l, const juce::Val
                                            return -1;
                                        return 0;
                                    } };
+
+cello::Query::Predicate bottomHalf { [] (juce::ValueTree tree)
+                                     {
+                                         Data d { tree };
+                                         return d.val < 0.5f;
+                                     } };
 
 } // namespace
 
@@ -120,12 +132,7 @@ public:
               {
                   cello::Object root { "root", parentTree };
                   cello::Query lo { "result" };
-                  lo.addFilter (
-                      [] (juce::ValueTree tree)
-                      {
-                          Data d { tree };
-                          return d.val < 0.5f;
-                      });
+                  lo.addFilter (bottomHalf);
                   cello::Query hi { "result" };
                   hi.addFilter (
                       [] (juce::ValueTree tree)
@@ -145,17 +152,12 @@ public:
               [this] ()
               {
                   cello::Object root { "root", parentTree };
-                  cello::Query::Predicate p1 { [] (juce::ValueTree tree)
-                                               {
-                                                   Data d { tree };
-                                                   return d.val < 0.5f;
-                                               } };
                   cello::Query::Predicate p2 { [] (juce::ValueTree tree)
                                                {
                                                    Data d { tree };
                                                    return d.odd;
                                                } };
-                  cello::Query query { p1 };
+                  cello::Query query { bottomHalf };
                   auto result1 { root.find (query) };
                   query.addFilter (p2);
                   auto result2 { root.find (query) };
@@ -188,6 +190,35 @@ public:
                   sortQuery.addComparison (oddSort).addComparison (valSort);
                   auto sorted { root.find (sortQuery) };
                   DBG (sorted.toXmlString ());
+              });
+
+        test ("upserting",
+              [this] ()
+              {
+                  const int originalSize { parentTree.getNumChildren () };
+                  cello::Object root { "root", parentTree };
+                  cello::Query query { "result" };
+                  query.addFilter (bottomHalf);
+                  auto result { root.find (query) };
+
+                  expect (result.getNumChildren () > 0);
+
+                  // modify each child (which we know is < 0.5) so that it's > 0.5
+                  for (auto child : result)
+                  {
+                      Data d { child };
+                      d.val += 0.5f;
+                  }
+
+                  cello::Object modified { "result", result };
+                  root.upsertAll (&modified, "key");
+
+                  // run the search again; there should now be no values below 0.5
+                  auto postResult { root.find (query) };
+                  expectEquals (postResult.getNumChildren (), 0);
+                  // ...and we should NOT have changed the size of the original tree;
+                  // updates only, no inserts.
+                  expectEquals (parentTree.getNumChildren (), originalSize);
               });
 #if 0
         // re-enable this to explore speed of queries/sorting.

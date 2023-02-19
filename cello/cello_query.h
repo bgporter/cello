@@ -30,7 +30,7 @@ public:
     /// The default identifier for the query results tree.
     static inline const juce::Identifier Result { "result" };
 
-    // query function, returns true if the tree it is pass should
+    // query function, returns true if the tree it is passed should
     // be included in the result set.
     using Predicate = std::function<bool (juce::ValueTree)>;
 
