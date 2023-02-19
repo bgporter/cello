@@ -28,4 +28,5 @@
 #endif
 
 #include "cello/cello_object.cpp"
+#include "cello/cello_query.cpp"
 #include "cello/cello_value.cpp"

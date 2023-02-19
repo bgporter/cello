@@ -67,10 +67,10 @@ public:
     MAKE_VALUE_MEMBER (juce::String, stringVal, {});
 };
 
-class ObjectWithConvertibleObject : public cello::Object
+class ObjectWithConvertibleValue : public cello::Object
 {
 public:
-    ObjectWithConvertibleObject ()
+    ObjectWithConvertibleValue ()
     : cello::Object ("convertible", nullptr)
     {
     }
@@ -132,7 +132,7 @@ public:
         test ("variant conversion",
               [&] ()
               {
-                  ObjectWithConvertibleObject o;
+                  ObjectWithConvertibleValue o;
                   std::complex<float> orig { 2.f, 3.f };
                   o.complexVal = orig;
 

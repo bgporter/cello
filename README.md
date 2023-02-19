@@ -12,9 +12,9 @@ API docs available [here](https://bgporter.github.io/cello/)
 
 ### Confessions of a `ValueTree` Skeptic
 
-I've been using the JUCE framework for over a decade now, but there's a major component of JUCE that never clicked for me as a developer &mdash; ValueTrees. This wasn't a problem for me until I changed jobs and started needing to work on a mature codebase that made significant use of them. This code makes efforts to hide some of the more cumbersome or repetitive aspects of integrating ValueTrees into an application, but that `ValueTreeWrapper` class still seemed like it required too much effort to work with; where I'm used to thinking in terms of objects that contain values, any time I needed to get near data that's stored in a ValueTree, it was impossible to avoid the awareness that I was always working through an API to perform operations on data that should just be directly manipulable, and while the wrapper class approach mitigated this to some extent, there was still more boilerplate code to write than seems good to me, as well as other places where the gaps around the abstraction were more obvious than I like.; 
+I've been using the JUCE framework for over a decade now, but there's a major component of JUCE that never clicked for me as a developer &mdash; ValueTrees. This wasn't a problem for me until I changed jobs and started needing to work on a mature codebase that made significant use of them. This code makes efforts to hide some of the more cumbersome or repetitive aspects of integrating ValueTrees into an application, but that `ValueTreeWrapper` class still seemed like it required too much effort to work with; where I'm used to thinking in terms of objects that contain values, any time I needed to get near data that's stored in a ValueTree, it was impossible to avoid the awareness that I was always working through an API to perform operations on data that should just be directly manipulable, and while the wrapper class approach mitigated this to some extent, there was still more boilerplate code to write than seems good to me, as well as other places where the gaps around the abstraction were more obvious than I like. 
 
-I've always found that the only way for me to work through these issues when I encounter them is to sit down with a blank document in an editor and start enumerating the problems that I see with a system and use that as a guide to start thinking about ways that I can engineer around the parts that aren' tmy favorite, and sometimes how I can reframe my thinking to start seeing superpowers where I thought there were deficiencies. 
+I've always found that the only way for me to work through these kinds of issues when I encounter them is to sit down with a blank document in an editor and start enumerating the problems that I see with a system and use that as a guide to start thinking about ways that I can engineer around the parts that aren't my favorite, and sometimes how I can reframe my thinking to start seeing superpowers where I thought there were deficiencies. 
 
 One of my current teammates has expressed confusion that I wasn't immediately on board with ValueTrees, and his defense of them was key to my eventually starting this re-analysis. They give you: 
 
@@ -44,7 +44,7 @@ Something similar to:
 // define a struct with two members and then create an instance
 struct CelloDemo : public cello::Object 
 {
-    // we'll figure this type out shortly...
+    // we'll figure this `Value` type out shortly...
     cello::Value<int> x;
     cello::Value<float> y;
 };
@@ -64,6 +64,7 @@ demoObject.x = 100;
 ## Values
 
 - actually, a proxy to a value. We store a `juce::Identifier` and a reference to a ValueTree that provides the actual storage; storing or retrieving the value through its variable needs to do so through the ValueTree API, but that's all kept out of sight. 
+- templated on an underlying data type to hide the fact that we're working with `juce::var` objects internally. `cello::Value` objects remove concerns about type-safety hat `var`s introduce.
 - can be set to always update their listeners when the value is set, even if the underlying value wasn't changed. 
 - can be given validator functions that will be called when the value is set or retrieved.
 - arithmetic types have all of the in-place operators (`++`, `--`, `+=`, `-=`, `*=`, `/=`) defined.
@@ -144,14 +145,16 @@ template <> struct VariantConverter<std::complex<float>>
 Then we define a class that has a single public Value member that contains a `std::complex<float>` &mdash; there's no additional work required to perform the conversions:
 
 ```cpp
-class ObjectWithConvertibleObject : public cello::Object
+class ObjectWithConvertibleValue : public cello::Object
 {
 public:
-    ObjectWithConvertibleObject ()
+    ObjectWithConvertibleValue ()
     : cello::Object ("convertible", nullptr)
     {
     }
-    // verify the automatic use of variant converters.
+
+    // the `complexVal` member can be used as a `std::complex<float>`; the 
+    // round-tripping through a juce::var is completely hidden. 
     MAKE_VALUE_MEMBER (std::complex<float>, complexVal, {});
 };
 ```
@@ -159,7 +162,7 @@ public:
 Your code is then free to work with that value directly: 
 
 ```cpp
-ObjectWithConvertibleObject o;
+ObjectWithConvertibleValue o;
 std::complex<float> orig { 2.f, 3.f };
 o.complexVal = orig;
 
@@ -174,7 +177,6 @@ If we're taking some inspiration from Python here, it's worth remembering that P
 Each `cello::Value` object may have `ValidatePropertyFn` lambdas assigned to it (where that lambda accepts a const reference to `T` and returns a `T` by value) that are (`onSet`) called before that value is stored into the underlying ValueTree or (`onGet`) called after retrieving the property from the ValueTree but before returning the value to calling code. 
 
 Your application can use this facility to modify the value (e.g. to keep it within a valid range), create an entirely new value, make changes to other properties of the ValueTree, create log entries, or anything else that you need to happen at these juncture points. 
-
 
 ### Forcing Update Callbacks
 
@@ -217,14 +219,13 @@ ValueTrees can contain other ValueTrees as children, and it's important to keep 
 * *Heterogeneous* The parent tree is a data structure that contains other (tree) data structures. Access the children by specifying their type. The children are stored in a list, but the sequence is not significant.
 * *Homogeneous* The parent tree contains a list of child trees, typically but not necessarily of the same type. Access the children by their index or iterating through them. 
 
-There's no mechanism to enforce this distinction &mdash; if a list of different types makes sense in your application, there's a little more logic you'll need to write, but that's all. 
+There's no mechanism to enforce this distinction&mdash;if a list of different types makes sense in your application, there's a little more logic you'll need to write, but that's all. 
 
 #### Adding Children
 
 `void append (Object* object);` adds the child to the end of this object's child list. 
 
 `void insert (Object* object, int index);` adds the child at a specific index in the list; if `index` is out of range (less than zero or greater than the current number of children), the child will be appended to the list. 
-
 
 #### Removing Children
 
@@ -287,7 +288,88 @@ that returns
 * a value of > 0 if the second comes before the first
 
 The `stableSort` argument specifies whether the sort algorithm should guarantee that equivalent children remain in their original order after the sort. 
-  
+
+After `cello` release 1.1, you may wish to instead use the new database/query features for searching and sorting. 
+
+### Database / Query
+
+Use the `cello::Query` object to define a set of search and sort criteria to use to perform simple database-like operations. Instead of defining a query language, we've defined two function types that can be passed into a Query object to define its behavior at run time: 
+
+#### `Query::Predicate`
+
+```cpp
+    // query function, returns true if the tree it is passed should
+    // be included in the result set.
+    using Predicate = std::function<bool (juce::ValueTree)>;
+
+    /**
+     * @brief Append a filter predicate to the end of our list; these are
+     * executed in the sequence they're added, and we stop testing at the first
+     * filter that returns false.
+     *
+     * @param filter
+     * @return Query& reference to this so we can use the builder pattern.
+     */
+    Query& addFilter (Predicate filter);
+```
+
+You can specify any number of predicate functions for a Query object to use; these functions accept a ValueTree as an argument and return a boolean to indicate whether this child tree should be included in the query search results. 
+
+The search logic will execute these functions in the order they were added until encountering one that returns `false`. If all of the query predicates return `true`, a copy of this ValueTree will be added to the search results. 
+
+If a query is run with no predicate functions defined, all children of the `Object` being searched will be copied and added to the search results. 
+
+#### `Query::Comparison`
+
+```cpp
+    // comparison/sort function.
+    // return 0 if the two trees should sort equally.
+    // return -1 if left should come before right
+    // return +1 if right should come before left.
+    using Comparison = std::function<int (const juce::ValueTree&, const juce::ValueTree&)>;
+
+    /**
+     * @brief Add a comparison function to the list we use to sort a list
+     * of children.
+     *
+     * @param sorter
+     * @return Query& so we can chain these calls together.
+     */
+    Query& addComparison (Comparison sorter);
+    
+```
+
+You can also specify comparison functions that will be used to sort the results list after a query is performed; if none are provided, the items in the search results will be in the same order they exist in the `Object` being queried. 
+
+#### `Object::find`
+
+```cpp
+    /**
+     * @brief Perform a query against the children of this Object, returning
+     * a new ValueTree containing zero or more copies of child trees that
+     * match the query, possibly sorted into a different order than they
+     * exist in this tree.
+     *
+     * @param query Query object that defines the search/sort criteria
+     * @param deep if true, also copy sub-items from object.
+     * @return juce::ValueTree with search results.
+     */
+    juce::ValueTree find (const cello::Query& query, bool deep = false);
+```
+
+#### `Object::upsert` and `Object::upsertAll`
+
+These use a concept borrowed from the MongoDB NoSql database; an 'upsert` operation performs one of:
+- Update a record in place if possible
+- Otherwise, add (insert) a new record to the object. 
+
+The main use case here would be to 
+1. Perform a query to get a list of (copies of) items
+2. Modify those copies in the result list
+3. Perform an upsert to apply the changes back into the original data. 
+
+For this to work, your items must be defined such that each has a unique key value that can be used to link the update tree with the original one to be updated. In the unit tests for this function, our `Data` objects have an attribute `key` that is populated with a monotonically incremented integer when created. In production code, it would be better to use something more unique, like a `juce::Uuid`. 
+
 ### Undo/Redo
 
 Most ValueTree operations accept a pointer to a `juce::UndoManager` object as an argument to make those operations undoable/redoable. `cello::Object`s can maintain this manager for you: pass a pointer to `UndoManager` to a `cello::Object` using its `setUndoManager` method, and that object and any child/descendant objects that are added to it will become undoable. 
@@ -301,7 +383,6 @@ The following undo/redo methods are available directly from `cello::Object`:
 * `void clearUndoHistory ();`
 
 You can also retrieve a pointer to the UndoManager (using `juce::UndoManager* getUndoManager()`) for any of its other operations that we don't expose directly.
-
 
 ### Change Callbacks
 
@@ -318,16 +399,13 @@ There are two Object methods to register these callbacks:
 * `void onPropertyChange (juce::Identifier id, PropertyUpdateFn callback)` &mdash; pass in the identifier of the attribute to watch
 * `void onPropertyChange (const ValueBase& val, PropertyUpdateFn callback);` &mdash; pass in a reference to the `cello::Value` or `cello::Object` to watch. 
 
-
 #### Child Changes
-
 
 Changes to children are broadcast using a `ChildUpdateFn` callback that has the signature `std::function<void (juce::ValueTree& child, int oldIndex, int newIndex)>;`
 
 * `onChildAdded` &mdash; `oldIndex` will be -1, `newIndex` will be the index of the new child. 
 * `onChildRemoved` &mdash; `oldIndex` will be the index of the child that was removed, `newIndex` will be -1.
 * `onChildMoved` &mdash; `oldIndex` and `newIndex` are self-explanatory. 
-
 
 #### Tree Changes
 
@@ -345,7 +423,6 @@ These methods do provide some level of type-safety and type-coercion using `Vari
 * `bool hasattr (const juce::Identifier& attr) const` tests an object to see if it has an attribute/property of the specified type (enabling what the Python world would call 'Look Before You Leap' programming)
 * `template <typename T> Object& setattr (const juce::Identifier& attr, const T& attrVal);` sets the value of the specified attribute in the object. We return a reference to the current Object so that multiple calls to this method can be chained together. 
 * `template <typename T> T getattr (const juce::Identifier& attr, const T& defaultVal) const` either returns the current value of the specified attribute, or a default value if it's not present. 
-
 
 ### Persistence
 
@@ -386,15 +463,15 @@ There are parts of the `juce::ValueTree` API that are not available through the 
 
 There is a [separate repo](https://github.com/bgporter/cello_test) containing a small unit test runner; you can also add my [testSuite](https://github.com/bgporter/testSuite) JUCE module as a component in your application to execute the tests in your own app. 
 
-
 ## Release Notes
+
+### Release 1.1.0 * 19 Feb 2023
+- Added `cello::Query` class and updates to `cello::Object` to perform database-like queries and in-place updating of child objects. See the "Database / Query" section of this README document. 
 
 ### Release 1.0.1 * 05 Feb 2023
 
 - added MIT license text to all source files. 
 - added [Doxygen Awesome](https://github.com/jothepro/doxygen-awesome-css) CSS/etc to document generation.
-
-
 
 ### Release 1.0.0 * 01 Jan 2023
 

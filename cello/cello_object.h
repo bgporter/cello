@@ -23,9 +23,11 @@
 #include <juce_data_structures/juce_data_structures.h>
 
 #include "cello_update_source.h"
+
 namespace cello
 {
 class ValueBase;
+class Query;
 
 class Object : public UpdateSource,
                public juce::ValueTree::Listener
@@ -152,6 +154,57 @@ public:
      * @return juce::ValueTree
      */
     operator juce::ValueTree () const { return data; }
+
+    /**
+     * @brief Make and return a copy of our underlying value tree.
+     *
+     * @param deep Include children?
+     * @return a copy of this thing.
+     */
+    juce::ValueTree clone (bool deep) const;
+
+    /**
+     * @name Database functionality
+     */
+    ///@{
+    /**
+     * @brief Perform a query against the children of this Object, returning
+     * a new ValueTree containing zero or more copies of child trees that
+     * match the query, possibly sorted into a different order than they
+     * exist in this tree.
+     *
+     * @param query Query object that defines the search/sort criteria
+     * @param deep if true, also copy sub-items from object.
+     * @return juce::ValueTree
+     */
+    juce::ValueTree find (const cello::Query& query, bool deep = false);
+
+    /**
+     * @brief Update or insert a child object (concept borrowed from MongoDB)
+     * Looks for a child with a 'key' value that matches the one found in the
+     * object we've been passed. If a match is found, we update the entry in place
+     * (update). If no match is found, we append a copy of `object` to our children.
+     *
+     * @param object Object with data to update or add
+     * @param key property name to use to match the two entries
+     * @param deep if true, also copy sub-items from object.
+     * @return false if the object being added doesn't have the key property.
+     */
+    bool upsert (const Object* object, const juce::Identifier& key, bool deep = false);
+
+    /**
+     * @brief Perform an upsert using each of the children of the parent being passed.
+     * Common workflow here:
+     * 1. perform a query to get a list of copies of some children.
+     * 2. modify those copies
+     * 3. Update them in place in their original parent container.
+     *
+     * @param parent object with children to use as update sources
+     * @param key   key to match children together
+     * @param deep  copy subtrees as well?
+     */
+    void upsertAll (const Object* parent, const juce::Identifier& key, bool deep = false);
+    ///@}
 
     /**
      * @name Undo/redo functionality

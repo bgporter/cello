@@ -340,6 +340,7 @@ public:
                   expectWithinAbsoluteError<float> (pt2.x, 3.1f, 0.001);
                   expectWithinAbsoluteError<float> (pt2.y, -1.9f, 0.001);
               });
+
         test ("change notify tree",
               [&] ()
               {
