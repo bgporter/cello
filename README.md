@@ -465,6 +465,9 @@ There is a [separate repo](https://github.com/bgporter/cello_test) containing a 
 
 ## Release Notes
 
+### Release 1.1.1 * 14 Mar 2023
+- Fixed some template errors. 
+
 ### Release 1.1.0 * 19 Feb 2023
 - Added `cello::Query` class and updates to `cello::Object` to perform database-like queries and in-place updating of child objects. See the "Database / Query" section of this README document. 
 

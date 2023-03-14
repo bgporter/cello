@@ -451,7 +451,12 @@ public:
      * @param attrVal
      */
     template <typename T>
-    Object& setattr (const juce::Identifier& attr, const T& attrVal);
+    Object& setattr (const juce::Identifier& attr, const T& attrVal)
+    {
+        data.setProperty (attr, juce::VariantConverter<T>::toVar (attrVal),
+                          getUndoManager ());
+        return (*this);
+    }
 
     /**
      * @brief Remove the specified property from this object.

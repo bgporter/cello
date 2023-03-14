@@ -83,7 +83,7 @@ public:
         // new Object, but may also happen if new values are added to an existing
         // type.
         if (!object.hasattr (id))
-            object.setattr (id, initVal);
+            object.setattr<T> (id, initVal);
     }
 
     /**
