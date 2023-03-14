@@ -103,8 +103,8 @@ $(document).ready(function(){initNavTree('md__r_e_a_d_m_e.html',''); initResizab
 Motivation and Overview</h1>
 <h2><a class="anchor" id="autotoc_md2"></a>
 Confessions of a &lt;tt&gt;ValueTree&lt;/tt&gt; Skeptic</h2>
-<p>I've been using the JUCE framework for over a decade now, but there's a major component of JUCE that never clicked for me as a developer &mdash; ValueTrees. This wasn't a problem for me until I changed jobs and started needing to work on a mature codebase that made significant use of them. This code makes efforts to hide some of the more cumbersome or repetitive aspects of integrating ValueTrees into an application, but that <code>ValueTreeWrapper</code> class still seemed like it required too much effort to work with; where I'm used to thinking in terms of objects that contain values, any time I needed to get near data that's stored in a ValueTree, it was impossible to avoid the awareness that I was always working through an API to perform operations on data that should just be directly manipulable, and while the wrapper class approach mitigated this to some extent, there was still more boilerplate code to write than seems good to me, as well as other places where the gaps around the abstraction were more obvious than I like.</p>
-<p>I've always found that the only way for me to work through these kinds of issues when I encounter them is to sit down with a blank document in an editor and start enumerating the problems that I see with a system and use that as a guide to start thinking about ways that I can engineer around the parts that aren't my favorite, and sometimes how I can reframe my thinking to start seeing superpowers where I thought there were deficiencies.</p>
+<p>I've been using the JUCE framework for over a decade now, but there's a major component of JUCE that never clicked for me as a developer &mdash; ValueTrees. This wasn't a problem for me until I changed jobs and started needing to work on a mature codebase that made significant use of them. This code makes efforts to hide some of the more cumbersome or repetitive aspects of integrating ValueTrees into an application, but that <code>ValueTreeWrapper</code> class still seemed like it required too much effort to work with; where I'm used to thinking in terms of objects that contain values, any time I needed to get near data that's stored in a ValueTree, it was impossible to avoid the awareness that I was always working through an API to perform operations on data that should just be directly manipulable, and while the wrapper class approach mitigated this to some extent, there was still more boilerplate code to write than seems good to me, as well as other places where the gaps around the abstraction were more obvious than I like. I've been using the JUCE framework for over a decade now, but there's a major component of JUCE that never clicked for me as a developer &mdash; ValueTrees. This wasn't a problem for me until I changed jobs and started needing to work on a mature codebase that made significant use of them. This code makes efforts to hide some of the more cumbersome or repetitive aspects of integrating ValueTrees into an application, but that <code>ValueTreeWrapper</code> class still seemed like it required too much effort to work with; where I'm used to thinking in terms of objects that contain values, any time I needed to get near data that's stored in a ValueTree, it was impossible to avoid the awareness that I was always working through an API to perform operations on data that should just be directly manipulable, and while the wrapper class approach mitigated this to some extent, there was still more boilerplate code to write than seems good to me, as well as other places where the gaps around the abstraction were more obvious than I like.</p>
+<p>I've always found that the only way for me to work through these kinds of issues when I encounter them is to sit down with a blank document in an editor and start enumerating the problems that I see with a system and use that as a guide to start thinking about ways that I can engineer around the parts that aren't my favorite, and sometimes how I can reframe my thinking to start seeing superpowers where I thought there were deficiencies. I've always found that the only way for me to work through these kinds of issues when I encounter them is to sit down with a blank document in an editor and start enumerating the problems that I see with a system and use that as a guide to start thinking about ways that I can engineer around the parts that aren't my favorite, and sometimes how I can reframe my thinking to start seeing superpowers where I thought there were deficiencies.</p>
 <p>One of my current teammates has expressed confusion that I wasn't immediately on board with ValueTrees, and his defense of them was key to my eventually starting this re-analysis. They give you:</p>
 <ul>
 <li>A really easy way to capture and pass around the entire state of your application's data at run time</li>
@@ -127,6 +127,7 @@ Confessions of a &lt;tt&gt;ValueTree&lt;/tt&gt; Skeptic</h2>
 <div class="line"><span class="keyword">struct </span>CelloDemo : <span class="keyword">public</span> <a class="code hl_class" href="classcello_1_1_object.html">cello::Object</a> </div>
 <div class="line">{</div>
 <div class="line">    <span class="comment">// we&#39;ll figure this `Value` type out shortly...</span></div>
+<div class="line">    <span class="comment">// we&#39;ll figure this `Value` type out shortly...</span></div>
 <div class="line">    <a class="code hl_class" href="classcello_1_1_value.html">cello::Value&lt;int&gt;</a> x;</div>
 <div class="line">    <a class="code hl_class" href="classcello_1_1_value.html">cello::Value&lt;float&gt;</a> y;</div>
 <div class="line">};</div>
@@ -147,6 +148,7 @@ Confessions of a &lt;tt&gt;ValueTree&lt;/tt&gt; Skeptic</h2>
 Values</h1>
 <ul>
 <li>actually, a proxy to a value. We store a <code>juce::Identifier</code> and a reference to a ValueTree that provides the actual storage; storing or retrieving the value through its variable needs to do so through the ValueTree API, but that's all kept out of sight.</li>
+<li>templated on an underlying data type to hide the fact that we're working with <code>juce::var</code> objects internally. <code><a class="el" href="classcello_1_1_value.html" title="A class to abstract away the issues around storing and retrieving a value from a ValueTree....">cello::Value</a></code> objects remove concerns about type-safety hat <code>var</code>s introduce.</li>
 <li>templated on an underlying data type to hide the fact that we're working with <code>juce::var</code> objects internally. <code><a class="el" href="classcello_1_1_value.html" title="A class to abstract away the issues around storing and retrieving a value from a ValueTree....">cello::Value</a></code> objects remove concerns about type-safety hat <code>var</code>s introduce.</li>
 <li>can be set to always update their listeners when the value is set, even if the underlying value wasn't changed.</li>
 <li>can be given validator functions that will be called when the value is set or retrieved.</li>
@@ -210,10 +212,14 @@ Values</h1>
 <div class="line"> </div>
 <div class="line">    <span class="comment">// the `complexVal` member can be used as a `std::complex&lt;float&gt;`; the </span></div>
 <div class="line">    <span class="comment">// round-tripping through a juce::var is completely hidden. </span></div>
+<div class="line"> </div>
+<div class="line">    <span class="comment">// the `complexVal` member can be used as a `std::complex&lt;float&gt;`; the </span></div>
+<div class="line">    <span class="comment">// round-tripping through a juce::var is completely hidden. </span></div>
 <div class="line">    MAKE_VALUE_MEMBER (std::complex&lt;float&gt;, complexVal, {});</div>
 <div class="line">};</div>
 </div><!-- fragment --><p>Your code is then free to work with that value directly:</p>
 <div class="fragment"><div class="line">ObjectWithConvertibleValue o;</div>
+<div class="line">ObjectWithConvertibleValue o;</div>
 <div class="line">std::complex&lt;float&gt; orig { 2.f, 3.f };</div>
 <div class="line">o.complexVal = orig;</div>
 <div class="line"> </div>
@@ -413,7 +419,7 @@ Persistence</h2>
 <div class="line">    <span class="comment">// handle it. </span></div>
 <div class="line">}</div>
 <div class="line"><span class="comment">// else, we&#39;ve re-loaded -- carry on! </span></div>
-<div class="ttc" id="aclasscello_1_1_object_html_ad05bcbdf54e3587a9060dba4caeba462"><div class="ttname"><a href="classcello_1_1_object.html#ad05bcbdf54e3587a9060dba4caeba462">cello::Object::load</a></div><div class="ttdeci">static juce::ValueTree load(juce::File file, FileFormat format=FileFormat::xml)</div><div class="ttdoc">Reload data from disk. Used in the ctor that accepts file name and format.</div><div class="ttdef"><b>Definition:</b> cello_object.cpp:309</div></div>
+<div class="ttc" id="aclasscello_1_1_object_html_ad05bcbdf54e3587a9060dba4caeba462"><div class="ttname"><a href="classcello_1_1_object.html#ad05bcbdf54e3587a9060dba4caeba462">cello::Object::load</a></div><div class="ttdeci">static juce::ValueTree load(juce::File file, FileFormat format=FileFormat::xml)</div><div class="ttdoc">Reload data from disk. Used in the ctor that accepts file name and format.</div><div class="ttdef"><b>Definition:</b> cello_object.cpp:301</div></div>
 </div><!-- fragment --><h1><a class="anchor" id="autotoc_md28"></a>
 Missing Pieces</h1>
 <p>There are parts of the <code>juce::ValueTree</code> API that are not available through the <code>cello</code> API; these may be added later, or you can use them directly by accessing the <code>ValueTree</code> object that an <code>Object</code> already owns.</p>
@@ -423,17 +429,22 @@ Unit Tests</h1>
 <h1><a class="anchor" id="autotoc_md30"></a>
 Release Notes</h1>
 <h2><a class="anchor" id="autotoc_md31"></a>
+Release 1.1.1 * 14 Mar 2023</h2>
+<ul>
+<li>Fixed some template errors.</li>
+</ul>
+<h2><a class="anchor" id="autotoc_md32"></a>
 Release 1.1.0 * 19 Feb 2023</h2>
 <ul>
 <li>Added <code><a class="el" href="classcello_1_1_query.html">cello::Query</a></code> class and updates to <code><a class="el" href="classcello_1_1_object.html">cello::Object</a></code> to perform database-like queries and in-place updating of child objects. See the "Database / Query" section of this README document.</li>
 </ul>
-<h2><a class="anchor" id="autotoc_md32"></a>
+<h2><a class="anchor" id="autotoc_md33"></a>
 Release 1.0.1 * 05 Feb 2023</h2>
 <ul>
 <li>added MIT license text to all source files.</li>
 <li>added <a href="https://github.com/jothepro/doxygen-awesome-css">Doxygen Awesome</a> CSS/etc to document generation.</li>
 </ul>
-<h2><a class="anchor" id="autotoc_md33"></a>
+<h2><a class="anchor" id="autotoc_md34"></a>
 Release 1.0.0 * 01 Jan 2023</h2>
 <p>Original release. </p>
 </div></div><!-- contents -->

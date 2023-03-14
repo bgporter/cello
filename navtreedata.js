@@ -62,9 +62,10 @@ var NAVTREE =
       [ "Missing Pieces", "md__r_e_a_d_m_e.html#autotoc_md28", null ],
       [ "Unit Tests", "md__r_e_a_d_m_e.html#autotoc_md29", null ],
       [ "Release Notes", "md__r_e_a_d_m_e.html#autotoc_md30", [
-        [ "Release 1.1.0 * 19 Feb 2023", "md__r_e_a_d_m_e.html#autotoc_md31", null ],
-        [ "Release 1.0.1 * 05 Feb 2023", "md__r_e_a_d_m_e.html#autotoc_md32", null ],
-        [ "Release 1.0.0 * 01 Jan 2023", "md__r_e_a_d_m_e.html#autotoc_md33", null ]
+        [ "Release 1.1.1 * 14 Mar 2023", "md__r_e_a_d_m_e.html#autotoc_md31", null ],
+        [ "Release 1.1.0 * 19 Feb 2023", "md__r_e_a_d_m_e.html#autotoc_md32", null ],
+        [ "Release 1.0.1 * 05 Feb 2023", "md__r_e_a_d_m_e.html#autotoc_md33", null ],
+        [ "Release 1.0.0 * 01 Jan 2023", "md__r_e_a_d_m_e.html#autotoc_md34", null ]
       ] ]
     ] ],
     [ "Classes", "annotated.html", [
