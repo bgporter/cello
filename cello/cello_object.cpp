@@ -293,14 +293,6 @@ bool Object::hasattr (const juce::Identifier& attr) const
     return data.hasProperty (attr);
 }
 
-template <typename T>
-Object& Object::setattr (const juce::Identifier& attr, const T& attrVal)
-{
-    data.setProperty (attr, juce::VariantConverter<T>::toVar (attrVal),
-                      getUndoManager ());
-    return (*this);
-}
-
 void Object::delattr (const juce::Identifier& attr)
 {
     data.removeProperty (attr, getUndoManager ());

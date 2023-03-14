@@ -13,7 +13,9 @@ API docs available [here](https://bgporter.github.io/cello/)
 ### Confessions of a `ValueTree` Skeptic
 
 I've been using the JUCE framework for over a decade now, but there's a major component of JUCE that never clicked for me as a developer &mdash; ValueTrees. This wasn't a problem for me until I changed jobs and started needing to work on a mature codebase that made significant use of them. This code makes efforts to hide some of the more cumbersome or repetitive aspects of integrating ValueTrees into an application, but that `ValueTreeWrapper` class still seemed like it required too much effort to work with; where I'm used to thinking in terms of objects that contain values, any time I needed to get near data that's stored in a ValueTree, it was impossible to avoid the awareness that I was always working through an API to perform operations on data that should just be directly manipulable, and while the wrapper class approach mitigated this to some extent, there was still more boilerplate code to write than seems good to me, as well as other places where the gaps around the abstraction were more obvious than I like. 
+I've been using the JUCE framework for over a decade now, but there's a major component of JUCE that never clicked for me as a developer &mdash; ValueTrees. This wasn't a problem for me until I changed jobs and started needing to work on a mature codebase that made significant use of them. This code makes efforts to hide some of the more cumbersome or repetitive aspects of integrating ValueTrees into an application, but that `ValueTreeWrapper` class still seemed like it required too much effort to work with; where I'm used to thinking in terms of objects that contain values, any time I needed to get near data that's stored in a ValueTree, it was impossible to avoid the awareness that I was always working through an API to perform operations on data that should just be directly manipulable, and while the wrapper class approach mitigated this to some extent, there was still more boilerplate code to write than seems good to me, as well as other places where the gaps around the abstraction were more obvious than I like. 
 
+I've always found that the only way for me to work through these kinds of issues when I encounter them is to sit down with a blank document in an editor and start enumerating the problems that I see with a system and use that as a guide to start thinking about ways that I can engineer around the parts that aren't my favorite, and sometimes how I can reframe my thinking to start seeing superpowers where I thought there were deficiencies. 
 I've always found that the only way for me to work through these kinds of issues when I encounter them is to sit down with a blank document in an editor and start enumerating the problems that I see with a system and use that as a guide to start thinking about ways that I can engineer around the parts that aren't my favorite, and sometimes how I can reframe my thinking to start seeing superpowers where I thought there were deficiencies. 
 
 One of my current teammates has expressed confusion that I wasn't immediately on board with ValueTrees, and his defense of them was key to my eventually starting this re-analysis. They give you: 
@@ -45,6 +47,7 @@ Something similar to:
 struct CelloDemo : public cello::Object 
 {
     // we'll figure this `Value` type out shortly...
+    // we'll figure this `Value` type out shortly...
     cello::Value<int> x;
     cello::Value<float> y;
 };
@@ -64,6 +67,7 @@ demoObject.x = 100;
 ## Values
 
 - actually, a proxy to a value. We store a `juce::Identifier` and a reference to a ValueTree that provides the actual storage; storing or retrieving the value through its variable needs to do so through the ValueTree API, but that's all kept out of sight. 
+- templated on an underlying data type to hide the fact that we're working with `juce::var` objects internally. `cello::Value` objects remove concerns about type-safety hat `var`s introduce.
 - templated on an underlying data type to hide the fact that we're working with `juce::var` objects internally. `cello::Value` objects remove concerns about type-safety hat `var`s introduce.
 - can be set to always update their listeners when the value is set, even if the underlying value wasn't changed. 
 - can be given validator functions that will be called when the value is set or retrieved.
@@ -155,6 +159,9 @@ public:
 
     // the `complexVal` member can be used as a `std::complex<float>`; the 
     // round-tripping through a juce::var is completely hidden. 
+
+    // the `complexVal` member can be used as a `std::complex<float>`; the 
+    // round-tripping through a juce::var is completely hidden. 
     MAKE_VALUE_MEMBER (std::complex<float>, complexVal, {});
 };
 ```
@@ -162,6 +169,7 @@ public:
 Your code is then free to work with that value directly: 
 
 ```cpp
+ObjectWithConvertibleValue o;
 ObjectWithConvertibleValue o;
 std::complex<float> orig { 2.f, 3.f };
 o.complexVal = orig;
@@ -464,6 +472,9 @@ There are parts of the `juce::ValueTree` API that are not available through the 
 There is a [separate repo](https://github.com/bgporter/cello_test) containing a small unit test runner; you can also add my [testSuite](https://github.com/bgporter/testSuite) JUCE module as a component in your application to execute the tests in your own app. 
 
 ## Release Notes
+
+### Release 1.1.1 * 14 Mar 2023
+- Fixed some template errors. 
 
 ### Release 1.1.0 * 19 Feb 2023
 - Added `cello::Query` class and updates to `cello::Object` to perform database-like queries and in-place updating of child objects. See the "Database / Query" section of this README document. 
