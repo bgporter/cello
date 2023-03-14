@@ -110,6 +110,7 @@ public:
                                            return d.val < 0.f;
                                        } };
                   auto result { root.find (query, false) };
+                  DBG (result.toXmlString ());
                   expect (result.hasType ("result"));
                   expectEquals (result.getNumChildren (), 0);
 
@@ -188,6 +189,7 @@ public:
                   // order.
                   sortQuery.addComparison (oddSort).addComparison (valSort);
                   auto sorted { root.find (sortQuery) };
+                  DBG (sorted.toXmlString ());
               });
 
         test ("upserting",
