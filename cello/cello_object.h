@@ -450,8 +450,7 @@ public:
      * @param attr
      * @param attrVal
      */
-    template <typename T>
-    Object& setattr (const juce::Identifier& attr, const T& attrVal)
+    template <typename T> Object& setattr (const juce::Identifier& attr, const T& attrVal)
     {
         data.setProperty (attr, juce::VariantConverter<T>::toVar (attrVal),
                           getUndoManager ());
@@ -471,7 +470,6 @@ public:
      * @brief save/load objects to/from disk.
      */
     ///@{
-
     /**
      * @brief Reload data from disk. Used in the ctor that accepts file name and
      * format.
@@ -487,9 +485,9 @@ public:
      *
      * @param file
      * @param format one of (xml, binary, zipped)
-     * @return true if saved successfully
+     * @return Result of the save operation.
      */
-    bool save (juce::File file, FileFormat format = FileFormat::xml) const;
+    juce::Result save (juce::File file, FileFormat format = FileFormat::xml) const;
 
     ///@}
 private:
