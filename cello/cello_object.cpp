@@ -323,34 +323,44 @@ juce::ValueTree Object::load (juce::File file, FileFormat format)
     return {};
 }
 
-bool Object::save (juce::File file, FileFormat format) const
+juce::Result Object::save (juce::File file, FileFormat format) const
 {
     if (format == FileFormat::xml)
-        return file.replaceWithText (data.toXmlString ());
+    {
+        auto res { file.create () };
+        if (res.wasOk ())
+        {
+            if (file.replaceWithText (data.toXmlString ()))
+                return juce::Result::ok ();
+            res = juce::Result::fail ("Error writing to " + file.getFullPathName ());
+        }
+        return res;
+    }
 
     juce::FileOutputStream fos { file };
     if (!fos.openedOk ())
     {
         jassertfalse;
-        return false;
+        return juce::Result::fail ("Unable to open " + file.getFullPathName () +
+                                   " for writing");
     }
 
     if (format == FileFormat::binary)
     {
         data.writeToStream (fos);
-        return true;
+        return juce::Result::ok ();
     }
 
     else if (format == FileFormat::zipped)
     {
         juce::GZIPCompressorOutputStream zipper { fos };
         data.writeToStream (zipper);
-        return true;
+        return juce::Result::ok ();
     }
 
     // unknown format
     jassertfalse;
-    return false;
+    return juce::Result::fail ("Unknown file format");
 }
 
 void Object::valueTreePropertyChanged (juce::ValueTree& treeWhosePropertyHasChanged,
