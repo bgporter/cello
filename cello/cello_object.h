@@ -450,7 +450,12 @@ public:
      * @param attr
      * @param attrVal
      */
+<<<<<<< HEAD
     template <typename T> Object& setattr (const juce::Identifier& attr, const T& attrVal)
+=======
+    template <typename T>
+    Object& setattr (const juce::Identifier& attr, const T& attrVal)
+>>>>>>> main
     {
         data.setProperty (attr, juce::VariantConverter<T>::toVar (attrVal),
                           getUndoManager ());
