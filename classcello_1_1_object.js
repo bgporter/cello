@@ -31,8 +31,7 @@ var classcello_1_1_object =
     [ "redo", "classcello_1_1_object.html#a534edaa253affc488dba210e86e55ccf", null ],
     [ "remove", "classcello_1_1_object.html#adcd6547ac3a03479b2d7c55d44fef840", null ],
     [ "remove", "classcello_1_1_object.html#ab91a10de733ff8c8bc3fa3729fd036a0", null ],
-    [ "save", "classcello_1_1_object.html#aa95d1de2cad7ce93e4ea89d06b1b7e76", null ],
-    [ "setattr", "classcello_1_1_object.html#a39df4cb5bd79fd770ad23184d5ef8c87", null ],
+    [ "save", "classcello_1_1_object.html#a5162885cca204640f836e776fcdd1cb9", null ],
     [ "setUndoManager", "classcello_1_1_object.html#a14e852dd0a299e2d72bf07dd8970b52a", null ],
     [ "sort", "classcello_1_1_object.html#a16f55b2f7ddbfa99ad014da938144f1b", null ],
     [ "undo", "classcello_1_1_object.html#a9068e0306934dcbf2c24b71efe5c1024", null ],
@@ -42,5 +41,6 @@ var classcello_1_1_object =
     [ "data", "classcello_1_1_object.html#a368472e271247ac9336c4f8015270627", null ],
     [ "doForceUpdates", "classcello_1_1_object.html#acd1018e5ee26cdd37c7208b37fb26485", null ],
     [ "excludedListener", "classcello_1_1_object.html#a7c69af2cea29bfd1b1459bf262d58611", null ],
+    [ "main", "classcello_1_1_object.html#af2e8f08a0b38be2850956deeffcc473c", null ],
     [ "undoManager", "classcello_1_1_object.html#a8f7ad57b7ba52f9a06b121b367d825b0", null ]
 ];

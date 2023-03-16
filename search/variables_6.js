@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['undomanager_0',['undoManager',['../classcello_1_1_object.html#a8f7ad57b7ba52f9a06b121b367d825b0',1,'cello::Object']]]
+  ['result_0',['Result',['../classcello_1_1_query.html#a15060e0546d440e62c52c9ddcc2a32c9',1,'cello::Query']]]
 ];
