@@ -281,13 +281,6 @@ void Object::onPropertyChange (const ValueBase& val, PropertyUpdateFn callback)
     onPropertyChange (val.getId (), callback);
 }
 
-template <typename T>
-T Object::getattr (const juce::Identifier& attr, const T& defaultVal) const
-{
-    // return static_cast<T> (data.getProperty (attr, defaultVal));
-    return juce::VariantConverter<T>::fromVar (data.getProperty (attr, defaultVal));
-}
-
 bool Object::hasattr (const juce::Identifier& attr) const
 {
     return data.hasProperty (attr);

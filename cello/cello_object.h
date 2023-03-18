@@ -431,7 +431,10 @@ public:
      * @return T
      */
     template <typename T>
-    T getattr (const juce::Identifier& attr, const T& defaultVal) const;
+    T getattr (const juce::Identifier& attr, const T& defaultVal) const
+    {
+        return juce::VariantConverter<T>::fromVar (data.getProperty (attr, defaultVal));
+    }
 
     /**
      * @brief test the object to see if it has an attribute with this id.

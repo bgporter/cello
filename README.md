@@ -473,6 +473,9 @@ There is a [separate repo](https://github.com/bgporter/cello_test) containing a 
 
 ## Release Notes
 
+### Release 1.1.3 * 18 Mar 2023
+- fixed template error in `Object:getattr`
+
 ### Release 1.1.2 * 16 Mar 2023
 - `Object::save` now ensures that its file is created befor attempting to save.
 - `Object::save` returns a `juce::Result` instead of bool, and will indicate the reason for a failure in that return value. 
