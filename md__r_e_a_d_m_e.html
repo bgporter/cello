@@ -419,7 +419,7 @@ Persistence</h2>
 <div class="line">    <span class="comment">// handle it. </span></div>
 <div class="line">}</div>
 <div class="line"><span class="comment">// else, we&#39;ve re-loaded -- carry on! </span></div>
-<div class="ttc" id="aclasscello_1_1_object_html_ad05bcbdf54e3587a9060dba4caeba462"><div class="ttname"><a href="classcello_1_1_object.html#ad05bcbdf54e3587a9060dba4caeba462">cello::Object::load</a></div><div class="ttdeci">static juce::ValueTree load(juce::File file, FileFormat format=FileFormat::xml)</div><div class="ttdoc">Reload data from disk. Used in the ctor that accepts file name and format.</div><div class="ttdef"><b>Definition:</b> cello_object.cpp:301</div></div>
+<div class="ttc" id="aclasscello_1_1_object_html_ad05bcbdf54e3587a9060dba4caeba462"><div class="ttname"><a href="classcello_1_1_object.html#ad05bcbdf54e3587a9060dba4caeba462">cello::Object::load</a></div><div class="ttdeci">static juce::ValueTree load(juce::File file, FileFormat format=FileFormat::xml)</div><div class="ttdoc">Reload data from disk. Used in the ctor that accepts file name and format.</div><div class="ttdef"><b>Definition:</b> cello_object.cpp:294</div></div>
 </div><!-- fragment --><h1><a class="anchor" id="autotoc_md28"></a>
 Missing Pieces</h1>
 <p>There are parts of the <code>juce::ValueTree</code> API that are not available through the <code>cello</code> API; these may be added later, or you can use them directly by accessing the <code>ValueTree</code> object that an <code>Object</code> already owns.</p>
@@ -429,28 +429,33 @@ Unit Tests</h1>
 <h1><a class="anchor" id="autotoc_md30"></a>
 Release Notes</h1>
 <h2><a class="anchor" id="autotoc_md31"></a>
+Release 1.1.3 * 18 Mar 2023</h2>
+<ul>
+<li>fixed template error in <code>Object:getattr</code></li>
+</ul>
+<h2><a class="anchor" id="autotoc_md32"></a>
 Release 1.1.2 * 16 Mar 2023</h2>
 <ul>
 <li><code>Object::save</code> now ensures that its file is created befor attempting to save.</li>
 <li><code>Object::save</code> returns a <code>juce::Result</code> instead of bool, and will indicate the reason for a failure in that return value.</li>
 </ul>
-<h2><a class="anchor" id="autotoc_md32"></a>
+<h2><a class="anchor" id="autotoc_md33"></a>
 Release 1.1.1 * 14 Mar 2023</h2>
 <ul>
 <li>Fixed some template errors.</li>
 </ul>
-<h2><a class="anchor" id="autotoc_md33"></a>
+<h2><a class="anchor" id="autotoc_md34"></a>
 Release 1.1.0 * 19 Feb 2023</h2>
 <ul>
 <li>Added <code><a class="el" href="classcello_1_1_query.html">cello::Query</a></code> class and updates to <code><a class="el" href="classcello_1_1_object.html">cello::Object</a></code> to perform database-like queries and in-place updating of child objects. See the "Database / Query" section of this README document.</li>
 </ul>
-<h2><a class="anchor" id="autotoc_md34"></a>
+<h2><a class="anchor" id="autotoc_md35"></a>
 Release 1.0.1 * 05 Feb 2023</h2>
 <ul>
 <li>added MIT license text to all source files.</li>
 <li>added <a href="https://github.com/jothepro/doxygen-awesome-css">Doxygen Awesome</a> CSS/etc to document generation.</li>
 </ul>
-<h2><a class="anchor" id="autotoc_md35"></a>
+<h2><a class="anchor" id="autotoc_md36"></a>
 Release 1.0.0 * 01 Jan 2023</h2>
 <p>Original release. </p>
 </div></div><!-- contents -->
