@@ -24,7 +24,7 @@
 BEGIN_JUCE_MODULE_DECLARATION
  ID:               cello
  vendor:           Brett g Porter
- version:          1.1.2
+ version:          1.1.3
  name:             Cello
  description:      Classes for working with JUCE Value Trees
  website:          https://github.com/bgporter/cello
