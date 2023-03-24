@@ -498,7 +498,7 @@ public:
                       pt1.x = 7;
                       pt1.y = 12;
 
-                      juce::TemporaryFile tempFile ();
+                      juce::TemporaryFile tempFile;
 
                       const juce::String fileName {
                           tempFile.getFile ().getFullPathName ()
