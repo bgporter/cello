@@ -332,8 +332,8 @@ public:
                   Vec2 pt ("point", &root);
                   expectWithinAbsoluteError<float> (pt.x, 0.f, 0.001f);
                   expectWithinAbsoluteError<float> (pt.y, 0.f, 0.001f);
-                  pt.x = 3.1;
-                  pt.y = -1.9;
+                  pt.x = 3.1f;
+                  pt.y = -1.9f;
 
                   // init from the root tree
                   Vec2 pt2 ("point", &root);
@@ -362,9 +362,9 @@ public:
                   // replace the entire tree with a new one (by copying its values)
                   pt = Vec2 ("point", 101.1f, -33.2f);
                   expectWithinAbsoluteError<float> (x, 101.1f, 0.001f);
-                  expectWithinAbsoluteError<float> (y, -33.2, 0.001f);
+                  expectWithinAbsoluteError<float> (y, -33.2f, 0.001f);
                   expectWithinAbsoluteError<float> (pt2.x, 101.1f, 0.001f);
-                  expectWithinAbsoluteError<float> (pt2.y, -33.2, 0.001f);
+                  expectWithinAbsoluteError<float> (pt2.y, -33.2f, 0.001f);
               });
 
         test ("set property lambda",
@@ -498,7 +498,11 @@ public:
                       pt1.x = 7;
                       pt1.y = 12;
 
-                      const juce::String fileName { "./testFile" };
+                      juce::TemporaryFile tempFile ();
+
+                      const juce::String fileName {
+                          tempFile.getFile ().getFullPathName ()
+                      };
                       expect (root.save (fileName, format));
 
                       cello::Object recoveredRoot ("root", fileName, format);
