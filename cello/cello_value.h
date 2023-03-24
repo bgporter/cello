@@ -74,8 +74,8 @@ public:
      * @param id Identifier of the data
      * @param initVal default initialized state for this value.
      */
-    Value (Object& data, const juce::Identifier& id, T initVal = {})
-    : ValueBase { id }
+    Value (Object& data, const juce::Identifier& id_, T initVal = {})
+    : ValueBase { id_ }
     , object { data }
     {
         // if the object doesn't have this value yet, add it and set it
@@ -336,7 +336,9 @@ T operator-- (Value<T>& val, int)
  * @brief a useful macro to create and default initialize a cello::Value
  * as a member of a cello::Object, using the same name for the variable
  * as the identifier used for the property in its ValueTree.
- *
  */
 #define MAKE_VALUE_MEMBER(type, name, init) \
-    cello::Value<type> name { *this, #name, init };
+    cello::Value<type> name                 \
+    {                                       \
+        *this, #name, init                  \
+    }

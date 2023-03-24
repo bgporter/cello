@@ -94,15 +94,15 @@ struct Vec2 : public cello::Object
     MAKE_VALUE_MEMBER (float, y, {});
 };
 
-class Rectangle : public cello::Object
+class Rect : public cello::Object
 {
 public:
-    Rectangle (juce::Identifier id, cello::Object* object)
+    Rect (juce::Identifier id, cello::Object* object)
     : cello::Object { id, object }
     {
     }
 
-    Rectangle (juce::Identifier id, float x, float y, float w, float h)
+    Rect (juce::Identifier id, float x, float y, float w, float h)
     : cello::Object { id, nullptr }
     {
         origin.x = x;
@@ -241,8 +241,8 @@ public:
               {
                   OneValue ov (0);
                   int count { 0 };
-                  cello::Object::PropertyUpdateFn callback =
-                      [&count] (juce::Identifier id) { ++count; };
+                  cello::Object::PropertyUpdateFn callback = [&count] (juce::Identifier)
+                  { ++count; };
                   ov.onPropertyChange (OneValue::valId, callback);
                   ov.setValue (2);
                   expect (count == 1);
@@ -276,7 +276,7 @@ public:
                   OneValue ov2 (ov);
                   int count { 0 };
                   ov2.onPropertyChange (OneValue::valId,
-                                        [&count] (juce::Identifier id) { ++count; });
+                                        [&count] (juce::Identifier) { ++count; });
                   ov.setValue (2);
                   expect (count == 1);
                   ov.setValue (2);
@@ -311,11 +311,11 @@ public:
                       OneValue ov (22);
                       int count { 0 };
                       ov.onPropertyChange (OneValue::valId,
-                                           [&count] (juce::Identifier id) { ++count; });
+                                           [&count] (juce::Identifier) { ++count; });
                       OneValue ov2 (ov);
                       int count2 { 0 };
-                      ov2.onPropertyChange (
-                          OneValue::valId, [&count2] (juce::Identifier id) { ++count2; });
+                      ov2.onPropertyChange (OneValue::valId,
+                                            [&count2] (juce::Identifier) { ++count2; });
 
                       ov.setValue (2);
                       expect (count == 1);
@@ -330,15 +330,15 @@ public:
               {
                   cello::Object root ("root", nullptr);
                   Vec2 pt ("point", &root);
-                  expectWithinAbsoluteError<float> (pt.x, 0, 0.001);
-                  expectWithinAbsoluteError<float> (pt.y, 0, 0.001);
+                  expectWithinAbsoluteError<float> (pt.x, 0.f, 0.001f);
+                  expectWithinAbsoluteError<float> (pt.y, 0.f, 0.001f);
                   pt.x = 3.1;
                   pt.y = -1.9;
 
                   // init from the root tree
                   Vec2 pt2 ("point", &root);
-                  expectWithinAbsoluteError<float> (pt2.x, 3.1f, 0.001);
-                  expectWithinAbsoluteError<float> (pt2.y, -1.9f, 0.001);
+                  expectWithinAbsoluteError<float> (pt2.x, 3.1f, 0.001f);
+                  expectWithinAbsoluteError<float> (pt2.y, -1.9f, 0.001f);
               });
 
         test ("change notify tree",
@@ -351,20 +351,20 @@ public:
                   float x {};
                   float y {};
                   pt2.onPropertyChange ("point",
-                                        [&] (juce::Identifier id)
+                                        [&] (juce::Identifier)
                                         {
                                             x = pt2.x;
                                             y = pt2.y;
                                         });
-                  expectWithinAbsoluteError<float> (pt2.x, 0.f, 0.001);
-                  expectWithinAbsoluteError<float> (pt2.y, 0.f, 0.001);
+                  expectWithinAbsoluteError<float> (pt2.x, 0.f, 0.001f);
+                  expectWithinAbsoluteError<float> (pt2.y, 0.f, 0.001f);
 
                   // replace the entire tree with a new one (by copying its values)
-                  pt = Vec2 ("point", 101.1, -33.2);
-                  expectWithinAbsoluteError<float> (x, 101.1f, 0.001);
-                  expectWithinAbsoluteError<float> (y, -33.2, 0.001);
-                  expectWithinAbsoluteError<float> (pt2.x, 101.1f, 0.001);
-                  expectWithinAbsoluteError<float> (pt2.y, -33.2, 0.001);
+                  pt = Vec2 ("point", 101.1f, -33.2f);
+                  expectWithinAbsoluteError<float> (x, 101.1f, 0.001f);
+                  expectWithinAbsoluteError<float> (y, -33.2, 0.001f);
+                  expectWithinAbsoluteError<float> (pt2.x, 101.1f, 0.001f);
+                  expectWithinAbsoluteError<float> (pt2.y, -33.2, 0.001f);
               });
 
         test ("set property lambda",
@@ -385,7 +385,7 @@ public:
         test ("embedded objects",
               [&] ()
               {
-                  Rectangle box ("box", 100, -100, 200, 250);
+                  Rect box ("box", 100, -100, 200, 250);
                   Vec2 origin { "origin", &box };
                   expectWithinAbsoluteError<float> (origin.x, 100.f, 0.001f);
                   expectWithinAbsoluteError<float> (origin.y, -100.f, 0.001f);
@@ -395,7 +395,7 @@ public:
 
                   // check a default initialized box as a child of another object.
                   cello::Object root ("root", nullptr);
-                  Rectangle rect ("rect", &root);
+                  Rect rect ("rect", &root);
                   Vec2 origin2 { "origin", &rect };
                   expectWithinAbsoluteError<float> (origin2.x, 0.f, 0.001f);
                   expectWithinAbsoluteError<float> (origin2.y, 0.f, 0.001f);
