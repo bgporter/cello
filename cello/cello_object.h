@@ -62,7 +62,16 @@ public:
      * @param type
      * @param state pointer to a cello::Object; pass nullptr to default initialize.
      */
-    Object (juce::Identifier type, Object* state);
+    Object (juce::Identifier type, const Object* state);
+
+    /**
+     * @brief Construct a new Object, initializing from the `state` argument.
+     * Follows the same descent logic used in the above constructor.
+     *
+     * @param type
+     * @param state
+     */
+    Object (juce::Identifier type, const Object& state);
 
     /**
      * @brief Construct a new Object from a raw juce ValueTree. Its behavior

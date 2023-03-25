@@ -139,13 +139,13 @@ public:
                   expect (root.isValid ());
                   expect (root.hasType ("root"));
                   // create a child
-                  auto o2 { Object ("child1", &o1) };
+                  auto o2 { Object ("child1", o1) };
                   juce::ValueTree childTree { o2 };
                   expect (childTree.isValid ());
                   expect (childTree.hasType ("child1"));
 
                   // get that child in a separate object.
-                  auto o2Copy { Object ("child1", &o1) };
+                  auto o2Copy { Object ("child1", o1) };
                   expect (o2Copy.getCreationType () == Object::CreationType::wrapped);
                   juce::ValueTree childCopy { o2Copy };
                   expect (childTree == childCopy);
@@ -329,14 +329,14 @@ public:
               [&] ()
               {
                   cello::Object root ("root", nullptr);
-                  Vec2 pt ("point", &root);
+                  Vec2 pt ("point", root);
                   expectWithinAbsoluteError<float> (pt.x, 0.f, 0.001f);
                   expectWithinAbsoluteError<float> (pt.y, 0.f, 0.001f);
                   pt.x = 3.1f;
                   pt.y = -1.9f;
 
                   // init from the root tree
-                  Vec2 pt2 ("point", &root);
+                  Vec2 pt2 ("point", root);
                   expectWithinAbsoluteError<float> (pt2.x, 3.1f, 0.001f);
                   expectWithinAbsoluteError<float> (pt2.y, -1.9f, 0.001f);
               });
@@ -345,9 +345,9 @@ public:
               [&] ()
               {
                   cello::Object root ("root", nullptr);
-                  Vec2 pt ("point", &root);
+                  Vec2 pt ("point", root);
                   // init from the root tree
-                  Vec2 pt2 ("point", &root);
+                  Vec2 pt2 ("point", root);
                   float x {};
                   float y {};
                   pt2.onPropertyChange ("point",
@@ -371,7 +371,7 @@ public:
               [&] ()
               {
                   cello::Object root ("root", nullptr);
-                  Vec2 pt ("point", &root);
+                  Vec2 pt ("point", root);
                   pt.x.onSet = [] (float v) { return v * 2; };
                   pt.x       = 10;
                   expectWithinAbsoluteError<float> (pt.x, 20.f, 0.001f);
@@ -488,13 +488,13 @@ public:
                                        cello::Object::FileFormat::zipped })
                   {
                       cello::Object root ("root", nullptr);
-                      Vec2 pt1 ("pt1", &root);
+                      Vec2 pt1 ("pt1", root);
                       pt1.x = 5;
                       pt1.y = 10;
-                      Vec2 pt2 ("pt2", &root);
+                      Vec2 pt2 ("pt2", root);
                       pt1.x = 6;
                       pt1.y = 11;
-                      Vec2 pt3 ("pt3", &root);
+                      Vec2 pt3 ("pt3", root);
                       pt1.x = 7;
                       pt1.y = 12;
 

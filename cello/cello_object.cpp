@@ -24,12 +24,17 @@
 namespace cello
 {
 
-Object::Object (juce::Identifier type, Object* state)
+Object::Object (juce::Identifier type, const Object* state)
 : Object { type, (state != nullptr ? static_cast<juce::ValueTree> (*state)
                                    : juce::ValueTree ()) }
 {
     if (state != nullptr)
         undoManager = state->getUndoManager ();
+}
+
+Object::Object (juce::Identifier type, const Object& state)
+: Object (type, &state)
+{
 }
 
 Object::Object (juce::Identifier type, juce::ValueTree tree)
