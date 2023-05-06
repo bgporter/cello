@@ -100,13 +100,6 @@ public:
     Object (juce::Identifier type, juce::File file, FileFormat format = FileFormat::xml);
 
     /**
-     * @brief Destroy the Object object
-     * The important thing done here is to remove ourselves as a listener to the
-     * value tree we're attached to.
-     */
-    ~Object () override;
-
-    /**
      * @brief Construct a new Object object as a copy of an existing one.
      * We register as a listener, but this new copy does not have any callbacks
      * registered. Both objects will point at the same shared value tree.
@@ -116,6 +109,15 @@ public:
     Object (const Object& rhs);
 
     /**
+     * @brief Wrap another Object's tree after this object is created.
+     *
+     * @param other
+     * @return CreationType, whether we were able to wrap that object or
+     * created a newly initialized child of it.
+     */
+    CreationType wrap (const Object& other);
+
+    /**
      * @brief set this object to use a different Object's value tree, which we will
      * begin listening to. Our `valueTreeRedirected` callback should be executed.
      *
@@ -123,6 +125,13 @@ public:
      * @return Object&
      */
     Object& operator= (const Object& rhs);
+
+    /**
+     * @brief Destroy the Object object
+     * The important thing done here is to remove ourselves as a listener to the
+     * value tree we're attached to.
+     */
+    ~Object () override;
 
     /**
      * @brief test for true equivalence: does this object point to the same
@@ -503,6 +512,17 @@ public:
 
     ///@}
 private:
+    /**
+     * @brief connect this object to the provided tree or one of its children,
+     * creating a newly-initialized object if we don't find a tree of the
+     * required type.
+     *
+     * @param type
+     * @param tree
+     * @return CreationType
+     */
+    CreationType wrap (const juce::Identifier& type, juce::ValueTree tree);
+
     /**
      * @brief Handle property changes in this tree by calling a registered
      * callback function for the property that changed (if one was registered).
