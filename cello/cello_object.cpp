@@ -339,6 +339,7 @@ juce::Result Object::save (juce::File file, FileFormat format) const
 
 Object::CreationType Object::wrap (const juce::Identifier& type, juce::ValueTree tree)
 {
+    creationType = CreationType::wrapped;
     if (tree.isValid ())
     {
         // case 1: We're passed the tree we use as our store directly.
