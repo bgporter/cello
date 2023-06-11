@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased 
 
+### Added 
+
+- new ctor that accepts another `Object` by reference.
+
+### Fixed
+
+- `creationType` bug on re-wrapping a ValueTree.
+
 ## 1.1.3 * 2023-03-18 
 ### Fixed 
 
@@ -22,14 +30,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed 
 - some template errors. 
 
-## Release 1.1.0 * 19 Feb 2023
-- Added `cello::Query` class and updates to `cello::Object` to perform database-like queries and in-place updating of child objects. See the "Database / Query" section of this README document. 
+## 1.1.0 * 2023-02-19 
+### Added 
 
-## Release 1.0.1 * 05 Feb 2023
+- `cello::Query` class and updates to `cello::Object` to perform database-like queries and in-place updating of child objects. See the "Database / Query" section of the README document. 
 
-- added MIT license text to all source files. 
-- added [Doxygen Awesome](https://github.com/jothepro/doxygen-awesome-css) CSS/etc to document generation.
+## 1.0.1 * 2023-02-05 
+### Added
+- MIT license text to all source files. 
+- [Doxygen Awesome](https://github.com/jothepro/doxygen-awesome-css) CSS/etc to document generation.
 
-## Release 1.0.0 * 01 Jan 2023
+## 1.0.0 * 2023-01-01 
 
 Original release. 

@@ -14,7 +14,16 @@ API docs available [here](https://bgporter.github.io/cello/)
 
 The primary intent of this project is to make working with ValueTrees more like working with C++ objects and less like calling API functions. A new `Value` type provides type safety (including transparent conversion from arbitrary C++ types and the JUCE `var` type used within ValueTrees), optional validator functions called on set/get, and implementation of all the in-place arithmetic operators (for numeric types).
 
+The `Object` type:
 
+- manages undo/redo for the object and all its children
+- provides a rich set of notification callbacks with no boilerplate required
+- provides persistence of the object and its children to/from disk
+- implements database-like query and update functionality
+- exposes (semi-typesafe) access to ValueTree properties whether they're represented by a `cello::Value` or not, in a Pythonesque manner.
+- provides access to the underlying ValueTree so you can use API functions not provided by the `cello` interface.
+
+`Cello` is released under the terms of the [MIT license](https://opensource.org/license/mit/).
 
 ## Motivation and Overview
 
