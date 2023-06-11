@@ -8,6 +8,14 @@ brett@bgporter.net
 
 API docs available [here](https://bgporter.github.io/cello/)
 
+## tl;dr 
+
+`Cello` is a set of C++ classes to work with `ValueTree` objects from the [JUCE](https://juce.com) application framework. 
+
+The primary intent of this project is to make working with ValueTrees more like working with C++ objects and less like calling API functions. A new `Value` type provides type safety (including transparent conversion from arbitrary C++ types and the JUCE `var` type used within ValueTrees), optional validator functions called on set/get, and implementation of all the in-place arithmetic operators (for numeric types).
+
+
+
 ## Motivation and Overview
 
 ### Confessions of a `ValueTree` Skeptic
@@ -66,8 +74,7 @@ demoObject.x = 100;
 ## Values
 
 - actually, a proxy to a value. We store a `juce::Identifier` and a reference to a ValueTree that provides the actual storage; storing or retrieving the value through its variable needs to do so through the ValueTree API, but that's all kept out of sight. 
-- templated on an underlying data type to hide the fact that we're working with `juce::var` objects internally. `cello::Value` objects remove concerns about type-safety hat `var`s introduce.
-- templated on an underlying data type to hide the fact that we're working with `juce::var` objects internally. `cello::Value` objects remove concerns about type-safety hat `var`s introduce.
+- templated on an underlying data type to hide the fact that we're working with `juce::var` objects internally. `cello::Value` objects remove concerns about type-safety that `var`s introduce.
 - can be set to always update their listeners when the value is set, even if the underlying value wasn't changed. 
 - can be given validator functions that will be called when the value is set or retrieved.
 - arithmetic types have all of the in-place operators (`++`, `--`, `+=`, `-=`, `*=`, `/=`) defined.
@@ -474,3 +481,23 @@ There is a [separate repo](https://github.com/bgporter/cello_test) containing a 
 
 See [CHANGELOG](CHANGELOG.md)
 
+## License
+
+```
+    Copyright (c) 2023 Brett g Porter
+    Permission is hereby granted, free of charge, to any person obtaining a copy
+    of this software and associated documentation files (the "Software"), to deal
+    in the Software without restriction, including without limitation the rights
+    to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+    copies of the Software, and to permit persons to whom the Software is
+    furnished to do so, subject to the following conditions:
+    The above copyright notice and this permission notice shall be included in all
+    copies or substantial portions of the Software.
+    THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+    IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+    FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+    AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+    LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+    OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+    SOFTWARE.
+```
