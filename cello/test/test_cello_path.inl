@@ -99,7 +99,7 @@ public:
                   expect (leftTree3.isValid ());
               });
 
-        test ("create target",
+        test ("create target(s)",
               [this] ()
               {
                   Path p1 { "/left/leftright" };
@@ -118,12 +118,36 @@ public:
                   Path p3 { "rootChild" };
                   isExpected (p3.findValueTree (rootTree, Path::SearchType::createTarget),
                               "rootChild");
+
+                  Path p4 { "/rootChild/w/x/y/z" };
+                  // creating without intermediate trees should fail
+                  auto t3 { p4.findValueTree (rootTree, Path::SearchType::createTarget) };
+                  expect (!t3.isValid ());
+                  auto t4 { p4.findValueTree (rootTree, Path::SearchType::createAll) };
+                  expect (t4.isValid ());
+                  DBG (rootTree.toXmlString ());
+              });
+
+        test ("paths with ancestors",
+              [this] ()
+              {
+                  Path p1 { "/left/leftleft" };
+                  auto t1 { p1.findValueTree (rootTree, Path::SearchType::query) };
+                  expect (t1.isValid ());
+
+                  // go up to an ancestor named 'left' and find its child named
+                  // 'leftright'
+                  Path p2 { "^left/leftright" };
+                  auto t2 { p2.findValueTree (t1, Path::SearchType::query) };
+                  expect (t2.isValid ());
+
+                  Path p3 { "^left/bogus" };
+                  auto t3 { p3.findValueTree (t2, Path::SearchType::query) };
+                  expect (!t3.isValid ());
               });
     }
 
 private:
-    // !!! test class member vars here...
-
     juce::ValueTree rootTree;
 };
 

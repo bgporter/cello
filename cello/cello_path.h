@@ -56,7 +56,7 @@ public:
     static const inline juce::String current { "." };
 
     Path (juce::StringRef pathString)
-    : path { pathString }
+    : pathSegments { parsePathSegments (pathString) }
     {
     }
 
@@ -79,7 +79,15 @@ public:
                                    juce::UndoManager* undo = nullptr);
 
 private:
-    juce::String path;
+    /**
+     * @brief parse the path string into its segments, cleaning and verifying as needed.
+     *
+     * @param pathString
+     * @return juce::StringArray
+     */
+    juce::StringArray parsePathSegments (const juce::String& pathString);
+
+    const juce::StringArray pathSegments;
 };
 
 } // namespace cello
