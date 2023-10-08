@@ -75,7 +75,8 @@ public:
      * @param searchType
      * @return juce::ValueTree; if search
      */
-    juce::ValueTree findValueTree (juce::ValueTree& origin, SearchType searchType);
+    juce::ValueTree findValueTree (juce::ValueTree& origin, SearchType searchType,
+                                   juce::UndoManager* undo = nullptr);
 
 private:
     juce::String path;

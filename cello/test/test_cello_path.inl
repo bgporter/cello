@@ -29,8 +29,8 @@ public:
                 rootTree.appendChild (left, nullptr);
 
                 juce::ValueTree right { "right" };
-                left.appendChild (juce::ValueTree { "rightleft" }, nullptr);
-                left.appendChild (juce::ValueTree { "rightright" }, nullptr);
+                right.appendChild (juce::ValueTree { "rightleft" }, nullptr);
+                right.appendChild (juce::ValueTree { "rightright" }, nullptr);
                 rootTree.appendChild (right, nullptr);
             });
 
@@ -66,6 +66,58 @@ public:
                   isExpected (
                       Path { "^root" }.findValueTree (leftRight, Path::SearchType::query),
                       "root");
+              });
+
+        test ("just find",
+              [this] ()
+              {
+                  Path leftPath { "left" };
+                  auto leftTree1 { leftPath.findValueTree (rootTree,
+                                                           Path::SearchType::query) };
+                  // if we start with the left tree and just ask for "left", we should
+                  // always return that tree.
+                  expect (leftTree1.isValid ());
+                  auto leftTree2 { leftPath.findValueTree (leftTree1,
+                                                           Path::SearchType::query) };
+                  expect (leftTree2.isValid ());
+
+                  // if we start with a single segment path that's a child, search for
+                  // that.
+                  Path leftleftPath { "leftleft" };
+                  auto leftTree2a { leftleftPath.findValueTree (
+                      leftTree1, Path::SearchType::query) };
+                  expect (leftTree2a.isValid ());
+                  expect (leftTree2a.hasType ("leftleft"));
+
+                  // ...but a path of "./left" will look for a *child* named 'left'
+                  Path leftChildPath { "./left" };
+                  auto leftTree3 { leftChildPath.findValueTree (
+                      leftTree1, Path::SearchType::query) };
+                  expect (!leftTree3.isValid ());
+                  leftTree3 = { leftChildPath.findValueTree (
+                      leftTree1, Path::SearchType::createTarget) };
+                  expect (leftTree3.isValid ());
+              });
+
+        test ("create target",
+              [this] ()
+              {
+                  Path p1 { "/left/leftright" };
+                  isExpected (p1.findValueTree (rootTree, Path::SearchType::query),
+                              "leftright");
+                  isExpected (p1.findValueTree (rootTree, Path::SearchType::createTarget),
+                              "leftright");
+
+                  Path p2 { "/left/leftright/leftrightleft" };
+                  auto t2 { p2.findValueTree (rootTree, Path::SearchType::query) };
+                  expect (!t2.isValid ());
+
+                  isExpected (p2.findValueTree (rootTree, Path::SearchType::createTarget),
+                              "leftrightleft");
+
+                  Path p3 { "rootChild" };
+                  isExpected (p3.findValueTree (rootTree, Path::SearchType::createTarget),
+                              "rootChild");
               });
     }
 

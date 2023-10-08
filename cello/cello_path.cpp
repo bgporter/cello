@@ -56,15 +56,24 @@ juce::ValueTree findAncestor (juce::ValueTree& origin,
 
 namespace cello
 {
-juce::ValueTree Path::findValueTree (juce::ValueTree& origin, Path::SearchType searchType)
+juce::ValueTree Path::findValueTree (juce::ValueTree& origin, Path::SearchType searchType,
+                                     juce::UndoManager* undo)
 {
     auto currentTree { path.startsWith (sep) ? findRoot (origin) : origin };
     const auto segments { juce::StringArray::fromTokens (path, sep, "") };
 
     for (int i = 0; i < segments.size (); ++i)
     {
-        DBG ("segment " << i << "= '" << segments[i] << "'");
+        DBG ("segment " << i << " = '" << segments[i] << "'");
     }
+
+    // special case: if there's only 1 segment and it matches the type of the current
+    // tree, treat it the same as "." (current tree) and just return it directly. If
+    // it's a different type, fall into the code below that will look for a child
+    // tree of the requested type.
+    if (segments.size () == 1 &&
+        (segments[0].trim () == currentTree.getType ().toString ()))
+        return currentTree;
 
     for (int i { 0 }; i < segments.size () && currentTree.isValid (); ++i)
     {
@@ -93,7 +102,16 @@ juce::ValueTree Path::findValueTree (juce::ValueTree& origin, Path::SearchType s
             }
             else
             {
-                // doesn't exist...yet. Create and add to the current tree?
+                if (!childTree.isValid ())
+                {
+                    // doesn't exist...yet. Create and add to the current tree?
+                    if (isLastSegment || (searchType == SearchType::createAll))
+                    {
+                        childTree = juce::ValueTree (segment);
+                        currentTree.appendChild (childTree, undo);
+                    }
+                }
+                currentTree = childTree;
             }
         };
     }
