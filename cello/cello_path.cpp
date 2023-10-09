@@ -59,13 +59,7 @@ namespace cello
 juce::ValueTree Path::findValueTree (juce::ValueTree& origin, Path::SearchType searchType,
                                      juce::UndoManager* undo)
 {
-    // auto currentTree { path.startsWith (sep) ? findRoot (origin) : origin };
     auto currentTree { origin };
-
-    // for (int i = 0; i < segments.size (); ++i)
-    // {
-    //     DBG ("segment " << i << " = '" << segments[i] << "'");
-    // }
 
     // special case: if there's only 1 segment and it matches the type of the current
     // tree, treat it the same as "." (current tree) and just return it directly. If
