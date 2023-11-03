@@ -62,19 +62,19 @@ private:
 
 struct Vec2 : public cello::Object
 {
-    Vec2 (juce::Identifier id, float x_, float y_)
+    Vec2 (const juce::String& id, float x_, float y_)
     : cello::Object (id, nullptr)
     {
         x = x_;
         y = y_;
     }
 
-    Vec2 (juce::Identifier id, cello::Object* object)
+    Vec2 (const juce::String& id, cello::Object* object)
     : cello::Object (id, object)
     {
     }
 
-    Vec2 (juce::Identifier id, juce::ValueTree tree)
+    Vec2 (const juce::String& id, juce::ValueTree tree)
     : cello::Object (id, tree)
     {
     }
@@ -97,12 +97,12 @@ struct Vec2 : public cello::Object
 class Rect : public cello::Object
 {
 public:
-    Rect (juce::Identifier id, cello::Object* object)
+    Rect (const juce::String& id, cello::Object* object)
     : cello::Object { id, object }
     {
     }
 
-    Rect (juce::Identifier id, float x, float y, float w, float h)
+    Rect (const juce::String& id, float x, float y, float w, float h)
     : cello::Object { id, nullptr }
     {
         origin.x = x;

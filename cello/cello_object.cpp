@@ -24,7 +24,7 @@
 namespace cello
 {
 
-Object::Object (juce::Identifier type, const Object* state)
+Object::Object (const juce::String& type, const Object* state)
 : Object { type, (state != nullptr ? static_cast<juce::ValueTree> (*state)
                                    : juce::ValueTree ()) }
 {
@@ -32,17 +32,17 @@ Object::Object (juce::Identifier type, const Object* state)
         undoManager = state->getUndoManager ();
 }
 
-Object::Object (juce::Identifier type, const Object& state)
+Object::Object (const juce::String& type, const Object& state)
 : Object (type, &state)
 {
 }
 
-Object::Object (juce::Identifier type, juce::ValueTree tree)
+Object::Object (const juce::String& type, juce::ValueTree tree)
 {
     if (tree.isValid ())
     {
         // case 1: We're passed the tree we use as our store directly.
-        if (tree.getType () == type)
+        if (tree.getType ().toString () == type)
             data = tree;
         else
         {
@@ -74,7 +74,7 @@ Object::Object (juce::Identifier type, juce::ValueTree tree)
     data.addListener (this);
 }
 
-Object::Object (juce::Identifier type, juce::File file, Object::FileFormat format)
+Object::Object (const juce::String& type, juce::File file, Object::FileFormat format)
 : Object { type, Object::load (file, format) }
 {
 }
@@ -143,7 +143,7 @@ void Object::upsertAll (const Object* parent, const juce::Identifier& key, bool 
     for (const auto& child : parentTree)
     {
         const auto type { child.getType () };
-        Object item { type, child };
+        Object item { type.toString (), child };
 
         if (!upsert (&item, key, deep))
             jassertfalse;

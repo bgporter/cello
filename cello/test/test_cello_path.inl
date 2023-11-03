@@ -16,6 +16,9 @@ public:
         expect (tree.isValid ());
         expect (tree.hasType (type));
     }
+
+    void createPath (const Path& p) { expect (true); }
+
     void runTest () override
     {
         setup (
@@ -36,6 +39,16 @@ public:
 
         tearDown ([this] () { rootTree = juce::ValueTree {}; });
 
+        test ("creation",
+              [this] ()
+              {
+                  createPath (Path ("foo"));
+                  createPath (juce::String { "bar" });
+                  juce::String longPath { "/foo/bar/baz" };
+                  createPath (longPath);
+                  createPath ({ "x/y/z" });
+              });
+
         test ("get root",
               [this] ()
               {
@@ -55,7 +68,8 @@ public:
                   isExpected (root2, "root");
 
                   // use a path object to do the same thing.
-                  Path path { "/" };
+                  juce::String rootPath { "/" };
+                  Path path { rootPath };
                   isExpected (path.findValueTree (rootTree, Path::SearchType::query),
                               "root");
                   isExpected (Path { ".." }.findValueTree (left, Path::SearchType::query),

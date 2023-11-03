@@ -55,7 +55,7 @@ public:
     static const inline juce::String parent { ".." };
     static const inline juce::String current { "." };
 
-    Path (juce::StringRef pathString)
+    Path (const juce::String& pathString)
     : pathSegments { parsePathSegments (pathString) }
     {
     }
