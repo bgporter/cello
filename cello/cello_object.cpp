@@ -37,8 +37,17 @@ Object::Object (const juce::String& type, const Object& state)
 {
 }
 
+#define PATH_IMPL 1
 Object::Object (const juce::String& type, juce::ValueTree tree)
 {
+#if PATH_IMPL
+    Path path { type };
+    // DBG(tree.toXmlString());
+    data = path.findValueTree (tree, Path::SearchType::createAll, nullptr);
+    // DBG(data.toXmlString());
+    if (path.getSearchResult () == Path::SearchResult::created)
+        creationType = CreationType::initialized;
+#else
     if (tree.isValid ())
     {
         // case 1: We're passed the tree we use as our store directly.
@@ -70,6 +79,7 @@ Object::Object (const juce::String& type, juce::ValueTree tree)
         data         = juce::ValueTree (type);
         creationType = CreationType::initialized;
     }
+#endif
     // register to receive callbacks when the tree changes.
     data.addListener (this);
 }

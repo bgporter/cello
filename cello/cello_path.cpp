@@ -59,6 +59,26 @@ namespace cello
 juce::ValueTree Path::findValueTree (juce::ValueTree& origin, Path::SearchType searchType,
                                      juce::UndoManager* undo)
 {
+    // nothing to look for!
+    if (pathSegments.size () == 0)
+        return {};
+
+    if (!origin.isValid ())
+    {
+        // can't query an empty tree
+        if (searchType == SearchType::query)
+            return {};
+        // can't create a hierarchy starting without a root.
+        if (pathSegments.size () > 1)
+            return {};
+        // We need a real type name, not a relative path character (or garbage)
+        if (!juce::Identifier::isValidIdentifier (pathSegments[0]))
+            return {};
+        // create and return the new root tree.
+        searchResult = SearchResult::created;
+        return juce::ValueTree (pathSegments[0]);
+    }
+
     auto currentTree { origin };
 
     // special case: if there's only 1 segment and it matches the type of the current
@@ -107,12 +127,16 @@ juce::ValueTree Path::findValueTree (juce::ValueTree& origin, Path::SearchType s
                     {
                         childTree = juce::ValueTree (segment);
                         currentTree.appendChild (childTree, undo);
+                        searchResult = SearchResult::created;
                     }
                 }
                 currentTree = childTree;
             }
         };
     }
+    if (searchResult != SearchResult::created)
+        searchResult =
+            currentTree.isValid () ? SearchResult::found : SearchResult::notFound;
 
     return currentTree;
 }

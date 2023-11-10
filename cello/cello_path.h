@@ -67,16 +67,31 @@ public:
         createAll ///< create final tree and all intermediate trees needed to reach it.
     };
 
+    enum SearchResult
+    {
+        notFound, ///< unable to find the requested tree
+        found,    ///< the sought tree existed already and was found
+        created   ///< performing a search created a new tree
+    };
+
     /**
      * @brief Navigate the path from `origin` to a tree that is expected at the end
      * of the current path specification.
      *
      * @param origin Initial/"current" value tree from which to begin search
      * @param searchType
-     * @return juce::ValueTree; if search
+     * @return juce::ValueTree; if search type was `query` may be an invalid tree
      */
     juce::ValueTree findValueTree (juce::ValueTree& origin, SearchType searchType,
                                    juce::UndoManager* undo = nullptr);
+
+    /**
+     * @brief Find out whether performing a search succeeded, and if so, needed to
+     * create a new tree.
+     *
+     * @return SearchResult
+     */
+    SearchResult getSearchResult () const { return searchResult; }
 
 private:
     /**
@@ -88,6 +103,8 @@ private:
     juce::StringArray parsePathSegments (const juce::String& pathString);
 
     const juce::StringArray pathSegments;
+
+    SearchResult searchResult { SearchResult::notFound };
 };
 
 } // namespace cello

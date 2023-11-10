@@ -72,6 +72,7 @@ public:
                   Path path { rootPath };
                   isExpected (path.findValueTree (rootTree, Path::SearchType::query),
                               "root");
+                  expectEquals (path.getSearchResult (), Path::SearchResult::found);
                   isExpected (Path { ".." }.findValueTree (left, Path::SearchType::query),
                               "root");
                   isExpected (
@@ -80,37 +81,64 @@ public:
                   isExpected (
                       Path { "^root" }.findValueTree (leftRight, Path::SearchType::query),
                       "root");
+                  isExpected (
+                      Path { "root" }.findValueTree (rootTree, Path::SearchType::query),
+                      "root");
               });
 
-        test ("just find",
+        test (
+            "just find",
+            [this] ()
+            {
+                Path leftPath { "left" };
+                auto leftTree1 { leftPath.findValueTree (rootTree,
+                                                         Path::SearchType::query) };
+                // if we start with the left tree and just ask for "left", we should
+                // always return that tree.
+                expect (leftTree1.isValid ());
+                expectEquals (leftPath.getSearchResult (), Path::SearchResult::found);
+                auto leftTree2 { leftPath.findValueTree (leftTree1,
+                                                         Path::SearchType::query) };
+                expect (leftTree2.isValid ());
+                expectEquals (leftPath.getSearchResult (), Path::SearchResult::found);
+
+                // if we start with a single segment path that's a child, search for
+                // that.
+                Path leftleftPath { "leftleft" };
+                auto leftTree2a { leftleftPath.findValueTree (leftTree1,
+                                                              Path::SearchType::query) };
+                expect (leftTree2a.isValid ());
+                expect (leftTree2a.hasType ("leftleft"));
+                expectEquals (leftleftPath.getSearchResult (), Path::SearchResult::found);
+
+                // ...but a path of "./left" will look for a *child* named 'left'
+                Path leftChildPath { "./left" };
+                auto leftTree3 { leftChildPath.findValueTree (leftTree1,
+                                                              Path::SearchType::query) };
+                expect (!leftTree3.isValid ());
+                expectEquals (leftChildPath.getSearchResult (),
+                              Path::SearchResult::notFound);
+                leftTree3 = { leftChildPath.findValueTree (
+                    leftTree1, Path::SearchType::createTarget) };
+                expect (leftTree3.isValid ());
+                expectEquals (leftChildPath.getSearchResult (),
+                              Path::SearchResult::created);
+            });
+
+        test ("variations searching from root",
               [this] ()
               {
-                  Path leftPath { "left" };
-                  auto leftTree1 { leftPath.findValueTree (rootTree,
-                                                           Path::SearchType::query) };
-                  // if we start with the left tree and just ask for "left", we should
-                  // always return that tree.
-                  expect (leftTree1.isValid ());
-                  auto leftTree2 { leftPath.findValueTree (leftTree1,
-                                                           Path::SearchType::query) };
-                  expect (leftTree2.isValid ());
+                  // I expect all of these to find the same thing
+                  Path p1 { "/left/leftleft" };
+                  Path p2 { "left/leftleft" };
+                  //   Path p3 { "root/left/leftleft" };
 
-                  // if we start with a single segment path that's a child, search for
-                  // that.
-                  Path leftleftPath { "leftleft" };
-                  auto leftTree2a { leftleftPath.findValueTree (
-                      leftTree1, Path::SearchType::query) };
-                  expect (leftTree2a.isValid ());
-                  expect (leftTree2a.hasType ("leftleft"));
-
-                  // ...but a path of "./left" will look for a *child* named 'left'
-                  Path leftChildPath { "./left" };
-                  auto leftTree3 { leftChildPath.findValueTree (
-                      leftTree1, Path::SearchType::query) };
-                  expect (!leftTree3.isValid ());
-                  leftTree3 = { leftChildPath.findValueTree (
-                      leftTree1, Path::SearchType::createTarget) };
-                  expect (leftTree3.isValid ());
+                  const auto t1 { p1.findValueTree (rootTree, Path::SearchType::query) };
+                  isExpected (t1, "leftleft");
+                  const auto t2 { p2.findValueTree (rootTree, Path::SearchType::query) };
+                  expect (t1 == t2);
+                  //   const auto t3 { p3.findValueTree (rootTree,
+                  //   Path::SearchType::query) }; expect (t1 == t3);
               });
 
         test ("create target(s)",
@@ -139,7 +167,7 @@ public:
                   expect (!t3.isValid ());
                   auto t4 { p4.findValueTree (rootTree, Path::SearchType::createAll) };
                   expect (t4.isValid ());
-                  DBG (rootTree.toXmlString ());
+                  //   DBG (rootTree.toXmlString ());
               });
 
         test ("paths with ancestors",
@@ -158,6 +186,28 @@ public:
                   Path p3 { "^left/bogus" };
                   auto t3 { p3.findValueTree (t2, Path::SearchType::query) };
                   expect (!t3.isValid ());
+              });
+        test ("ex nihilo",
+              [this] ()
+              {
+                  Path p1 { "foo" };
+                  auto nullTree { juce::ValueTree () };
+                  auto t1 { p1.findValueTree (nullTree, Path::SearchType::query) };
+                  expect (!t1.isValid ());
+                  expect (p1.getSearchResult () == Path::SearchResult::notFound);
+
+                  auto t2 { p1.findValueTree (nullTree, Path::SearchType::createTarget) };
+                  expect (t2.isValid ());
+                  expect (p1.getSearchResult () == Path::SearchResult::created);
+
+                  // if we create, we should get back a new (root) tree with a single
+                  // element.
+                  auto t3 { p1.findValueTree (nullTree, Path::SearchType::createAll) };
+                  expect (t3.isValid ());
+
+                  Path p2 { "foo/bar" };
+                  auto t4 { p2.findValueTree (nullTree, Path::SearchType::createAll) };
+                  expect (!t4.isValid ());
               });
     }
 

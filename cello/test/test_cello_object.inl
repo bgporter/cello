@@ -341,6 +341,26 @@ public:
                   expectWithinAbsoluteError<float> (pt2.y, -1.9f, 0.001f);
               });
 
+        test ("create/wrap hierarchy",
+              [this] ()
+              {
+                  cello::Object root ("root", nullptr);
+                  expect (root.getType ().toString () == "root");
+                  // create 3 levels below root
+                  cello::Object fooBarBaz { "/foo/bar/baz", root };
+                  juce::ValueTree dbgTree { root };
+                  //   DBG (dbgTree.toXmlString ());
+                  expect (fooBarBaz.getType ().toString () == "baz");
+                  expect (fooBarBaz.getCreationType () ==
+                          Object::CreationType::initialized);
+                  // find bar relative to the root, but starting at the bottom level.
+                  cello::Object bar { "/foo/bar", fooBarBaz };
+                  expect (bar.getType ().toString () == "bar");
+                  // find ancestor named "foo" relative to baz.
+                  cello::Object foo { "^foo", fooBarBaz };
+                  expect (foo.getType ().toString () == "foo");
+              });
+
         test ("change notify tree",
               [&] ()
               {
