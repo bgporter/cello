@@ -393,7 +393,6 @@ public:
      */
     ///@{
 
-    using PropertyUpdateFn = std::function<void (juce::Identifier)>;
     /**
      * @brief Install (or clear) a function to be called when one of this Object's
      * properties changes. A cello extension to this mechanism is that you can pass

@@ -241,7 +241,7 @@ public:
               {
                   OneValue ov (0);
                   int count { 0 };
-                  cello::Object::PropertyUpdateFn callback = [&count] (juce::Identifier)
+                  cello::PropertyUpdateFn callback = [&count] (juce::Identifier)
                   { ++count; };
                   ov.onPropertyChange (OneValue::valId, callback);
                   ov.setValue (2);
@@ -260,7 +260,10 @@ public:
                   Vec2 pt { "point", 0, 0 };
                   count = 0;
                   pt.onPropertyChange (pt.x, callback);
-                  pt.onPropertyChange (pt.y, callback);
+                  // you can also set a callback on a value member directly without
+                  // needing to bring its owning tree/object into matters at all.
+                  pt.y.onPropertyChange (callback);
+
                   pt.x = 100;
                   expect (count == 1);
                   // don't trigger callback if we don't change value

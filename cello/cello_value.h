@@ -157,6 +157,17 @@ public:
         excludedListener = listener;
     }
 
+    /**
+     * @brief Register (or clear) a callback function to execute when this value
+     * changes.
+     *
+     * @param callback
+     */
+    void onPropertyChange (PropertyUpdateFn callback)
+    {
+        object.onPropertyChange (getId (), callback);
+    }
+
 private:
     void doSet (const T& val)
     {

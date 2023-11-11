@@ -10,7 +10,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added 
 
 - new ctor that accepts another `Object` by reference.
-- "Path" functionality that permits finding/constructing trees/Object by using an absolute or relative path. An impact of this change is that the `type` parameter passed to `cello::Object` constructors has been changed from `juce::Identifier&` to `juce::String&` 
+- "Path" functionality that permits finding/constructing trees/Object by using an absolute or relative path. An impact of this change is that the `type` parameter passed to `cello::Object` constructors has been changed from `juce::Identifier&` to `juce::String&`.
+- `PropertyUpdateFn` alias moved from the `Object` class into the top-level `Cello` namespace (defined in the `cello_update_source.h` header)
+- added `Value::onPropertyChange()` to simplify subscribing to value objects that are public; instead of doing e.g. `myObject.onPropertyChange (myVal, callback)` you can just call `myVal.onPropertyChange(callback)`. 
 
 ### Fixed
 
