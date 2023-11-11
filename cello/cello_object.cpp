@@ -40,48 +40,7 @@ Object::Object (const juce::String& type, const Object& state)
 #define PATH_IMPL 1
 Object::Object (const juce::String& type, juce::ValueTree tree)
 {
-#if PATH_IMPL
-    Path path { type };
-    // DBG(tree.toXmlString());
-    data = path.findValueTree (tree, Path::SearchType::createAll, nullptr);
-    // DBG(data.toXmlString());
-    if (path.getSearchResult () == Path::SearchResult::created)
-        creationType = CreationType::initialized;
-#else
-    if (tree.isValid ())
-    {
-        // case 1: We're passed the tree we use as our store directly.
-        if (tree.getType ().toString () == type)
-            data = tree;
-        else
-        {
-            // case 2: look in the state tree for our data.
-            auto childTree = tree.getChildWithName (type);
-            if (childTree.isValid ())
-            {
-                data = childTree;
-            }
-            else
-            {
-                // case 3: the state tree doesn't have a tree for our data type
-                // yet. Create an empty tree of the correct type, mark ourselves
-                // as having been default-initialized.
-                data         = juce::ValueTree (type);
-                creationType = CreationType::initialized;
-                tree.appendChild (data, getUndoManager ());
-            }
-        }
-    }
-    else
-    {
-        // case 4: There's no state, just create an empty tree of the correct
-        // type and mark ourselves as needing to be initialized.
-        data         = juce::ValueTree (type);
-        creationType = CreationType::initialized;
-    }
-#endif
-    // register to receive callbacks when the tree changes.
-    data.addListener (this);
+    wrap (type, static_cast<juce::ValueTree> (tree));
 }
 
 Object::Object (const juce::String& type, juce::File file, Object::FileFormat format)
@@ -95,6 +54,14 @@ Object::Object (const Object& rhs)
 {
     // register to receive callbacks when the tree changes.
     data.addListener (this);
+}
+
+Object::CreationType Object::wrap (const Object& other)
+{
+    data.removeListener (this);
+    const auto result { wrap (getType ().toString (), other) };
+    undoManager = other.getUndoManager ();
+    return result;
 }
 
 Object& Object::operator= (const Object& rhs)
@@ -369,6 +336,55 @@ juce::Result Object::save (juce::File file, FileFormat format) const
     // unknown format
     jassertfalse;
     return juce::Result::fail ("Unknown file format");
+}
+
+Object::CreationType Object::wrap (const juce::String& type, juce::ValueTree tree)
+{
+    creationType = CreationType::wrapped;
+#if PATH_IMPL
+    Path path { type };
+    // DBG(tree.toXmlString());
+    data = path.findValueTree (tree, Path::SearchType::createAll, nullptr);
+    // DBG(data.toXmlString());
+    if (path.getSearchResult () == Path::SearchResult::created)
+        creationType = CreationType::initialized;
+#else
+    if (tree.isValid ())
+    {
+        // case 1: We're passed the tree we use as our store directly.
+        if (tree.getType () == type)
+            data = tree;
+        else
+        {
+            // case 2: look in the state tree for our data.
+            auto childTree = tree.getChildWithName (type);
+            if (childTree.isValid ())
+            {
+                data = childTree;
+            }
+            else
+            {
+                // case 3: the state tree doesn't have a tree for our data type
+                // yet. Create an empty tree of the correct type, mark ourselves
+                // as having been default-initialized.
+                data         = juce::ValueTree (type);
+                creationType = CreationType::initialized;
+                tree.appendChild (data, getUndoManager ());
+            }
+        }
+    }
+    else
+    {
+        // case 4: There's no state, just create an empty tree of the correct
+        // type and mark ourselves as needing to be initialized.
+        data         = juce::ValueTree (type);
+        creationType = CreationType::initialized;
+    }
+#endif
+
+    // register to receive callbacks when the tree changes.
+    data.addListener (this);
+    return creationType;
 }
 
 void Object::valueTreePropertyChanged (juce::ValueTree& treeWhosePropertyHasChanged,

@@ -200,7 +200,7 @@ private:
      * @param newValue
      * @return true if the two values are sufficiently unequal.
      */
-    bool notEqualTo (T newValue)
+    bool notEqualTo (const T& newValue)
     {
         if constexpr (std::is_floating_point_v<T>)
             return std::fabs (newValue - doGet ()) > epsilon;
