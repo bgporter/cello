@@ -444,6 +444,8 @@ There are two Object methods to register these callbacks:
 * `void onPropertyChange (juce::Identifier id, PropertyUpdateFn callback)` &mdash; pass in the identifier of the attribute to watch
 * `void onPropertyChange (const ValueBase& val, PropertyUpdateFn callback);` &mdash; pass in a reference to the `cello::Value` or `cello::Object` to watch. 
 
+If the `Value` that you're watching is a public member of an `Object`, you can also subscribe to its updates directly using the method `Value<T>::onPropertyUpdate (PropertyUpdateFn callback);`
+
 #### Child Changes
 
 Changes to children are broadcast using a `ChildUpdateFn` callback that has the signature `std::function<void (juce::ValueTree& child, int oldIndex, int newIndex)>;`
