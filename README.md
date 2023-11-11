@@ -176,9 +176,6 @@ public:
 
     // the `complexVal` member can be used as a `std::complex<float>`; the 
     // round-tripping through a juce::var is completely hidden. 
-
-    // the `complexVal` member can be used as a `std::complex<float>`; the 
-    // round-tripping through a juce::var is completely hidden. 
     MAKE_VALUE_MEMBER (std::complex<float>, complexVal, {});
 };
 ```
@@ -187,7 +184,6 @@ Your code is then free to work with that value directly:
 
 ```cpp
 ObjectWithConvertibleValue o;
-ObjectWithConvertibleValue o;
 std::complex<float> orig { 2.f, 3.f };
 o.complexVal = orig;
 
@@ -195,9 +191,10 @@ std::complex<float> retrieved { o.complexVal };
 expectWithinAbsoluteError<float> (orig.real (), retrieved.real (), 0.001f);
 expectWithinAbsoluteError<float> (orig.imag (), retrieved.imag (), 0.001f);
 ```
+
 ### Validator Functions
 
-If we're taking some inspiration from Python here, it's worth remembering that Python developers are in the practice of leaving all their class member variables public instead of hiding them behind a wall or privacy and forcing the usage of `getVariable()`/`setVariable()` methods to ensure the separation of interface from implementation &mdash; much of the time, there's no reason to require those accessor/mutator methods, and when there is an actual reason (for example, to ensure the maintenance of a class invariant), it's easy to switch over to using a property to manage access to the underlying data. Bertrand Meyer, creator of the Eiffel programming language refers to this as the "Uniform Access Principle," that "...all services offered by a module should be available through a uniform notation, which does not betray whether they are implemented through storage or through computation."
+If we're taking some inspiration from Python here, it's worth remembering that Python developers are in the practice of leaving all their class member variables public instead of hiding them behind a wall of privacy and forcing the usage of `getVariable()`/`setVariable()` methods to ensure the separation of interface from implementation&mdash;much of the time, there's no reason to require those accessor/mutator methods, and when there is an actual reason (for example, to ensure the maintenance of a class invariant), it's easy to switch over to using a property to manage access to the underlying data. Bertrand Meyer, creator of the Eiffel programming language refers to this as the "Uniform Access Principle," that _"...all services offered by a module should be available through a uniform notation, which does not betray whether they are implemented through storage or through computation."_
 
 Each `cello::Value` object may have `ValidatePropertyFn` lambdas assigned to it (where that lambda accepts a const reference to `T` and returns a `T` by value) that are (`onSet`) called before that value is stored into the underlying ValueTree or (`onGet`) called after retrieving the property from the ValueTree but before returning the value to calling code. 
 
@@ -211,7 +208,7 @@ To simplify the common case where this behavior is only meant to be in force for
 
 ### Excluding Listeners
 
-It's also common to want to send update callbacks to all listeners except one &mdash; for example, if I have a bit of code that's setting a value and that code is also listening to the value, there's no need to receive a callback; the code already knows what the new value is. The `cello::Value` class provides a method `void excludeListener (juce::ValueTree::Listener* listener)` for this purpose. 
+It's also common to want to send update callbacks to all listeners except one&mdash;for example, if I have a bit of code that's setting a value and that code is also listening to the value, there's no need to receive a callback; that code already knows what the new value is. The `cello::Value` class provides a method `void excludeListener (juce::ValueTree::Listener* listener)` for this purpose. 
 
 ## Objects
 
@@ -224,8 +221,9 @@ Since our objects rely on separate ValueTree objects for their storage, we need 
 
 The constructors of `cello::Object` handle both these cases for us, using the logic outlined below:
 
-* `Object (juce::Identifier type, Object* state);` (preferred)
-* `Object (juce::Identifier type, juce::ValueTree tree);`
+* `Object (const juce::String& type, Object* state);` (preferred)
+* `Object (const juce::String& type, Object& state);` (preferred)
+* `Object (const juce::String& type, juce::ValueTree tree);`
 
 1. If the `state` or `tree` argument is of type `type`, wrap that inside the object being created. 
 2. If the `state` or `tree` arguments has a child of type `type`, wrap that child inside the object beng created. 
@@ -236,6 +234,29 @@ It is sometimes useful to know whether a new Object was created or wrapped &mdas
 You can test this at runtime using the method `Object::getCreationType()`, which will return either:
 * `Object::CreationType::initialized`
 * `Object::CreationType::wrapped`
+
+### Creating/Finding Objects in a Hierarchy
+
+The `type` argument to an Object constructor can be richer than just a simple `juce::Identifier`; it's useful in an application to be able to pass around a single top-level context object and have individual objects within that hierarchy be able to find themselves. 
+
+Consider a common pattern where an application needs to have separate trees to collect persistent attributes that are saved and restored between app runs, and another that holds runtime values that are recreated each time the application runs. Rather than write procedural code to start at the root and find (or create) individual child objects that are expected, we can do the same thing declaratively using paths, like: `/persistent/object1/object2`, which would start at the root tree, then descend through children `persistent`, `object1`, and `object2`, creating any children that are not found.
+
+Path elements are separated with forward slashes. 
+
+If the first character in a path string is `/`, the path is absolute starting at the root. 
+
+All other paths are relative to the Object that's passed into an Object constructor. 
+
+Path elements starting with a circumflex character `^` will search upward from the current path location to find an ancestor Object of a specified type, so `^grandpa` is read as "search upward in the hierarchy from the current path location until you find an object of type `grandpa`.
+
+A path element of `..` operates as it does in file systems, navigating to the parent of the current path location, so `../sibling` would find a sibling object of the current one, and `../../uncle` will look for a sibling of the current object's parent. 
+
+All other paths must be valid `juce::Identifier`s, and search downward through child objects. 
+
+Downward searches when instantiating `cello::Object`s will create child trees (that will *not* be initialized) as needed. 
+
+Searches upward from an object will not be able to create interim object/trees. You can check the `CreationType` after the constructor executes to make sure that you have a valid object before using it. You can test for existence before attempting creation by instantiating a `cello::Path` object directly and using its `findValueTree()` method with a search type of `Query`; if that search returns an invalid `juce::ValueTree`, you'll need to handle that case as appropriate, whether it's an error, or just triggers additional configuration/creation of the hierarchy before using it. 
+
 
 ### Working with Children
 
@@ -361,7 +382,6 @@ If a query is run with no predicate functions defined, all children of the `Obje
      * @return Query& so we can chain these calls together.
      */
     Query& addComparison (Comparison sorter);
-    
 ```
 
 You can also specify comparison functions that will be used to sort the results list after a query is performed; if none are provided, the items in the search results will be in the same order they exist in the `Object` being queried. 
