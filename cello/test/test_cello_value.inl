@@ -142,6 +142,33 @@ public:
                   expectWithinAbsoluteError<float> (orig.imag (), retrieved.imag (),
                                                     0.001f);
               });
+
+        test ("Cached value",
+              [this] ()
+              {
+                  ObjectWithOperators obj;
+                  cello::CachedValue<int> cachedInt (obj.intVal);
+                  int updateCount { 0 };
+                  obj.intVal.onGet = [&updateCount] (const int& v)
+                  {
+                      ++updateCount;
+                      return v;
+                  };
+
+                  expectEquals (static_cast<int> (cachedInt), 0);
+                  expectEquals (updateCount, 0);
+                  obj.intVal = 100;
+                  expectEquals (static_cast<int> (cachedInt), 100);
+                  expectEquals (updateCount, 1);
+                  expectEquals (static_cast<int> (cachedInt), 100);
+                  expectEquals (updateCount, 1);
+                  obj.intVal = 100;
+                  expectEquals (static_cast<int> (cachedInt), 100);
+                  expectEquals (updateCount, 1);
+                  obj.intVal = 200;
+                  expectEquals (static_cast<int> (cachedInt), 200);
+                  expectEquals (updateCount, 2);
+              });
     }
 
 private:

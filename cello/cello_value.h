@@ -341,6 +341,26 @@ T operator-- (Value<T>& val, int)
     return original;
 }
 
+template <typename T> class CachedValue
+{
+public:
+    CachedValue (Value<T>& val)
+    : value { val }
+    , cachedValue { static_cast<T> (value) }
+    {
+        // when the underlying value changes, cache it here so it can
+        // be used without needing to look it up, go through validation, etc.
+        value.onPropertyChange ([this] (juce::Identifier id)
+                                { cachedValue = static_cast<T> (value); });
+    }
+
+    operator T () const { return cachedValue; }
+
+private:
+    Value<T>& value;
+    T cachedValue;
+};
+
 } // namespace cello
 
 /**
