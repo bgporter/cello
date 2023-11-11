@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added 
 
 - new ctor that accepts another `Object` by reference.
+- "Path" functionality that permits finding/constructing trees/Object by using an absolute or relative path. An impact of this change is that the `type` parameter passed to `cello::Object` constructors has been changed from `juce::Identifier&` to `juce::String&` 
 
 ### Fixed
 
@@ -23,7 +24,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## 1.1.2 * 2023-03-16 
 ### Fixed
 
-- `Object::save` now ensures that its file is created befor attempting to save.
+- `Object::save` now ensures that its file is created before attempting to save.
 - `Object::save` returns a `juce::Result` instead of bool, and will indicate the reason for a failure in that return value. 
 
 ## 1.1.1 * 2023-03-14 
