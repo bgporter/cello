@@ -1,6 +1,6 @@
 var searchData=
 [
-  ['value_0',['Value',['../classcello_1_1_value.html',1,'cello']]],
-  ['valuebase_1',['ValueBase',['../classcello_1_1_value_base.html',1,'cello']]],
-  ['variantconverter_3c_20std_3a_3acomplex_3c_20float_20_3e_20_3e_2',['VariantConverter&lt; std::complex&lt; float &gt; &gt;',['../structjuce_1_1_variant_converter_3_01std_1_1complex_3_01float_01_4_01_4.html',1,'juce']]]
+  ['test_5fcello_5fpath_0',['Test_cello_path',['../classcello_1_1_test__cello__path.html',1,'cello']]],
+  ['test_5fcello_5fquery_1',['Test_cello_query',['../class_test__cello__query.html',1,'']]],
+  ['test_5fcello_5fvalue_2',['Test_cello_value',['../class_test__cello__value.html',1,'']]]
 ];

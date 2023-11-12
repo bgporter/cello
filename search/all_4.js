@@ -1,5 +1,4 @@
 var searchData=
 [
-  ['find_0',['find',['../classcello_1_1_object.html#aa28a19ff0e4f6e6c826e7293e1937d23',1,'cello::Object']]],
-  ['forceupdate_1',['forceUpdate',['../classcello_1_1_update_source.html#a776d44ec037a4cbbc8631118fa5876ca',1,'cello::UpdateSource']]]
+  ['4_202023_2011_2012_0',['1.1.4 * 2023-11-12',['../md__c_h_a_n_g_e_l_o_g.html#autotoc_md2',1,'']]]
 ];

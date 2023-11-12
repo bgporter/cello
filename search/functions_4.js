@@ -1,5 +1,6 @@
 var searchData=
 [
   ['find_0',['find',['../classcello_1_1_object.html#aa28a19ff0e4f6e6c826e7293e1937d23',1,'cello::Object']]],
-  ['forceupdate_1',['forceUpdate',['../classcello_1_1_update_source.html#a776d44ec037a4cbbc8631118fa5876ca',1,'cello::UpdateSource']]]
+  ['findvaluetree_1',['findValueTree',['../classcello_1_1_path.html#a7cdbb7cc2f6eb30b7ef66895863192ef',1,'cello::Path']]],
+  ['forceupdate_2',['forceUpdate',['../classcello_1_1_update_source.html#a776d44ec037a4cbbc8631118fa5876ca',1,'cello::UpdateSource']]]
 ];

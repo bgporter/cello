@@ -1,6 +1,7 @@
 var searchData=
 [
-  ['test_5fcello_5fobject_0',['Test_cello_object',['../classcello_1_1_test__cello__object.html',1,'cello']]],
-  ['test_5fcello_5fquery_1',['Test_cello_query',['../class_test__cello__query.html',1,'']]],
-  ['test_5fcello_5fvalue_2',['Test_cello_value',['../class_test__cello__value.html',1,'']]]
+  ['missing_20pieces_0',['Missing Pieces',['../md__r_e_a_d_m_e.html#autotoc_md47',1,'']]],
+  ['motivation_20and_20overview_1',['Motivation and Overview',['../md__r_e_a_d_m_e.html#autotoc_md18',1,'']]],
+  ['move_2',['move',['../classcello_1_1_object.html#a05e394127066a7e14788dcf97b663ff1',1,'cello::Object']]],
+  ['moving_20sorting_20children_3',['Moving / Sorting Children',['../md__r_e_a_d_m_e.html#autotoc_md34',1,'']]]
 ];

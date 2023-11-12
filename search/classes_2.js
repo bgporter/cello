@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['scopedforceupdater_0',['ScopedForceUpdater',['../classcello_1_1_scoped_force_updater.html',1,'cello']]]
+  ['path_0',['Path',['../classcello_1_1_path.html',1,'cello']]]
 ];

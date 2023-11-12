@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['query_0',['Query',['../classcello_1_1_query.html',1,'cello']]]
+  ['object_0',['Object',['../classcello_1_1_object.html',1,'cello']]]
 ];

@@ -1,5 +1,8 @@
 var searchData=
 [
-  ['id_0',['id',['../classcello_1_1_value_base.html#a20280fac589a95954067a2496b699fe6',1,'cello::ValueBase']]],
-  ['insert_1',['insert',['../classcello_1_1_object.html#ae45a38a610eadc3fcf2bb9a358c7befa',1,'cello::Object']]]
+  ['data_0',['data',['../classcello_1_1_object.html#a368472e271247ac9336c4f8015270627',1,'cello::Object']]],
+  ['database_20query_1',['Database / Query',['../md__r_e_a_d_m_e.html#autotoc_md35',1,'']]],
+  ['delattr_2',['delattr',['../classcello_1_1_object.html#a7fd4f6b747c7c120ded85f09765378af',1,'cello::Object']]],
+  ['doforceupdates_3',['doForceUpdates',['../classcello_1_1_object.html#acd1018e5ee26cdd37c7208b37fb26485',1,'cello::Object']]],
+  ['dr_4',['tl;dr',['../md__r_e_a_d_m_e.html#autotoc_md17',1,'']]]
 ];

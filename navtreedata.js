@@ -25,50 +25,70 @@
 var NAVTREE =
 [
   [ "cello", "index.html", [
+    [ "Changelog", "md__c_h_a_n_g_e_l_o_g.html", [
+      [ "Unreleased", "md__c_h_a_n_g_e_l_o_g.html#autotoc_md1", null ],
+      [ "1.1.4 * 2023-11-12", "md__c_h_a_n_g_e_l_o_g.html#autotoc_md2", [
+        [ "Added", "md__c_h_a_n_g_e_l_o_g.html#autotoc_md3", null ],
+        [ "Fixed", "md__c_h_a_n_g_e_l_o_g.html#autotoc_md4", null ]
+      ] ],
+      [ "1.1.3 * 2023-03-18", "md__c_h_a_n_g_e_l_o_g.html#autotoc_md5", [
+        [ "Fixed", "md__c_h_a_n_g_e_l_o_g.html#autotoc_md6", null ]
+      ] ],
+      [ "1.1.2 * 2023-03-16", "md__c_h_a_n_g_e_l_o_g.html#autotoc_md7", [
+        [ "Fixed", "md__c_h_a_n_g_e_l_o_g.html#autotoc_md8", null ]
+      ] ],
+      [ "1.1.1 * 2023-03-14", "md__c_h_a_n_g_e_l_o_g.html#autotoc_md9", [
+        [ "Fixed", "md__c_h_a_n_g_e_l_o_g.html#autotoc_md10", null ]
+      ] ],
+      [ "1.1.0 * 2023-02-19", "md__c_h_a_n_g_e_l_o_g.html#autotoc_md11", [
+        [ "Added", "md__c_h_a_n_g_e_l_o_g.html#autotoc_md12", null ]
+      ] ],
+      [ "1.0.1 * 2023-02-05", "md__c_h_a_n_g_e_l_o_g.html#autotoc_md13", [
+        [ "Added", "md__c_h_a_n_g_e_l_o_g.html#autotoc_md14", null ]
+      ] ],
+      [ "1.0.0 * 2023-01-01", "md__c_h_a_n_g_e_l_o_g.html#autotoc_md15", null ]
+    ] ],
     [ "Cello", "md__r_e_a_d_m_e.html", [
-      [ "Motivation and Overview", "md__r_e_a_d_m_e.html#autotoc_md1", [
-        [ "Confessions of a <tt>ValueTree</tt> Skeptic", "md__r_e_a_d_m_e.html#autotoc_md2", null ],
-        [ "<tt>cello</tt>", "md__r_e_a_d_m_e.html#autotoc_md3", null ]
+      [ "tl;dr", "md__r_e_a_d_m_e.html#autotoc_md17", null ],
+      [ "Motivation and Overview", "md__r_e_a_d_m_e.html#autotoc_md18", [
+        [ "Confessions of a <tt>ValueTree</tt> Skeptic", "md__r_e_a_d_m_e.html#autotoc_md19", null ],
+        [ "cello", "md__r_e_a_d_m_e.html#autotoc_md20", null ]
       ] ],
-      [ "Values", "md__r_e_a_d_m_e.html#autotoc_md4", [
-        [ "<tt>VariantConverter</tt>s", "md__r_e_a_d_m_e.html#autotoc_md5", null ],
-        [ "Validator Functions", "md__r_e_a_d_m_e.html#autotoc_md6", null ],
-        [ "Forcing Update Callbacks", "md__r_e_a_d_m_e.html#autotoc_md7", null ],
-        [ "Excluding Listeners", "md__r_e_a_d_m_e.html#autotoc_md8", null ]
+      [ "Values", "md__r_e_a_d_m_e.html#autotoc_md21", [
+        [ "VariantConverters", "md__r_e_a_d_m_e.html#autotoc_md22", null ],
+        [ "Validator Functions", "md__r_e_a_d_m_e.html#autotoc_md23", null ],
+        [ "Caching values", "md__r_e_a_d_m_e.html#autotoc_md24", null ],
+        [ "Forcing Update Callbacks", "md__r_e_a_d_m_e.html#autotoc_md25", null ],
+        [ "Excluding Listeners", "md__r_e_a_d_m_e.html#autotoc_md26", null ]
       ] ],
-      [ "Objects", "md__r_e_a_d_m_e.html#autotoc_md9", [
-        [ "Creation Patterns: Creating vs Wrapping", "md__r_e_a_d_m_e.html#autotoc_md10", null ],
-        [ "Working with Children", "md__r_e_a_d_m_e.html#autotoc_md11", [
-          [ "Adding Children", "md__r_e_a_d_m_e.html#autotoc_md12", null ],
-          [ "Removing Children", "md__r_e_a_d_m_e.html#autotoc_md13", null ],
-          [ "Finding Children", "md__r_e_a_d_m_e.html#autotoc_md14", null ],
-          [ "Moving / Sorting Children", "md__r_e_a_d_m_e.html#autotoc_md15", null ]
+      [ "Objects", "md__r_e_a_d_m_e.html#autotoc_md27", [
+        [ "Creation Patterns: Creating vs Wrapping", "md__r_e_a_d_m_e.html#autotoc_md28", null ],
+        [ "Creating/Finding Objects in a Hierarchy", "md__r_e_a_d_m_e.html#autotoc_md29", null ],
+        [ "Working with Children", "md__r_e_a_d_m_e.html#autotoc_md30", [
+          [ "Adding Children", "md__r_e_a_d_m_e.html#autotoc_md31", null ],
+          [ "Removing Children", "md__r_e_a_d_m_e.html#autotoc_md32", null ],
+          [ "Finding Children", "md__r_e_a_d_m_e.html#autotoc_md33", null ],
+          [ "Moving / Sorting Children", "md__r_e_a_d_m_e.html#autotoc_md34", null ]
         ] ],
-        [ "Database / Query", "md__r_e_a_d_m_e.html#autotoc_md16", [
-          [ "<tt>Query::Predicate</tt>", "md__r_e_a_d_m_e.html#autotoc_md17", null ],
-          [ "<tt>Query::Comparison</tt>", "md__r_e_a_d_m_e.html#autotoc_md18", null ],
-          [ "<tt>Object::find</tt>", "md__r_e_a_d_m_e.html#autotoc_md19", null ],
-          [ "<tt>Object::upsert</tt> and <tt>Object::upsertAll</tt>", "md__r_e_a_d_m_e.html#autotoc_md20", null ]
+        [ "Database / Query", "md__r_e_a_d_m_e.html#autotoc_md35", [
+          [ "Query::Predicate", "md__r_e_a_d_m_e.html#autotoc_md36", null ],
+          [ "Query::Comparison", "md__r_e_a_d_m_e.html#autotoc_md37", null ],
+          [ "Object::find", "md__r_e_a_d_m_e.html#autotoc_md38", null ],
+          [ "Object::upsert and Object::upsertAll", "md__r_e_a_d_m_e.html#autotoc_md39", null ]
         ] ],
-        [ "Undo/Redo", "md__r_e_a_d_m_e.html#autotoc_md21", null ],
-        [ "Change Callbacks", "md__r_e_a_d_m_e.html#autotoc_md22", [
-          [ "Property Changes", "md__r_e_a_d_m_e.html#autotoc_md23", null ],
-          [ "Child Changes", "md__r_e_a_d_m_e.html#autotoc_md24", null ],
-          [ "Tree Changes", "md__r_e_a_d_m_e.html#autotoc_md25", null ]
+        [ "Undo/Redo", "md__r_e_a_d_m_e.html#autotoc_md40", null ],
+        [ "Change Callbacks", "md__r_e_a_d_m_e.html#autotoc_md41", [
+          [ "Property Changes", "md__r_e_a_d_m_e.html#autotoc_md42", null ],
+          [ "Child Changes", "md__r_e_a_d_m_e.html#autotoc_md43", null ],
+          [ "Tree Changes", "md__r_e_a_d_m_e.html#autotoc_md44", null ]
         ] ],
-        [ "\"Pythonesque\" access", "md__r_e_a_d_m_e.html#autotoc_md26", null ],
-        [ "Persistence", "md__r_e_a_d_m_e.html#autotoc_md27", null ]
+        [ "\"Pythonesque\" access", "md__r_e_a_d_m_e.html#autotoc_md45", null ],
+        [ "Persistence", "md__r_e_a_d_m_e.html#autotoc_md46", null ]
       ] ],
-      [ "Missing Pieces", "md__r_e_a_d_m_e.html#autotoc_md28", null ],
-      [ "Unit Tests", "md__r_e_a_d_m_e.html#autotoc_md29", null ],
-      [ "Release Notes", "md__r_e_a_d_m_e.html#autotoc_md30", [
-        [ "Release 1.1.3 * 18 Mar 2023", "md__r_e_a_d_m_e.html#autotoc_md31", null ],
-        [ "Release 1.1.2 * 16 Mar 2023", "md__r_e_a_d_m_e.html#autotoc_md32", null ],
-        [ "Release 1.1.1 * 14 Mar 2023", "md__r_e_a_d_m_e.html#autotoc_md33", null ],
-        [ "Release 1.1.0 * 19 Feb 2023", "md__r_e_a_d_m_e.html#autotoc_md34", null ],
-        [ "Release 1.0.1 * 05 Feb 2023", "md__r_e_a_d_m_e.html#autotoc_md35", null ],
-        [ "Release 1.0.0 * 01 Jan 2023", "md__r_e_a_d_m_e.html#autotoc_md36", null ]
-      ] ]
+      [ "Missing Pieces", "md__r_e_a_d_m_e.html#autotoc_md47", null ],
+      [ "Unit Tests", "md__r_e_a_d_m_e.html#autotoc_md48", null ],
+      [ "Release Notes", "md__r_e_a_d_m_e.html#autotoc_md49", null ],
+      [ "License", "md__r_e_a_d_m_e.html#autotoc_md50", null ]
     ] ],
     [ "Classes", "annotated.html", [
       [ "Class List", "annotated.html", "annotated_dup" ],
@@ -78,7 +98,9 @@ var NAVTREE =
         [ "All", "functions.html", null ],
         [ "Functions", "functions_func.html", null ],
         [ "Variables", "functions_vars.html", null ],
-        [ "Typedefs", "functions_type.html", null ]
+        [ "Typedefs", "functions_type.html", null ],
+        [ "Enumerations", "functions_enum.html", null ],
+        [ "Enumerator", "functions_eval.html", null ]
       ] ]
     ] ],
     [ "Files", "files.html", [

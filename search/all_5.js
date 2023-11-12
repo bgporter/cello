@@ -1,10 +1,13 @@
 var searchData=
 [
-  ['getattr_0',['getattr',['../classcello_1_1_object.html#a6a23c8172d0df906594e9d222dd6e441',1,'cello::Object']]],
-  ['getcreationtype_1',['getCreationType',['../classcello_1_1_object.html#ae04aa9d628d2ee279d9d467c8caf73d8',1,'cello::Object']]],
-  ['getexcludedlistener_2',['getExcludedListener',['../classcello_1_1_object.html#a36491bac36514cc7e88454d8444d0a0f',1,'cello::Object']]],
-  ['getid_3',['getId',['../classcello_1_1_value_base.html#a34e2aac3c6fb6b2247a6d5ad91aaac79',1,'cello::ValueBase']]],
-  ['getnumchildren_4',['getNumChildren',['../classcello_1_1_object.html#a86a5f2f969546e15cf78507a09b5b0dd',1,'cello::Object']]],
-  ['gettype_5',['getType',['../classcello_1_1_object.html#a9365e8cc11d3d6ea98957cf150450b1a',1,'cello::Object']]],
-  ['getundomanager_6',['getUndoManager',['../classcello_1_1_object.html#aa19bde9dc0f5ae807641414d8e890d44',1,'cello::Object']]]
+  ['a_20hierarchy_0',['Creating/Finding Objects in a Hierarchy',['../md__r_e_a_d_m_e.html#autotoc_md29',1,'']]],
+  ['a_20tt_20valuetree_20tt_20skeptic_1',['Confessions of a &lt;tt&gt;ValueTree&lt;/tt&gt; Skeptic',['../md__r_e_a_d_m_e.html#autotoc_md19',1,'']]],
+  ['access_2',['&quot;Pythonesque&quot; access',['../md__r_e_a_d_m_e.html#autotoc_md45',1,'']]],
+  ['addcomparison_3',['addComparison',['../classcello_1_1_query.html#a6590ad472f1f5393686b176ce2ce8e2c',1,'cello::Query']]],
+  ['added_4',['added',['../md__c_h_a_n_g_e_l_o_g.html#autotoc_md3',1,'Added'],['../md__c_h_a_n_g_e_l_o_g.html#autotoc_md12',1,'Added'],['../md__c_h_a_n_g_e_l_o_g.html#autotoc_md14',1,'Added']]],
+  ['addfilter_5',['addFilter',['../classcello_1_1_query.html#a7b5d32c81cd0c437f2ec2be8248523d7',1,'cello::Query']]],
+  ['adding_20children_6',['Adding Children',['../md__r_e_a_d_m_e.html#autotoc_md31',1,'']]],
+  ['and_20object_3a_3aupsertall_7',['Object::upsert and Object::upsertAll',['../md__r_e_a_d_m_e.html#autotoc_md39',1,'']]],
+  ['and_20overview_8',['Motivation and Overview',['../md__r_e_a_d_m_e.html#autotoc_md18',1,'']]],
+  ['append_9',['append',['../classcello_1_1_object.html#accfacbf6d9bcd8f237fda4cc91d1816b',1,'cello::Object']]]
 ];

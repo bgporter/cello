@@ -1,6 +1,11 @@
 var searchData=
 [
-  ['data_0',['data',['../classcello_1_1_object.html#a368472e271247ac9336c4f8015270627',1,'cello::Object']]],
-  ['delattr_1',['delattr',['../classcello_1_1_object.html#a7fd4f6b747c7c120ded85f09765378af',1,'cello::Object']]],
-  ['doforceupdates_2',['doForceUpdates',['../classcello_1_1_object.html#acd1018e5ee26cdd37c7208b37fb26485',1,'cello::Object']]]
+  ['2_202023_2003_2016_0',['1.1.2 * 2023-03-16',['../md__c_h_a_n_g_e_l_o_g.html#autotoc_md7',1,'']]],
+  ['2023_2001_2001_1',['1.0.0 * 2023-01-01',['../md__c_h_a_n_g_e_l_o_g.html#autotoc_md15',1,'']]],
+  ['2023_2002_2005_2',['1.0.1 * 2023-02-05',['../md__c_h_a_n_g_e_l_o_g.html#autotoc_md13',1,'']]],
+  ['2023_2002_2019_3',['1.1.0 * 2023-02-19',['../md__c_h_a_n_g_e_l_o_g.html#autotoc_md11',1,'']]],
+  ['2023_2003_2014_4',['1.1.1 * 2023-03-14',['../md__c_h_a_n_g_e_l_o_g.html#autotoc_md9',1,'']]],
+  ['2023_2003_2016_5',['1.1.2 * 2023-03-16',['../md__c_h_a_n_g_e_l_o_g.html#autotoc_md7',1,'']]],
+  ['2023_2003_2018_6',['1.1.3 * 2023-03-18',['../md__c_h_a_n_g_e_l_o_g.html#autotoc_md5',1,'']]],
+  ['2023_2011_2012_7',['1.1.4 * 2023-11-12',['../md__c_h_a_n_g_e_l_o_g.html#autotoc_md2',1,'']]]
 ];

@@ -1,10 +1,11 @@
 var classcello_1_1_object =
 [
-    [ "Object", "classcello_1_1_object.html#a0e7dcedd63ad88da5024fbbe12fbd638", null ],
-    [ "Object", "classcello_1_1_object.html#ad17773dcf8218d13dc9c8f4fc86d9ed0", null ],
-    [ "Object", "classcello_1_1_object.html#a0b2ed315b942df47e005e496eaee8433", null ],
-    [ "~Object", "classcello_1_1_object.html#a34c001271075ceb3006e2fed75aef279", null ],
+    [ "Object", "classcello_1_1_object.html#a4e0aab983b0079b72a5cc652ef06e775", null ],
+    [ "Object", "classcello_1_1_object.html#a63a891dc061e42fafeacbe0a2aa01607", null ],
+    [ "Object", "classcello_1_1_object.html#a3d80db10512c4cfa708543ccf83e3428", null ],
+    [ "Object", "classcello_1_1_object.html#a11a186ba097370a8a778be2314c37d6c", null ],
     [ "Object", "classcello_1_1_object.html#ad0d5d0df3615b3a6a294929d16fd90ce", null ],
+    [ "~Object", "classcello_1_1_object.html#a34c001271075ceb3006e2fed75aef279", null ],
     [ "append", "classcello_1_1_object.html#accfacbf6d9bcd8f237fda4cc91d1816b", null ],
     [ "canRedo", "classcello_1_1_object.html#a887fbb6f22d47fc6e2cdfec57c320efe", null ],
     [ "canUndo", "classcello_1_1_object.html#a6cace96ea91fd79dfc17cb44b9c4fbf9", null ],
@@ -38,6 +39,7 @@ var classcello_1_1_object =
     [ "undo", "classcello_1_1_object.html#a9068e0306934dcbf2c24b71efe5c1024", null ],
     [ "upsert", "classcello_1_1_object.html#a26a8d3a310c6ac67498f762224f09daf", null ],
     [ "upsertAll", "classcello_1_1_object.html#ae4f3e07c7db1d4d8af104d9ea5c63883", null ],
+    [ "wrap", "classcello_1_1_object.html#a41128bc9a0e36952a2ea053d332455e2", null ],
     [ "creationType", "classcello_1_1_object.html#a9ef37de54c32241809154d63985719b3", null ],
     [ "data", "classcello_1_1_object.html#a368472e271247ac9336c4f8015270627", null ],
     [ "doForceUpdates", "classcello_1_1_object.html#acd1018e5ee26cdd37c7208b37fb26485", null ],

@@ -1,12 +1,12 @@
 var searchData=
 [
-  ['object_0',['Object',['../classcello_1_1_object.html',1,'cello::Object'],['../classcello_1_1_object.html#a0e7dcedd63ad88da5024fbbe12fbd638',1,'cello::Object::Object(juce::Identifier type, Object *state)'],['../classcello_1_1_object.html#ad17773dcf8218d13dc9c8f4fc86d9ed0',1,'cello::Object::Object(juce::Identifier type, juce::ValueTree tree)'],['../classcello_1_1_object.html#a0b2ed315b942df47e005e496eaee8433',1,'cello::Object::Object(juce::Identifier type, juce::File file, FileFormat format=FileFormat::xml)'],['../classcello_1_1_object.html#ad0d5d0df3615b3a6a294929d16fd90ce',1,'cello::Object::Object(const Object &amp;rhs)']]],
-  ['onget_1',['onGet',['../classcello_1_1_value.html#adf88f9ea5917883107c832361c3a23f5',1,'cello::Value']]],
-  ['onpropertychange_2',['onPropertyChange',['../classcello_1_1_object.html#a2af14feec2238a3318bbfcd8954025ac',1,'cello::Object::onPropertyChange(juce::Identifier id, PropertyUpdateFn callback)'],['../classcello_1_1_object.html#ab76c604f03632096881fbcbd33835b6f',1,'cello::Object::onPropertyChange(const ValueBase &amp;val, PropertyUpdateFn callback)']]],
-  ['onset_3',['onSet',['../classcello_1_1_value.html#aa9daacc449975a52080abf290070caba',1,'cello::Value']]],
-  ['operator_20t_4',['operator T',['../classcello_1_1_value.html#a7b34e884e1a6498b74c39ab055573565',1,'cello::Value']]],
-  ['operator_3d_5',['operator=',['../classcello_1_1_object.html#ad43381ba2a3be680f308b6d1bfc284e3',1,'cello::Object::operator=()'],['../classcello_1_1_value.html#a7c7b92027f618a169cd26815b5a37ea2',1,'cello::Value::operator=()']]],
-  ['operator_3d_3d_6',['operator==',['../classcello_1_1_object.html#a3fabc22c50460fc720c8be1c3384db70',1,'cello::Object']]],
-  ['operator_5b_5d_7',['operator[]',['../classcello_1_1_object.html#ad8cf02406e7aa4127d4c4f9117123fa9',1,'cello::Object']]],
-  ['valuetree_8',['ValueTree',['../classcello_1_1_object.html#aab9527be361c6013e97bda636a549d6e',1,'cello::Object']]]
+  ['getattr_0',['getattr',['../classcello_1_1_object.html#a6a23c8172d0df906594e9d222dd6e441',1,'cello::Object']]],
+  ['getcached_1',['getCached',['../classcello_1_1_value.html#af18baa55efabfe09259855f6fa4d020c',1,'cello::Value']]],
+  ['getcreationtype_2',['getCreationType',['../classcello_1_1_object.html#ae04aa9d628d2ee279d9d467c8caf73d8',1,'cello::Object']]],
+  ['getexcludedlistener_3',['getExcludedListener',['../classcello_1_1_object.html#a36491bac36514cc7e88454d8444d0a0f',1,'cello::Object']]],
+  ['getid_4',['getId',['../classcello_1_1_value_base.html#a34e2aac3c6fb6b2247a6d5ad91aaac79',1,'cello::ValueBase']]],
+  ['getnumchildren_5',['getNumChildren',['../classcello_1_1_object.html#a86a5f2f969546e15cf78507a09b5b0dd',1,'cello::Object']]],
+  ['getsearchresult_6',['getSearchResult',['../classcello_1_1_path.html#a416fcfaeae96e894832810c684429034',1,'cello::Path']]],
+  ['gettype_7',['getType',['../classcello_1_1_object.html#a9365e8cc11d3d6ea98957cf150450b1a',1,'cello::Object']]],
+  ['getundomanager_8',['getUndoManager',['../classcello_1_1_object.html#aa19bde9dc0f5ae807641414d8e890d44',1,'cello::Object']]]
 ];
