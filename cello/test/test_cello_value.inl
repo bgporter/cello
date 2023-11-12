@@ -147,8 +147,15 @@ public:
               [this] ()
               {
                   ObjectWithOperators obj;
-                  cello::CachedValue<int> cachedInt (obj.intVal);
+                  // can create verbosely
+                  cello::Value<float>::Cached cachedFloat (obj.floatVal);
+                  // ...or just have the Value object return us one
+                  auto cachedInt { obj.intVal.getCached () };
+
                   int updateCount { 0 };
+                  // use the get validation function to increment a counter each time the
+                  // value is actually retrieved, which will happen automatically when
+                  // the cached value is updated on the value changing.
                   obj.intVal.onGet = [&updateCount] (const int& v)
                   {
                       ++updateCount;

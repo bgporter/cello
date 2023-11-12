@@ -200,6 +200,10 @@ Each `cello::Value` object may have `ValidatePropertyFn` lambdas assigned to it 
 
 Your application can use this facility to modify the value (e.g. to keep it within a valid range), create an entirely new value, make changes to other properties of the ValueTree, create log entries, or anything else that you need to happen at these juncture points. 
 
+### Caching values
+
+There will be times when a value stored in a ValueTree/Object needs to be used frequently enough that the overhead of re-fetching from the underlying tree and performing validation on it become problematic. The `cello::Value::<T>::Cached` class provides a simple mechanism to maintain a copy of a Value object that's automatically updated each time it changes. 
+
 ### Forcing Update Callbacks
 
 The normal behavior of ValueTrees is to only notify callback listeners of property changes when a value actually *changes*. In practice, it's frequently useful to ensure that any attempt to set a property results in notifications being sent even if setting it to its current value. This can be controlled on a per-value basis by calling that value's `forceUpdate (bool shouldForceUpdate)` method. 
