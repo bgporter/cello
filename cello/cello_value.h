@@ -74,8 +74,8 @@ public:
      * @param id Identifier of the data
      * @param initVal default initialized state for this value.
      */
-    Value (Object& data, const juce::Identifier& id, T initVal = {})
-    : ValueBase { id }
+    Value (Object& data, const juce::Identifier& id_, T initVal = {})
+    : ValueBase { id_ }
     , object { data }
     {
         // if the object doesn't have this value yet, add it and set it
@@ -128,6 +128,49 @@ public:
     }
 
     /**
+     * @class Cached
+     * @brief A utility class to maintain the last known value of a cello::Value
+     * object -- each call that fetches from a Value does two things that may be
+     * more costly than we like in some cases:
+     * - fetch the current value from the underlying value tree
+     * - execute the `onGet` validation function if one is defined for this value.
+     *
+     * Objects of this type will store the last value of the associated Value object
+     * each time it's changed, and can be used directly without additional overhead.
+     *
+     * NOTE that we store a reference to a Value object owned by another cello::Object;
+     * be careful that the lifetime of this cached value object is not longer than
+     * that owning object.
+     */
+    class Cached
+    {
+    public:
+        Cached (Value<T>& val)
+        : value { val }
+        , cachedValue { static_cast<T> (value) }
+        {
+            // when the underlying value changes, cache it here so it can
+            // be used without needing to look it up, go through validation, etc.
+            value.onPropertyChange ([this] (juce::Identifier id)
+                                    { cachedValue = static_cast<T> (value); });
+        }
+
+        ~Cached () { value.onPropertyChange (nullptr); }
+
+        operator T () const { return cachedValue; }
+
+    private:
+        Value<T>& value;
+        T cachedValue;
+    };
+
+    /**
+     * @return an initialized `Cached` object that will always contain the current state
+     * of this `Value`.
+     */
+    Cached getCached () { return Cached (*this); }
+
+    /**
      * @brief We define the signature of a 'validator' function that
      * can validate/modify/replace values as your application requires.
      *
@@ -155,6 +198,17 @@ public:
     void excludeListener (juce::ValueTree::Listener* listener)
     {
         excludedListener = listener;
+    }
+
+    /**
+     * @brief Register (or clear) a callback function to execute when this value
+     * changes.
+     *
+     * @param callback
+     */
+    void onPropertyChange (PropertyUpdateFn callback)
+    {
+        object.onPropertyChange (getId (), callback);
     }
 
 private:
@@ -200,7 +254,7 @@ private:
      * @param newValue
      * @return true if the two values are sufficiently unequal.
      */
-    bool notEqualTo (T newValue)
+    bool notEqualTo (const T& newValue)
     {
         if constexpr (std::is_floating_point_v<T>)
             return std::fabs (newValue - doGet ()) > epsilon;
@@ -336,7 +390,9 @@ T operator-- (Value<T>& val, int)
  * @brief a useful macro to create and default initialize a cello::Value
  * as a member of a cello::Object, using the same name for the variable
  * as the identifier used for the property in its ValueTree.
- *
  */
 #define MAKE_VALUE_MEMBER(type, name, init) \
-    cello::Value<type> name { *this, #name, init };
+    cello::Value<type> name                 \
+    {                                       \
+        *this, #name, init                  \
+    }

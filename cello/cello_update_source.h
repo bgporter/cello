@@ -67,4 +67,6 @@ private:
     UpdateSource& value;
 };
 
+using PropertyUpdateFn = std::function<void (juce::Identifier)>;
+
 } // namespace cello

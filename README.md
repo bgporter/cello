@@ -8,11 +8,29 @@ brett@bgporter.net
 
 API docs available [here](https://bgporter.github.io/cello/)
 
+## tl;dr 
+
+`Cello` is a set of C++ classes to work with [`ValueTree`](https://docs.juce.com/master/classValueTree.html) objects from the [JUCE](https://juce.com) application framework. 
+
+The primary intent of this project is to make working with ValueTrees more like working with C++ objects and less like calling API functions. 
+
+A new `Value` type provides type safety (including transparent conversion from arbitrary C++ types and the JUCE `var` type used within ValueTrees), optional validator functions called on set/get, and implementation of all the in-place arithmetic operators (for numeric types).
+
+The `Object` type:
+
+- manages undo/redo for the object and all its children
+- provides a rich set of notification callbacks with no boilerplate required
+- provides persistence of the object and its children to/from disk
+- implements database-like query, sort, and update functionality
+- exposes (semi-typesafe) access to ValueTree properties whether they're represented by a `cello::Value` or not, in a Pythonesque manner.
+- provides access to the underlying ValueTree so you can use API functions not provided by the `cello` interface.
+
+`Cello` is released under the terms of the [MIT license](https://opensource.org/license/mit/).
+
 ## Motivation and Overview
 
 ### Confessions of a `ValueTree` Skeptic
 
-I've been using the JUCE framework for over a decade now, but there's a major component of JUCE that never clicked for me as a developer &mdash; ValueTrees. This wasn't a problem for me until I changed jobs and started needing to work on a mature codebase that made significant use of them. This code makes efforts to hide some of the more cumbersome or repetitive aspects of integrating ValueTrees into an application, but that `ValueTreeWrapper` class still seemed like it required too much effort to work with; where I'm used to thinking in terms of objects that contain values, any time I needed to get near data that's stored in a ValueTree, it was impossible to avoid the awareness that I was always working through an API to perform operations on data that should just be directly manipulable, and while the wrapper class approach mitigated this to some extent, there was still more boilerplate code to write than seems good to me, as well as other places where the gaps around the abstraction were more obvious than I like. 
 I've been using the JUCE framework for over a decade now, but there's a major component of JUCE that never clicked for me as a developer &mdash; ValueTrees. This wasn't a problem for me until I changed jobs and started needing to work on a mature codebase that made significant use of them. This code makes efforts to hide some of the more cumbersome or repetitive aspects of integrating ValueTrees into an application, but that `ValueTreeWrapper` class still seemed like it required too much effort to work with; where I'm used to thinking in terms of objects that contain values, any time I needed to get near data that's stored in a ValueTree, it was impossible to avoid the awareness that I was always working through an API to perform operations on data that should just be directly manipulable, and while the wrapper class approach mitigated this to some extent, there was still more boilerplate code to write than seems good to me, as well as other places where the gaps around the abstraction were more obvious than I like. 
 
 I've always found that the only way for me to work through these kinds of issues when I encounter them is to sit down with a blank document in an editor and start enumerating the problems that I see with a system and use that as a guide to start thinking about ways that I can engineer around the parts that aren't my favorite, and sometimes how I can reframe my thinking to start seeing superpowers where I thought there were deficiencies. 
@@ -35,7 +53,7 @@ At one level, you can look at Python as being nothing but a bunch of associative
 
 As frequently happens with me, these thoughts sat collecting dust in a document until I hit upon a name for the project &mdash; `cello`, short for 'cellophane' (since the code is wrapping a ValueTree)
 
-### `cello`
+### cello
 
 In short, my goal was: create a set of C++ classes that I can derive my own classes from where member variables are stored transparently in JUCE ValueTrees instead of directly in those object instances, combining the comfort and simplicity of working with normal-looking C++ code with the benefits and tradeoffs of ValueTrees. 
 
@@ -67,8 +85,7 @@ demoObject.x = 100;
 ## Values
 
 - actually, a proxy to a value. We store a `juce::Identifier` and a reference to a ValueTree that provides the actual storage; storing or retrieving the value through its variable needs to do so through the ValueTree API, but that's all kept out of sight. 
-- templated on an underlying data type to hide the fact that we're working with `juce::var` objects internally. `cello::Value` objects remove concerns about type-safety hat `var`s introduce.
-- templated on an underlying data type to hide the fact that we're working with `juce::var` objects internally. `cello::Value` objects remove concerns about type-safety hat `var`s introduce.
+- templated on an underlying data type to hide the fact that we're working with `juce::var` objects internally. `cello::Value` objects remove concerns about type-safety that `var`s introduce.
 - can be set to always update their listeners when the value is set, even if the underlying value wasn't changed. 
 - can be given validator functions that will be called when the value is set or retrieved.
 - arithmetic types have all of the in-place operators (`++`, `--`, `+=`, `-=`, `*=`, `/=`) defined.
@@ -111,7 +128,7 @@ myObj.x = 20;
 --myObj.x;
 myObj.x *= -3;
 ```
-### `VariantConverter`s
+### VariantConverters
 
 By defining a template specialization of the `juce::VariantConverter` struct, you can store more complex value types by cleverly packing them inside one of the more interesting `var` variants that exist &mdash; in this example from the `cello` unit tests, we use the fact that an `Array` of `var`s is a `var`:
 
@@ -159,9 +176,6 @@ public:
 
     // the `complexVal` member can be used as a `std::complex<float>`; the 
     // round-tripping through a juce::var is completely hidden. 
-
-    // the `complexVal` member can be used as a `std::complex<float>`; the 
-    // round-tripping through a juce::var is completely hidden. 
     MAKE_VALUE_MEMBER (std::complex<float>, complexVal, {});
 };
 ```
@@ -170,7 +184,6 @@ Your code is then free to work with that value directly:
 
 ```cpp
 ObjectWithConvertibleValue o;
-ObjectWithConvertibleValue o;
 std::complex<float> orig { 2.f, 3.f };
 o.complexVal = orig;
 
@@ -178,13 +191,18 @@ std::complex<float> retrieved { o.complexVal };
 expectWithinAbsoluteError<float> (orig.real (), retrieved.real (), 0.001f);
 expectWithinAbsoluteError<float> (orig.imag (), retrieved.imag (), 0.001f);
 ```
+
 ### Validator Functions
 
-If we're taking some inspiration from Python here, it's worth remembering that Python developers are in the practice of leaving all their class member variables public instead of hiding them behind a wall or privacy and forcing the usage of `getVariable()`/`setVariable()` methods to ensure the separation of interface from implementation &mdash; much of the time, there's no reason to require those accessor/mutator methods, and when there is an actual reason (for example, to ensure the maintenance of a class invariant), it's easy to switch over to using a property to manage access to the underlying data. Bertrand Meyer, creator of the Eiffel programming language refers to this as the "Uniform Access Principle," that "...all services offered by a module should be available through a uniform notation, which does not betray whether they are implemented through storage or through computation."
+If we're taking some inspiration from Python here, it's worth remembering that Python developers are in the practice of leaving all their class member variables public instead of hiding them behind a wall of privacy and forcing the usage of `getVariable()`/`setVariable()` methods to ensure the separation of interface from implementation&mdash;much of the time, there's no reason to require those accessor/mutator methods, and when there is an actual reason (for example, to ensure the maintenance of a class invariant), it's easy to switch over to using a property to manage access to the underlying data. Bertrand Meyer, creator of the Eiffel programming language refers to this as the "Uniform Access Principle," that _"...all services offered by a module should be available through a uniform notation, which does not betray whether they are implemented through storage or through computation."_
 
 Each `cello::Value` object may have `ValidatePropertyFn` lambdas assigned to it (where that lambda accepts a const reference to `T` and returns a `T` by value) that are (`onSet`) called before that value is stored into the underlying ValueTree or (`onGet`) called after retrieving the property from the ValueTree but before returning the value to calling code. 
 
 Your application can use this facility to modify the value (e.g. to keep it within a valid range), create an entirely new value, make changes to other properties of the ValueTree, create log entries, or anything else that you need to happen at these juncture points. 
+
+### Caching values
+
+There will be times when a value stored in a ValueTree/Object needs to be used frequently enough that the overhead of re-fetching from the underlying tree and performing validation on it become problematic. The `cello::Value::<T>::Cached` class provides a simple mechanism to maintain a copy of a Value object that's automatically updated each time it changes. 
 
 ### Forcing Update Callbacks
 
@@ -194,7 +212,7 @@ To simplify the common case where this behavior is only meant to be in force for
 
 ### Excluding Listeners
 
-It's also common to want to send update callbacks to all listeners except one &mdash; for example, if I have a bit of code that's setting a value and that code is also listening to the value, there's no need to receive a callback; the code already knows what the new value is. The `cello::Value` class provides a method `void excludeListener (juce::ValueTree::Listener* listener)` for this purpose. 
+It's also common to want to send update callbacks to all listeners except one&mdash;for example, if I have a bit of code that's setting a value and that code is also listening to the value, there's no need to receive a callback; that code already knows what the new value is. The `cello::Value` class provides a method `void excludeListener (juce::ValueTree::Listener* listener)` for this purpose. 
 
 ## Objects
 
@@ -207,8 +225,9 @@ Since our objects rely on separate ValueTree objects for their storage, we need 
 
 The constructors of `cello::Object` handle both these cases for us, using the logic outlined below:
 
-* `Object (juce::Identifier type, Object* state);` (preferred)
-* `Object (juce::Identifier type, juce::ValueTree tree);`
+* `Object (const juce::String& type, Object* state);` (preferred)
+* `Object (const juce::String& type, Object& state);` (preferred)
+* `Object (const juce::String& type, juce::ValueTree tree);`
 
 1. If the `state` or `tree` argument is of type `type`, wrap that inside the object being created. 
 2. If the `state` or `tree` arguments has a child of type `type`, wrap that child inside the object beng created. 
@@ -219,6 +238,29 @@ It is sometimes useful to know whether a new Object was created or wrapped &mdas
 You can test this at runtime using the method `Object::getCreationType()`, which will return either:
 * `Object::CreationType::initialized`
 * `Object::CreationType::wrapped`
+
+### Creating/Finding Objects in a Hierarchy
+
+The `type` argument to an Object constructor can be richer than just a simple `juce::Identifier`; it's useful in an application to be able to pass around a single top-level context object and have individual objects within that hierarchy be able to find themselves. 
+
+Consider a common pattern where an application needs to have separate trees to collect persistent attributes that are saved and restored between app runs, and another that holds runtime values that are recreated each time the application runs. Rather than write procedural code to start at the root and find (or create) individual child objects that are expected, we can do the same thing declaratively using paths, like: `/persistent/object1/object2`, which would start at the root tree, then descend through children `persistent`, `object1`, and `object2`, creating any children that are not found.
+
+Path elements are separated with forward slashes. 
+
+If the first character in a path string is `/`, the path is absolute starting at the root. 
+
+All other paths are relative to the Object that's passed into an Object constructor. 
+
+Path elements starting with a circumflex character `^` will search upward from the current path location to find an ancestor Object of a specified type, so `^grandpa` is read as "search upward in the hierarchy from the current path location until you find an object of type `grandpa`.
+
+A path element of `..` operates as it does in file systems, navigating to the parent of the current path location, so `../sibling` would find a sibling object of the current one, and `../../uncle` will look for a sibling of the current object's parent. 
+
+All other paths must be valid `juce::Identifier`s, and search downward through child objects. 
+
+Downward searches when instantiating `cello::Object`s will create child trees (that will *not* be initialized) as needed. 
+
+Searches upward from an object will not be able to create interim object/trees. You can check the `CreationType` after the constructor executes to make sure that you have a valid object before using it. You can test for existence before attempting creation by instantiating a `cello::Path` object directly and using its `findValueTree()` method with a search type of `Query`; if that search returns an invalid `juce::ValueTree`, you'll need to handle that case as appropriate, whether it's an error, or just triggers additional configuration/creation of the hierarchy before using it. 
+
 
 ### Working with Children
 
@@ -303,7 +345,7 @@ After `cello` release 1.1, you may wish to instead use the new database/query fe
 
 Use the `cello::Query` object to define a set of search and sort criteria to use to perform simple database-like operations. Instead of defining a query language, we've defined two function types that can be passed into a Query object to define its behavior at run time: 
 
-#### `Query::Predicate`
+#### Query::Predicate
 
 ```cpp
     // query function, returns true if the tree it is passed should
@@ -327,7 +369,7 @@ The search logic will execute these functions in the order they were added until
 
 If a query is run with no predicate functions defined, all children of the `Object` being searched will be copied and added to the search results. 
 
-#### `Query::Comparison`
+#### Query::Comparison
 
 ```cpp
     // comparison/sort function.
@@ -344,12 +386,11 @@ If a query is run with no predicate functions defined, all children of the `Obje
      * @return Query& so we can chain these calls together.
      */
     Query& addComparison (Comparison sorter);
-    
 ```
 
 You can also specify comparison functions that will be used to sort the results list after a query is performed; if none are provided, the items in the search results will be in the same order they exist in the `Object` being queried. 
 
-#### `Object::find`
+#### Object::find
 
 ```cpp
     /**
@@ -365,7 +406,7 @@ You can also specify comparison functions that will be used to sort the results 
     juce::ValueTree find (const cello::Query& query, bool deep = false);
 ```
 
-#### `Object::upsert` and `Object::upsertAll`
+#### Object::upsert and Object::upsertAll
 
 These use a concept borrowed from the MongoDB NoSql database; an 'upsert` operation performs one of:
 - Update a record in place if possible
@@ -406,6 +447,8 @@ There are two Object methods to register these callbacks:
 
 * `void onPropertyChange (juce::Identifier id, PropertyUpdateFn callback)` &mdash; pass in the identifier of the attribute to watch
 * `void onPropertyChange (const ValueBase& val, PropertyUpdateFn callback);` &mdash; pass in a reference to the `cello::Value` or `cello::Object` to watch. 
+
+If the `Value` that you're watching is a public member of an `Object`, you can also subscribe to its updates directly using the method `Value<T>::onPropertyUpdate (PropertyUpdateFn callback);`
 
 #### Child Changes
 
@@ -473,25 +516,25 @@ There is a [separate repo](https://github.com/bgporter/cello_test) containing a 
 
 ## Release Notes
 
-### Release 1.1.3 * 18 Mar 2023
-- fixed template error in `Object:getattr`
+See [CHANGELOG](CHANGELOG.md)
 
-### Release 1.1.2 * 16 Mar 2023
-- `Object::save` now ensures that its file is created befor attempting to save.
-- `Object::save` returns a `juce::Result` instead of bool, and will indicate the reason for a failure in that return value. 
+## License
 
-### Release 1.1.1 * 14 Mar 2023
-- Fixed some template errors. 
-
-### Release 1.1.0 * 19 Feb 2023
-- Added `cello::Query` class and updates to `cello::Object` to perform database-like queries and in-place updating of child objects. See the "Database / Query" section of this README document. 
-
-### Release 1.0.1 * 05 Feb 2023
-
-- added MIT license text to all source files. 
-- added [Doxygen Awesome](https://github.com/jothepro/doxygen-awesome-css) CSS/etc to document generation.
-
-### Release 1.0.0 * 01 Jan 2023
-
-Original release. 
-
+```
+    Copyright (c) 2023 Brett g Porter
+    Permission is hereby granted, free of charge, to any person obtaining a copy
+    of this software and associated documentation files (the "Software"), to deal
+    in the Software without restriction, including without limitation the rights
+    to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+    copies of the Software, and to permit persons to whom the Software is
+    furnished to do so, subject to the following conditions:
+    The above copyright notice and this permission notice shall be included in all
+    copies or substantial portions of the Software.
+    THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+    IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+    FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+    AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+    LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+    OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+    SOFTWARE.
+```

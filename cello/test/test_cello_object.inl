@@ -62,19 +62,19 @@ private:
 
 struct Vec2 : public cello::Object
 {
-    Vec2 (juce::Identifier id, float x_, float y_)
+    Vec2 (const juce::String& id, float x_, float y_)
     : cello::Object (id, nullptr)
     {
         x = x_;
         y = y_;
     }
 
-    Vec2 (juce::Identifier id, cello::Object* object)
+    Vec2 (const juce::String& id, cello::Object* object)
     : cello::Object (id, object)
     {
     }
 
-    Vec2 (juce::Identifier id, juce::ValueTree tree)
+    Vec2 (const juce::String& id, juce::ValueTree tree)
     : cello::Object (id, tree)
     {
     }
@@ -94,15 +94,15 @@ struct Vec2 : public cello::Object
     MAKE_VALUE_MEMBER (float, y, {});
 };
 
-class Rectangle : public cello::Object
+class Rect : public cello::Object
 {
 public:
-    Rectangle (juce::Identifier id, cello::Object* object)
+    Rect (const juce::String& id, cello::Object* object)
     : cello::Object { id, object }
     {
     }
 
-    Rectangle (juce::Identifier id, float x, float y, float w, float h)
+    Rect (const juce::String& id, float x, float y, float w, float h)
     : cello::Object { id, nullptr }
     {
         origin.x = x;
@@ -139,13 +139,13 @@ public:
                   expect (root.isValid ());
                   expect (root.hasType ("root"));
                   // create a child
-                  auto o2 { Object ("child1", &o1) };
+                  auto o2 { Object ("child1", o1) };
                   juce::ValueTree childTree { o2 };
                   expect (childTree.isValid ());
                   expect (childTree.hasType ("child1"));
 
                   // get that child in a separate object.
-                  auto o2Copy { Object ("child1", &o1) };
+                  auto o2Copy { Object ("child1", o1) };
                   expect (o2Copy.getCreationType () == Object::CreationType::wrapped);
                   juce::ValueTree childCopy { o2Copy };
                   expect (childTree == childCopy);
@@ -241,8 +241,8 @@ public:
               {
                   OneValue ov (0);
                   int count { 0 };
-                  cello::Object::PropertyUpdateFn callback =
-                      [&count] (juce::Identifier id) { ++count; };
+                  cello::PropertyUpdateFn callback = [&count] (juce::Identifier)
+                  { ++count; };
                   ov.onPropertyChange (OneValue::valId, callback);
                   ov.setValue (2);
                   expect (count == 1);
@@ -260,7 +260,10 @@ public:
                   Vec2 pt { "point", 0, 0 };
                   count = 0;
                   pt.onPropertyChange (pt.x, callback);
-                  pt.onPropertyChange (pt.y, callback);
+                  // you can also set a callback on a value member directly without
+                  // needing to bring its owning tree/object into matters at all.
+                  pt.y.onPropertyChange (callback);
+
                   pt.x = 100;
                   expect (count == 1);
                   // don't trigger callback if we don't change value
@@ -276,7 +279,7 @@ public:
                   OneValue ov2 (ov);
                   int count { 0 };
                   ov2.onPropertyChange (OneValue::valId,
-                                        [&count] (juce::Identifier id) { ++count; });
+                                        [&count] (juce::Identifier) { ++count; });
                   ov.setValue (2);
                   expect (count == 1);
                   ov.setValue (2);
@@ -311,11 +314,11 @@ public:
                       OneValue ov (22);
                       int count { 0 };
                       ov.onPropertyChange (OneValue::valId,
-                                           [&count] (juce::Identifier id) { ++count; });
+                                           [&count] (juce::Identifier) { ++count; });
                       OneValue ov2 (ov);
                       int count2 { 0 };
-                      ov2.onPropertyChange (
-                          OneValue::valId, [&count2] (juce::Identifier id) { ++count2; });
+                      ov2.onPropertyChange (OneValue::valId,
+                                            [&count2] (juce::Identifier) { ++count2; });
 
                       ov.setValue (2);
                       expect (count == 1);
@@ -329,49 +332,69 @@ public:
               [&] ()
               {
                   cello::Object root ("root", nullptr);
-                  Vec2 pt ("point", &root);
-                  expectWithinAbsoluteError<float> (pt.x, 0, 0.001);
-                  expectWithinAbsoluteError<float> (pt.y, 0, 0.001);
-                  pt.x = 3.1;
-                  pt.y = -1.9;
+                  Vec2 pt ("point", root);
+                  expectWithinAbsoluteError<float> (pt.x, 0.f, 0.001f);
+                  expectWithinAbsoluteError<float> (pt.y, 0.f, 0.001f);
+                  pt.x = 3.1f;
+                  pt.y = -1.9f;
 
                   // init from the root tree
-                  Vec2 pt2 ("point", &root);
-                  expectWithinAbsoluteError<float> (pt2.x, 3.1f, 0.001);
-                  expectWithinAbsoluteError<float> (pt2.y, -1.9f, 0.001);
+                  Vec2 pt2 ("point", root);
+                  expectWithinAbsoluteError<float> (pt2.x, 3.1f, 0.001f);
+                  expectWithinAbsoluteError<float> (pt2.y, -1.9f, 0.001f);
+              });
+
+        test ("create/wrap hierarchy",
+              [this] ()
+              {
+                  cello::Object root ("root", nullptr);
+                  expect (root.getType ().toString () == "root");
+                  // create 3 levels below root
+                  cello::Object fooBarBaz { "/foo/bar/baz", root };
+                  juce::ValueTree dbgTree { root };
+                  //   DBG (dbgTree.toXmlString ());
+                  expect (fooBarBaz.getType ().toString () == "baz");
+                  expect (fooBarBaz.getCreationType () ==
+                          Object::CreationType::initialized);
+                  // find bar relative to the root, but starting at the bottom level.
+                  cello::Object bar { "/foo/bar", fooBarBaz };
+                  expect (bar.getType ().toString () == "bar");
+                  // find ancestor named "foo" relative to baz.
+                  cello::Object foo { "^foo", fooBarBaz };
+                  expect (foo.getType ().toString () == "foo");
               });
 
         test ("change notify tree",
               [&] ()
               {
                   cello::Object root ("root", nullptr);
-                  Vec2 pt ("point", &root);
+                  Vec2 pt ("point", root);
                   // init from the root tree
-                  Vec2 pt2 ("point", &root);
+                  Vec2 pt2 ("point", root);
                   float x {};
                   float y {};
                   pt2.onPropertyChange ("point",
-                                        [&] (juce::Identifier id)
+                                        [&] (juce::Identifier)
                                         {
                                             x = pt2.x;
                                             y = pt2.y;
                                         });
-                  expectWithinAbsoluteError<float> (pt2.x, 0.f, 0.001);
-                  expectWithinAbsoluteError<float> (pt2.y, 0.f, 0.001);
+                  expectWithinAbsoluteError<float> (pt2.x, 0.f, 0.001f);
+                  expectWithinAbsoluteError<float> (pt2.y, 0.f, 0.001f);
 
                   // replace the entire tree with a new one (by copying its values)
-                  pt = Vec2 ("point", 101.1, -33.2);
-                  expectWithinAbsoluteError<float> (x, 101.1f, 0.001);
-                  expectWithinAbsoluteError<float> (y, -33.2, 0.001);
-                  expectWithinAbsoluteError<float> (pt2.x, 101.1f, 0.001);
-                  expectWithinAbsoluteError<float> (pt2.y, -33.2, 0.001);
+                  pt = Vec2 ("point", 101.1f, -33.2f);
+                  expectWithinAbsoluteError<float> (x, 101.1f, 0.001f);
+                  expectWithinAbsoluteError<float> (y, -33.2f, 0.001f);
+                  expectWithinAbsoluteError<float> (pt2.x, 101.1f, 0.001f);
+                  expectWithinAbsoluteError<float> (pt2.y, -33.2f, 0.001f);
               });
 
         test ("set property lambda",
               [&] ()
               {
                   cello::Object root ("root", nullptr);
-                  Vec2 pt ("point", &root);
+                  Vec2 pt ("point", root);
                   pt.x.onSet = [] (float v) { return v * 2; };
                   pt.x       = 10;
                   expectWithinAbsoluteError<float> (pt.x, 20.f, 0.001f);
@@ -385,7 +408,7 @@ public:
         test ("embedded objects",
               [&] ()
               {
-                  Rectangle box ("box", 100, -100, 200, 250);
+                  Rect box ("box", 100, -100, 200, 250);
                   Vec2 origin { "origin", &box };
                   expectWithinAbsoluteError<float> (origin.x, 100.f, 0.001f);
                   expectWithinAbsoluteError<float> (origin.y, -100.f, 0.001f);
@@ -395,7 +418,7 @@ public:
 
                   // check a default initialized box as a child of another object.
                   cello::Object root ("root", nullptr);
-                  Rectangle rect ("rect", &root);
+                  Rect rect ("rect", &root);
                   Vec2 origin2 { "origin", &rect };
                   expectWithinAbsoluteError<float> (origin2.x, 0.f, 0.001f);
                   expectWithinAbsoluteError<float> (origin2.y, 0.f, 0.001f);
@@ -488,17 +511,21 @@ public:
                                        cello::Object::FileFormat::zipped })
                   {
                       cello::Object root ("root", nullptr);
-                      Vec2 pt1 ("pt1", &root);
+                      Vec2 pt1 ("pt1", root);
                       pt1.x = 5;
                       pt1.y = 10;
-                      Vec2 pt2 ("pt2", &root);
+                      Vec2 pt2 ("pt2", root);
                       pt1.x = 6;
                       pt1.y = 11;
-                      Vec2 pt3 ("pt3", &root);
+                      Vec2 pt3 ("pt3", root);
                       pt1.x = 7;
                       pt1.y = 12;
 
-                      const juce::String fileName { "./testFile" };
+                      juce::TemporaryFile tempFile;
+
+                      const juce::String fileName {
+                          tempFile.getFile ().getFullPathName ()
+                      };
                       expect (root.save (fileName, format));
 
                       cello::Object recoveredRoot ("root", fileName, format);

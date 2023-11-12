@@ -142,6 +142,40 @@ public:
                   expectWithinAbsoluteError<float> (orig.imag (), retrieved.imag (),
                                                     0.001f);
               });
+
+        test ("Cached value",
+              [this] ()
+              {
+                  ObjectWithOperators obj;
+                  // can create verbosely
+                  cello::Value<float>::Cached cachedFloat (obj.floatVal);
+                  // ...or just have the Value object return us one
+                  auto cachedInt { obj.intVal.getCached () };
+
+                  int updateCount { 0 };
+                  // use the get validation function to increment a counter each time the
+                  // value is actually retrieved, which will happen automatically when
+                  // the cached value is updated on the value changing.
+                  obj.intVal.onGet = [&updateCount] (const int& v)
+                  {
+                      ++updateCount;
+                      return v;
+                  };
+
+                  expectEquals (static_cast<int> (cachedInt), 0);
+                  expectEquals (updateCount, 0);
+                  obj.intVal = 100;
+                  expectEquals (static_cast<int> (cachedInt), 100);
+                  expectEquals (updateCount, 1);
+                  expectEquals (static_cast<int> (cachedInt), 100);
+                  expectEquals (updateCount, 1);
+                  obj.intVal = 100;
+                  expectEquals (static_cast<int> (cachedInt), 100);
+                  expectEquals (updateCount, 1);
+                  obj.intVal = 200;
+                  expectEquals (static_cast<int> (cachedInt), 200);
+                  expectEquals (updateCount, 2);
+              });
     }
 
 private:
