@@ -1,7 +1,5 @@
 var searchData=
 [
-  ['missing_20pieces_0',['Missing Pieces',['../md__r_e_a_d_m_e.html#autotoc_md47',1,'']]],
-  ['motivation_20and_20overview_1',['Motivation and Overview',['../md__r_e_a_d_m_e.html#autotoc_md18',1,'']]],
-  ['move_2',['move',['../classcello_1_1_object.html#a05e394127066a7e14788dcf97b663ff1',1,'cello::Object']]],
-  ['moving_20sorting_20children_3',['Moving / Sorting Children',['../md__r_e_a_d_m_e.html#autotoc_md34',1,'']]]
+  ['notes_0',['Release Notes',['../md__r_e_a_d_m_e.html#autotoc_md49',1,'']]],
+  ['notfound_1',['notFound',['../classcello_1_1_path.html#a839048a48678e8ea37c54593ebc4bf05ac5ab409bed7925d73951e2b48b5475b8',1,'cello::Path']]]
 ];

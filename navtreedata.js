@@ -27,7 +27,7 @@ var NAVTREE =
   [ "cello", "index.html", [
     [ "Changelog", "md__c_h_a_n_g_e_l_o_g.html", [
       [ "Unreleased", "md__c_h_a_n_g_e_l_o_g.html#autotoc_md1", null ],
-      [ "1.1.4 * 2023-11-12", "md__c_h_a_n_g_e_l_o_g.html#autotoc_md2", [
+      [ "1.2.0 * 2023-11-12", "md__c_h_a_n_g_e_l_o_g.html#autotoc_md2", [
         [ "Added", "md__c_h_a_n_g_e_l_o_g.html#autotoc_md3", null ],
         [ "Fixed", "md__c_h_a_n_g_e_l_o_g.html#autotoc_md4", null ]
       ] ],
