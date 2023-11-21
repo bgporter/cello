@@ -55,8 +55,6 @@ public:
     Sync (const Sync&)            = delete;
     Sync& operator= (const Sync&) = delete;
 
-    void stateChanged (const void* encodedChange, size_t encodedChangeSize) override;
-
     /**
      * @return int = number of updates that are ready to apply to the consumer side.
      */
@@ -72,6 +70,19 @@ public:
      * destination value tree.
      */
     void performNextUpdate ();
+
+private:
+    /**
+     * @brief Whenever the state of the producer tree changes, this callback will
+     * be executed to push the delta onto the queue that connects the producer
+     * and consumer threads and then alerts the consumer side that there's new
+     * data ready for processing. If the consumer thread is the message thread,
+     * we schedule an async update; otherwise we call `notify()` to awaken the
+     * other thread if needed.
+     * @param encodedChange     pointer to a block of binary data
+     * @param encodedChangeSize  length of the data.
+     */
+    void stateChanged (const void* encodedChange, size_t encodedChangeSize) override;
 
 private:
     /// @brief  Cello object that is controlling the sync

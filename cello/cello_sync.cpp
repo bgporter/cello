@@ -41,11 +41,17 @@ void Sync::stateChanged (const void* encodedChange, size_t encodedChangeSize)
         queue.push_back (juce::MemoryBlock { encodedChange, encodedChangeSize });
     }
     if (destThread == nullptr)
-        juce::MessageManager::callAsync ([this] () { performAllUpdates (); });
+        juce::MessageManager::callAsync (
+            [this] ()
+            {
+                jassert (juce::MessageManager::existsAndIsCurrentThread ());
+                performAllUpdates ();
+            });
     else
         // wake the consumer thread up if it's sleeping. It's the duty
-        // of that thread to call either performNextUpdate() or
-        // performAllUpdates() to apply any pending changes waiting in the queue.
+        // of that thread to call either `performNextUpdate()` (iterating through
+        // pending updates on its own) or `performAllUpdates()` to apply any
+        // pending changes waiting in the queue.
         destThread->notify ();
 }
 
