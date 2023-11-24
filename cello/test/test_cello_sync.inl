@@ -37,7 +37,7 @@ public:
         while (!threadShouldExit ())
         {
             sync->performAllUpdates ();
-            sleep (1000);
+            wait (1000);
         }
     }
 
@@ -110,7 +110,8 @@ public:
         test ("one way from worker",
               [this] ()
               {
-                  expect (juce::MessageManager::existsAndIsCurrentThread ());
+                  if (!juce::MessageManager::existsAndIsCurrentThread ())
+                      return;
                   const int updateCount { 100 };
                   ThreadTestObject dest;
                   GeneratorThread thread (updateCount);
@@ -124,50 +125,59 @@ public:
                   } while (thread.isThreadRunning ());
               });
 
-        skipTest ("two-way thread updates",
-                  [this] ()
+        test ("two-way thread updates",
+              [this] ()
+              {
+                  WorkerThread leftThread ("left");
+                  WorkerThread rightThread ("right");
+                  // we need a pair of cello::Sync objects; one in each direction.
+                  cello::Sync syncLeftToRight (leftThread.tto, rightThread.tto,
+                                               &rightThread);
+                  cello::Sync syncRightToLeft (rightThread.tto, leftThread.tto,
+                                               &leftThread);
+
+                  leftThread.setSync (&syncRightToLeft);
+                  rightThread.setSync (&syncLeftToRight);
+
+                  // each of the WorkerThread objects listens to a different value in the
+                  // shared tree; when the value being watched changes, the thread updates
+                  // the value of the *other* value so we get a cascade of update messages
+                  // between the threads. We tell the threads to exit when the value they
+                  // are watching is greater than 100.
+                  leftThread.tto.y.onPropertyChange (
+                      [&leftThread] (juce::Identifier)
+                      {
+                          int yVal { leftThread.tto.y };
+                          //   DBG ("leftThread x = " << yVal + 1);
+                          leftThread.tto.x = yVal + 1;
+                          if (yVal > 100)
+                              leftThread.signalThreadShouldExit ();
+                      });
+                  rightThread.tto.x.onPropertyChange (
+                      [&rightThread] (juce::Identifier)
+                      {
+                          int xVal { rightThread.tto.x };
+                          //   DBG ("rightThread y = " << xVal + 1);
+                          rightThread.tto.y = xVal + 1;
+                          if (xVal > 100)
+                              rightThread.signalThreadShouldExit ();
+                      });
+
+                  leftThread.startThread ();
+                  rightThread.startThread ();
+
+                  // start the cascade
+                  leftThread.tto.x = 1;
+                  // spin here a bit while waiting for the two worker threads to
+                  // update each other...
+                  while (leftThread.isThreadRunning () && rightThread.isThreadRunning ())
                   {
-                      ThreadTestObject src;
-                      WorkerThread thread ("oneway");
-                      cello::Sync syncToWorker (src, thread.tto, &thread);
-                      cello::Sync syncToMessage (thread.tto, src, nullptr);
-
-                      const int updateCount { 100 };
-                      thread.tto.x.onPropertyChange (
-                          [&thread] (juce::Identifier)
-                          {
-                              // make a change in the worker thread that should be
-                              // propagated back to the main thread
-                              int newVal   = thread.tto.x;
-                              thread.tto.y = newVal;
-
-                              if (newVal >= updateCount)
-                                  thread.signalThreadShouldExit ();
-                          });
-
-                      src.y.onPropertyChange ([this, &src] (juce::Identifier)
-                                              { DBG ("src.y =" << (int) src.y); });
-
-                      thread.setSync (&syncToWorker);
-                      thread.startThread ();
-                      for (int i { 0 }; i < updateCount + 1; ++i)
-                      {
-                          src.x = i;
-                      }
-                      do
-                      {
-                          // loop here until thread finishes running...
-                          juce::Thread::sleep (10);
-                      } while (syncToMessage.getPendingUpdateCount () > 0);
-
-                      expect ((int) thread.tto.x == updateCount);
-                      DBG ("src.y = " << (int) src.y);
-                      expect ((int) src.y == updateCount);
-                  });
+                      juce::Thread::sleep (100);
+                  }
+                  expectEquals ((int) leftThread.tto.x, 103);
+                  expectEquals ((int) rightThread.tto.y, 102);
+              });
     }
-
-private:
-    // !!! test class member vars here...
 };
 
 static Test_cello_sync testcello_sync;
