@@ -123,7 +123,7 @@ public:
                   do
                   {
                       DBG ("dest.x = " << (int) dest.x);
-                      juce::Thread::wait (100);
+                      juce::Thread::sleep (100);
                   } while (thread.isThreadRunning ());
               });
 
