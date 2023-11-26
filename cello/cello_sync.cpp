@@ -48,7 +48,7 @@ void Sync::stateChanged (const void* encodedChange, size_t encodedChangeSize)
                 performAllUpdates ();
             });
     else
-        // wake the consumer thread up if it's sleeping. It's the duty
+        // wake the consumer thread up if it's waiting. It's the duty
         // of that thread to call either `performNextUpdate()` (iterating through
         // pending updates on its own) or `performAllUpdates()` to apply any
         // pending changes waiting in the queue.

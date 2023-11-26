@@ -506,6 +506,60 @@ if (root.getCreationType () == cello::Object::CreationType::initialized)
 // else, we've re-loaded -- carry on! 
 ```
 
+### Thread-safe Updates
+
+When working with multiple threads, it's important to ensure that when two threads work with the same piece of data that they do so using techniques that prevent the common problems when using threads&mdash;race conditions, data corruption, deadlocks, etc. 
+
+`cello` provides the `cello::Sync` class to support clean updates across thread boundaries. We do this using a pair of `cello::Object`s of the same underlying ValueTree type, letting the `juce::ValueTreeSynchroniser` object perform most of the hard work: when the 'producer' object is changed, it generates a small binary payload containing the deltas that need to be applied to the `consumer` object to make them sync up. Because all the operations are performed on the ValueTrees themselves, once a `Sync` object is created to connect the pair, your code doesn't need to concern itself over the origin of a change. 
+
+`cello::Sync` objects are created with this constructor: 
+
+```cpp
+    /**
+     * @brief Construct a new Sync object
+     *
+     * @param producer cello::Object that will be sending updates
+     * @param consumer cello::Object that will be kept in sync with the producer
+     * @param thread non-owning pointer to the Thread on which the consumer will
+     *              be updated. If the consumer object is to be updated on the
+     *              message thread, pass a nullptr for this arg.
+     */
+    Sync (Object& producer, Object& consumer, juce::Thread* thread);
+```
+To perform bidirectional sync operations, create a pair of `Sync` objects with the products/consumer roles swapped appropriately. You'll need to be careful when doing this to avoid creating feedback loops where updates echo infinitely between Objects.
+
+When the consumer object is being updated on the message thread, the Sync class will handle executing the updates automatically for you. Consumers being updated in a worker thread will need to find a place in their `run()` loop to check for and execute any pending updates. A minimal worker thread class would look something like:
+
+```cpp
+class WorkerThread : public juce::Thread
+{
+public:
+    WorkerThread (const juce::String& name)
+    : juce::Thread (name)
+    {
+    }
+
+    void setSync (cello::Sync* syncObject)
+    {
+        jassert (syncObject != nullptr);
+        sync = syncObject;
+    }
+
+    void run () override
+    {
+        jassert (sync != nullptr);
+        while (!threadShouldExit ())
+        {
+            sync->performAllUpdates ();
+            wait (1000);
+        }
+    }
+
+    cello::Sync* sync;
+};
+```
+
+
 ## Missing Pieces
 
 There are parts of the `juce::ValueTree` API that are not available through the `cello` API; these may be added later, or you can use them directly by accessing the `ValueTree` object that an `Object` already owns. 

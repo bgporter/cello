@@ -110,6 +110,8 @@ public:
         test ("one way from worker",
               [this] ()
               {
+                  // if the test runner isn't on the message thread, skip this
+                  // test.
                   if (!juce::MessageManager::existsAndIsCurrentThread ())
                       return;
                   const int updateCount { 100 };
@@ -121,7 +123,7 @@ public:
                   do
                   {
                       DBG ("dest.x = " << (int) dest.x);
-                      juce::Thread::sleep (100);
+                      juce::Thread::wait (100);
                   } while (thread.isThreadRunning ());
               });
 
