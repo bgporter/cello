@@ -28,32 +28,15 @@ namespace cello
 
 class Object;
 
-/**
- * @class Sync
- * @brief Permits thread-safe Object updates by using the
- * juce::ValueTreeSynchroniser class to generate small binary patches that
- * are used to pass updates from one copy of a ValueTree to another, each in
- * separate threads. This sync is only performed in one direction, so you will
- * need a pair of these objects to perform bidirectional syncs.
- *
- * Take care to not generate infinite update loops.
- */
-class Sync : public juce::ValueTreeSynchroniser
+class UpdateQueue
 {
 public:
-    /**
-     * @brief Construct a new Sync object
-     *
-     * @param producer cello::Object that will be sending updates
-     * @param consumer cello::Object that will be kept in sync with the producer
-     * @param thread non-owning pointer to the Thread on which the consumer will
-     *              be updated. If the consumer object is to be updated on the
-     *              message thread, pass a nullptr for this arg.
-     */
-    Sync (Object& producer, Object& consumer, juce::Thread* thread);
-
-    Sync (const Sync&)            = delete;
-    Sync& operator= (const Sync&) = delete;
+    UpdateQueue (Object& consumer, juce::Thread* thread);
+    virtual ~UpdateQueue () {};
+    UpdateQueue (const UpdateQueue&)            = delete;
+    UpdateQueue& operator= (const UpdateQueue&) = delete;
+    UpdateQueue (UpdateQueue&&)                 = delete;
+    UpdateQueue& operator= (UpdateQueue&&)      = delete;
 
     /**
      * @return int = number of updates that are ready to apply to the consumer side.
@@ -71,6 +54,48 @@ public:
      */
     void performNextUpdate ();
 
+protected:
+    void pushUpdate (juce::MemoryBlock&& update);
+
+private:
+    /// @brief  Cello object that is being updated
+    Object& dest;
+    /// @brief juce Thread object responsible for performing destination updates
+    juce::Thread* destThread;
+    /// @brief Critical section to maintain thread sanity
+    juce::CriticalSection mutex;
+    /// @brief Queue of tree updates to communicate between threads
+    std::deque<juce::MemoryBlock> queue;
+};
+
+/**
+ * @class Sync
+ * @brief Permits thread-safe Object updates by using the
+ * juce::ValueTreeSynchroniser class to generate small binary patches that
+ * are used to pass updates from one copy of a ValueTree to another, each in
+ * separate threads. This sync is only performed in one direction, so you will
+ * need a pair of these objects to perform bidirectional syncs.
+ *
+ * Take care to not generate infinite update loops.
+ */
+class Sync : public UpdateQueue,
+             public juce::ValueTreeSynchroniser
+{
+public:
+    /**
+     * @brief Construct a new Sync object
+     *
+     * @param producer cello::Object that will be sending updates
+     * @param consumer cello::Object that will be kept in sync with the producer
+     * @param thread non-owning pointer to the Thread on which the consumer will
+     *              be updated. If the consumer object is to be updated on the
+     *              message thread, pass a nullptr for this arg.
+     */
+    Sync (Object& producer, Object& consumer, juce::Thread* thread);
+
+    Sync (const Sync&)            = delete;
+    Sync& operator= (const Sync&) = delete;
+
 private:
     /**
      * @brief Whenever the state of the producer tree changes, this callback will
@@ -83,18 +108,6 @@ private:
      * @param encodedChangeSize  length of the data.
      */
     void stateChanged (const void* encodedChange, size_t encodedChangeSize) override;
-
-private:
-    /// @brief  Cello object that is controlling the sync
-    Object& src;
-    /// @brief  Cello object that is being updated
-    Object& dest;
-    /// @brief juce Thread object responsible for performing destination updates
-    juce::Thread* destThread;
-    /// @brief Critical section to maintain thread sanity
-    juce::CriticalSection mutex;
-    /// @brief Queue of tree updates to communicate between threads
-    std::deque<juce::MemoryBlock> queue;
 };
 
 } // namespace cello

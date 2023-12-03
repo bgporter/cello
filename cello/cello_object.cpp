@@ -87,6 +87,12 @@ juce::ValueTree Object::clone (bool deep) const
     return cloneTree;
 }
 
+void Object::update (const juce::MemoryBlock& updateBlock)
+{
+    juce::ValueTreeSynchroniser::applyChange (data, updateBlock.getData (),
+                                              updateBlock.getSize (), getUndoManager ());
+}
+
 juce::ValueTree Object::find (const cello::Query& query, bool deep)
 {
     return query.search (data, deep);

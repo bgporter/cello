@@ -22,23 +22,46 @@
 
 namespace cello
 {
-Sync::Sync (Object& producer, Object& consumer, juce::Thread* thread)
-: juce::ValueTreeSynchroniser { producer }
-, src { producer }
-, dest { consumer }
-, destThread { thread }
+
+UpdateQueue::UpdateQueue (Object& consumer, juce::Thread* thread)
+: dest (consumer)
+, destThread (thread)
 {
-    // cannot sync to yourself!
-    jassert (static_cast<juce::ValueTree> (producer) !=
-             static_cast<juce::ValueTree> (consumer));
 }
 
-void Sync::stateChanged (const void* encodedChange, size_t encodedChangeSize)
+int UpdateQueue::getPendingUpdateCount () const
+{
+    const juce::ScopedLock lock { mutex };
+    return static_cast<int> (queue.size ());
+}
+
+void UpdateQueue::performAllUpdates ()
+{
+    while (getPendingUpdateCount () > 0)
+        performNextUpdate ();
+}
+
+void UpdateQueue::performNextUpdate ()
+{
+    if (getPendingUpdateCount () == 0)
+        return;
+
+    // lock the queue and get the block at its head
+    juce::MemoryBlock block;
+    {
+        const juce::ScopedLock lock { mutex };
+        block = std::move (queue.front ());
+        queue.pop_front ();
+    }
+    dest.update (block);
+}
+
+void UpdateQueue::pushUpdate (juce::MemoryBlock&& update)
 {
     // push the update data onto the queue
     {
         const juce::ScopedLock lock { mutex };
-        queue.push_back (juce::MemoryBlock { encodedChange, encodedChangeSize });
+        queue.push_back (update);
     }
     if (destThread == nullptr)
         juce::MessageManager::callAsync (
@@ -55,33 +78,18 @@ void Sync::stateChanged (const void* encodedChange, size_t encodedChangeSize)
         destThread->notify ();
 }
 
-int Sync::getPendingUpdateCount () const
+Sync::Sync (Object& producer, Object& consumer, juce::Thread* thread)
+: UpdateQueue (consumer, thread)
+, juce::ValueTreeSynchroniser { producer }
 {
-    const juce::ScopedLock lock { mutex };
-    return static_cast<int> (queue.size ());
+    // cannot sync to yourself!
+    jassert (static_cast<juce::ValueTree> (producer) !=
+             static_cast<juce::ValueTree> (consumer));
 }
 
-void Sync::performAllUpdates ()
+void Sync::stateChanged (const void* encodedChange, size_t encodedChangeSize)
 {
-    while (getPendingUpdateCount () > 0)
-        performNextUpdate ();
-}
-
-void Sync::performNextUpdate ()
-{
-    if (getPendingUpdateCount () == 0)
-        return;
-
-    // lock the queue and get the block at its head
-    juce::MemoryBlock block;
-    {
-        const juce::ScopedLock lock { mutex };
-        block = std::move (queue.front ());
-        queue.pop_front ();
-    }
-    juce::ValueTree destTree { dest };
-    juce::ValueTreeSynchroniser::applyChange (destTree, block.getData (),
-                                              block.getSize (), dest.getUndoManager ());
+    pushUpdate (juce::MemoryBlock (encodedChange, encodedChangeSize));
 }
 
 } // namespace cello
