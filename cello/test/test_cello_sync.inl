@@ -59,7 +59,7 @@ public:
         for (int i { 0 }; i < maxVal; ++i)
         {
             tto.x = i + 1;
-            Thread::sleep (250);
+            juce::Thread::sleep (250);
         }
     }
 
