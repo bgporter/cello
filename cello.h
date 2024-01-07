@@ -35,6 +35,7 @@ BEGIN_JUCE_MODULE_DECLARATION
 END_JUCE_MODULE_DECLARATION
 */
 
+#include "cello/cello_ipc.h"
 #include "cello/cello_object.h"
 #include "cello/cello_path.h"
 #include "cello/cello_query.h"
