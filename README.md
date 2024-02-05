@@ -16,6 +16,10 @@ The primary intent of this project is to make working with ValueTrees more like 
 
 A new `Value` type provides type safety (including transparent conversion from arbitrary C++ types and the JUCE `var` type used within ValueTrees), optional validator functions called on set/get, and implementation of all the in-place arithmetic operators (for numeric types).
 
+Additional support classes to safely use ValueTrees across thread and process boundaries (including over TCP connections) simplify those use cases. 
+
+The design of the classes also simplifies the implementation of applications where the internals can be both loosely and dynamically coupled together using a super fine-grained implementation of the Observer pattern to support a reactive programming style.
+
 The `Object` type:
 
 - manages undo/redo for the object and all its children
@@ -33,7 +37,6 @@ The `Object` type:
 
 I've been using the JUCE framework for over a decade now, but there's a major component of JUCE that never clicked for me as a developer &mdash; ValueTrees. This wasn't a problem for me until I changed jobs and started needing to work on a mature codebase that made significant use of them. This code makes efforts to hide some of the more cumbersome or repetitive aspects of integrating ValueTrees into an application, but that `ValueTreeWrapper` class still seemed like it required too much effort to work with; where I'm used to thinking in terms of objects that contain values, any time I needed to get near data that's stored in a ValueTree, it was impossible to avoid the awareness that I was always working through an API to perform operations on data that should just be directly manipulable, and while the wrapper class approach mitigated this to some extent, there was still more boilerplate code to write than seems good to me, as well as other places where the gaps around the abstraction were more obvious than I like. 
 
-I've always found that the only way for me to work through these kinds of issues when I encounter them is to sit down with a blank document in an editor and start enumerating the problems that I see with a system and use that as a guide to start thinking about ways that I can engineer around the parts that aren't my favorite, and sometimes how I can reframe my thinking to start seeing superpowers where I thought there were deficiencies. 
 I've always found that the only way for me to work through these kinds of issues when I encounter them is to sit down with a blank document in an editor and start enumerating the problems that I see with a system and use that as a guide to start thinking about ways that I can engineer around the parts that aren't my favorite, and sometimes how I can reframe my thinking to start seeing superpowers where I thought there were deficiencies. 
 
 One of my current teammates has expressed confusion that I wasn't immediately on board with ValueTrees, and his defense of them was key to my eventually starting this re-analysis. They give you: 
