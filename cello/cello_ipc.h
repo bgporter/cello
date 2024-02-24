@@ -30,7 +30,10 @@ namespace cello
 
 struct IpcClientProperties : public Object
 {
-    IpcClientProperties (Object* state);
+    IpcClientProperties (Object* state)
+    : cello::Object ("IpcClient", state)
+    {
+    }
     MAKE_VALUE_MEMBER (bool, connected, false);
     MAKE_VALUE_MEMBER (int, rxCount, 0);
     MAKE_VALUE_MEMBER (int, txCount, 0);
@@ -63,6 +66,8 @@ public:
     IpcClient (Object& objectToWatch, const juce::String& pipeName, int msTimeout,
                UpdateType updateType, Object* state = nullptr);
 
+    ~IpcClient () override;
+
     /**
      * @brief Attempt to make a connection to another IpcClient running
      * in another process.
@@ -74,7 +79,9 @@ public:
 
 private:
     friend class IpcServer;
-    IpcClient (Object& objectToWatch, UpdateType updateType, Object* state = nullptr);
+    IpcClient (Object& objectToWatch, UpdateType updateType, const juce::String& hostName,
+               int portNum, const juce::String& pipeName, int msTimeout,
+               Object* state = nullptr);
 
     void connectionMade () override;
     void connectionLost () override;

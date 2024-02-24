@@ -27,45 +27,63 @@ namespace
 juce::uint32 CelloMagicIpcNumber { 0x000C3110 };
 } // namespace
 
+namespace juce
+{
+template <> struct VariantConverter<cello::IpcServerStatus>
+{
+    static cello::IpcServerStatus fromVar (const var& v)
+    {
+        return static_cast<cello::IpcServerStatus> (int (v));
+    }
+
+    static var toVar (const cello::IpcServerStatus& t) { return static_cast<int> (t); }
+};
+} // namespace juce
+
 namespace cello
 {
 
-IpcClient::IpcClient (Object& objectToWatch, UpdateType updateType, Object* state)
+IpcClient::IpcClient (Object& objectToWatch, UpdateType updateType,
+                      const juce::String& hostName, int portNum,
+                      const juce::String& pipeName, int msTimeout, Object* state)
 : juce::InterprocessConnection { true, CelloMagicIpcNumber }
 , juce::ValueTreeSynchroniser { objectToWatch }
 , UpdateQueue { objectToWatch, nullptr }
 , clientProperties { state }
 , update { updateType }
+, host { hostName }
+, port { portNum }
+, pipe { pipeName }
+, timeout { msTimeout }
 {
     // verify that the update type makes basic sense
     // need to either send or receive
     jassert ((update & UpdateType::send) || (update & UpdateType::receive));
     // ...and if we are sending a full update, we also need to be sending (in general)
-    jassert (
-        !(update & UpdateType::sendFullSyncCallback) ||
-        ((update & UpdateType::sendFullSyncCallback) && (update & UpdateType::send)));
+    jassert (!(update & UpdateType::fullUpdateOnConnect) ||
+             ((update & UpdateType::fullUpdateOnConnect) && (update & UpdateType::send)));
 }
 
 IpcClient::IpcClient (Object& objectToWatch, const juce::String& hostName, int portNum,
                       int msTimeout, UpdateType updateType, Object* state)
-: IpcClient (objectToWatch, updateType, state)
-, host (hostName)
-, port (portNum)
-, timeout (msTimeout)
+: IpcClient (objectToWatch, updateType, hostName, portNum, "", msTimeout, state)
 {
     jassert (host.isNotEmpty ());
 }
 
 IpcClient::IpcClient (Object& objectToWatch, const juce::String& pipeName, int msTimeout,
                       UpdateType updateType, Object* state)
-: IpcClient (objectToWatch, updateType, state)
-, pipe (pipeName)
-, timeout (msTimeout)
+: IpcClient (objectToWatch, updateType, "", 0, pipeName, msTimeout, state)
 {
     jassert (pipe.isNotEmpty ());
 }
 
-bool IpcClient::connect (ConnectOptions option = ConnectOptions::noOptions)
+IpcClient::~IpcClient ()
+{
+    disconnect ();
+}
+
+bool IpcClient::connect (ConnectOptions options)
 {
     if (host.isNotEmpty ())
     {
@@ -112,7 +130,8 @@ void IpcClient::messageReceived (const juce::MemoryBlock& message)
 {
     if (update & UpdateType::receive)
     {
-        pushUpdate (message);
+        // create an rvalue copy of the message that can be moved from.
+        pushUpdate (juce::MemoryBlock { message });
         clientProperties.rxCount++;
     }
 }
@@ -167,13 +186,14 @@ IpcServer::IpcServer (Object& sync, IpcClient::UpdateType updateType,
 {
     // the server properties will change its portNumber member to let us
     // know that we should start or stop ourselves.
-    serverProperties.portNumber.onPropertyChange = [this] (juce::Identifier id)
-    {
-        if (serverProperties.portNumber > 0)
-            startServer (serverProperties.portNumber, serverProperties.bindAddress);
-        else
-            stopServer ();
-    }
+    serverProperties.portNumber.onPropertyChange (
+        [this] (juce::Identifier id)
+        {
+            if (serverProperties.portNumber > 0)
+                startServer (serverProperties.portNumber, serverProperties.bindAddress);
+            else
+                stopServer ();
+        });
 }
 
 IpcServer::~IpcServer ()
@@ -186,10 +206,9 @@ IpcServer::~IpcServer ()
 
 bool IpcServer::startServer (int portNumber, const juce::String& bindAddress)
 {
-    if (isThreadRunning)
+    if (serverProperties.running)
     {
-        serverProperties.running = true;
-        serverProperties.status  = IpcServerStatus::alreadyRunning;
+        serverProperties.status = IpcServerStatus::alreadyRunning;
         return true;
     }
 
@@ -207,23 +226,19 @@ bool IpcServer::startServer (int portNumber, const juce::String& bindAddress)
 
 bool IpcServer::stopServer ()
 {
-    if (!isThreadRunning ())
+    if (!serverProperties.running)
     {
-        serverProperties.running = false;
-        serverProperties.status  = IpcServerStatus::alreadyStopped;
+        serverProperties.status = IpcServerStatus::alreadyStopped;
         return true;
     }
 
     stop ();
+    // the stop() method returns void, so we have no way to verify that
+    // the server actually did stop!
 
-    if (!isThreadRunning ())
-    {
-        serverProperties.running = false;
-        serverProperties.status  = IpcServerStatus::stoppedOkay;
-        return true;
-    }
-    serverProperties.status = IpcServerStatus::errorStopping;
-    return false;
+    serverProperties.running = false;
+    serverProperties.status  = IpcServerStatus::stoppedOkay;
+    return true;
 }
 
 juce::InterprocessConnection* IpcServer::createConnectionObject ()
@@ -231,7 +246,8 @@ juce::InterprocessConnection* IpcServer::createConnectionObject ()
     // create a new IpcConnection object, and take over its ownership;
     // pass back a non-owning pointer to it so the base server class can
     // finish setting up the client connection.
-    auto client { std::make_unique<IpcClient> (syncObject, update, &serverProperties) };
+    auto client { std::make_unique<IpcClient> (syncObject, "", 0, 0, update,
+                                               &serverProperties) };
     juce::InterprocessConnection* connection { client.get () };
     connections.push_back (std::move (client));
     return connection;
