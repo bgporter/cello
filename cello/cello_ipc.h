@@ -28,10 +28,15 @@
 namespace cello
 {
 
+/**
+ * @brief Properties struct to monitor an IPC client. Created automatically
+ * when creating an IpcClient object, and will be named after the cello Object
+ * that's connected to the IpcClient, with the string "IpcClient" appended.
+ */
 struct IpcClientProperties : public Object
 {
-    IpcClientProperties (Object* state)
-    : cello::Object ("IpcClient", state)
+    IpcClientProperties (const juce::String& name, Object* state)
+    : cello::Object (name + "IpcClient", state)
     {
     }
     MAKE_VALUE_MEMBER (bool, connected, false);
@@ -61,10 +66,30 @@ public:
         createIfNeeded ///< If pipe exists, use it, otherwise create.
     };
 
-    IpcClient (Object& objectToWatch, const juce::String& hostName, int portNum,
-               int msTimeout, UpdateType updateType, Object* state = nullptr);
-    IpcClient (Object& objectToWatch, const juce::String& pipeName, int msTimeout,
-               UpdateType updateType, Object* state = nullptr);
+    /**
+     * @brief Construct a new Ipc Client object that connects using sockets
+     *
+     * @param objectToWatch Local object to connect over IPC
+     * @param hostName hostname of the machine running an IpcServer
+     * @param portNum port number on the host
+     * @param msTimeout
+     * @param updateType see UpdateType
+     * @param state parent object to contain our IpcClientProperties object.
+     */
+    IpcClient (Object& objectToWatch, const juce::String& hostName, int portNum, int msTimeout, UpdateType updateType,
+               Object* state = nullptr);
+
+    /**
+     * @brief Construct a new Ipc Client object using a named pipe.
+     *
+     * @param objectToWatch Local object to connect over IPC
+     * @param pipeName name of the pipe to use
+     * @param msTimeout timeout, -1 == wait forever.
+     * @param updateType see UpdateType
+     * @param state parent object to contain our IpcClientProperties object.
+     */
+    IpcClient (Object& objectToWatch, const juce::String& pipeName, int msTimeout, UpdateType updateType,
+               Object* state = nullptr);
 
     ~IpcClient () override;
 
@@ -79,9 +104,19 @@ public:
 
 private:
     friend class IpcServer;
-    IpcClient (Object& objectToWatch, UpdateType updateType, const juce::String& hostName,
-               int portNum, const juce::String& pipeName, int msTimeout,
-               Object* state = nullptr);
+    /**
+     * @brief Private delegating ctor.
+     *
+     * @param objectToWatch
+     * @param updateType
+     * @param hostName
+     * @param portNum
+     * @param pipeName
+     * @param msTimeout
+     * @param state
+     */
+    IpcClient (Object& objectToWatch, UpdateType updateType, const juce::String& hostName, int portNum,
+               const juce::String& pipeName, int msTimeout, Object* state = nullptr);
 
     void connectionMade () override;
     void connectionLost () override;
@@ -109,9 +144,13 @@ private:
     /// When do we send or receive updates?
     UpdateType update;
 
+    /// @brief (socket only) host name
     const juce::String host;
+    /// @brief (socket only) port number
     const int port;
+    /// (pipe only) name of pipe to use
     const juce::String pipe;
+    /// receive timeout in ms.
     const int timeout;
 };
 
@@ -170,8 +209,7 @@ struct IpcServerProperties : public Object
 class IpcServer : public juce::InterprocessConnectionServer
 {
 public:
-    IpcServer (Object& sync, IpcClient::UpdateType updateType,
-               const juce::String& statePath, Object* state = nullptr);
+    IpcServer (Object& sync, IpcClient::UpdateType updateType, const juce::String& statePath, Object* state = nullptr);
     ~IpcServer () override;
 
     /**

@@ -49,7 +49,7 @@ IpcClient::IpcClient (Object& objectToWatch, UpdateType updateType,
 : juce::InterprocessConnection { true, CelloMagicIpcNumber }
 , juce::ValueTreeSynchroniser { objectToWatch }
 , UpdateQueue { objectToWatch, nullptr }
-, clientProperties { state }
+, clientProperties { objectToWatch.getType ().toString (), state }
 , update { updateType }
 , host { hostName }
 , port { portNum }
