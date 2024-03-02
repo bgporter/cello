@@ -12,11 +12,18 @@ API docs available [here](https://bgporter.github.io/cello/)
 
 `Cello` is a set of C++ classes to work with [`ValueTree`](https://docs.juce.com/master/classValueTree.html) objects from the [JUCE](https://juce.com) application framework. 
 
-The primary intent of this project is to make working with ValueTrees more like working with C++ objects and less like calling API functions. 
+This project has several overlapping goals:
+- make working with ValueTrees more like working with C++ objects and less like calling API functions
+- explore the gray area between compile-time strong typing as in C++ and the kind of runtime dynamic typing that's possible using the ValueTree API
+- explore the available methods of reactive programming enabled with this system 
+- build out new functionality that's implied by the capabilities of ValueTrees but perhaps not obvious, like:
+  - creating a kind of NoSQL database
+  - creating a simple IPC implementation 
+- In general, add support for more complex use cases where the complexity can be hidden inside the framework. 
 
 A new `Value` type provides type safety (including transparent conversion from arbitrary C++ types and the JUCE `var` type used within ValueTrees), optional validator functions called on set/get, and implementation of all the in-place arithmetic operators (for numeric types).
 
-Additional support classes to safely use ValueTrees across thread and process boundaries (including over TCP connections) simplify those use cases. 
+Additional support classes to safely use ValueTrees across thread and process boundaries (including over TCP connections and named pipes) simplify those use cases. 
 
 The design of the classes also simplifies the implementation of applications where the internals can be both loosely and dynamically coupled together using a super fine-grained implementation of the Observer pattern to support a reactive programming style.
 
@@ -30,6 +37,13 @@ The `Object` type:
 - provides access to the underlying ValueTree so you can use API functions not provided by the `cello` interface.
 
 `Cello` is released under the terms of the [MIT license](https://opensource.org/license/mit/).
+
+### Acknowledgements
+
+- This project was largely written in response/reaction to a similar set of classes originally written by Chris Roberts, aka `cpr2323`, used in products we worked on together at Artiphon. 
+- Those classes have over time seen modifications and refinements added by coworkers there including Vincent Berthiaume, Joël Langlois, Megan Jurek, Walter Kopacz, and Sean Maloney. 
+- David Rowland's [presentation on Value Trees](https://www.youtube.com/watch?v=3IaMjH5lBEY) from ADC'17 remains probably the best overview of the capabilities of the API itself
+- Matt Gonzalez from ECHO Audio tried to convince me long ago of the utility of ValueTrees, but I hadn't quite learned to trust his recommendations as quickly and deeply as I have since then. 
 
 ## Motivation and Overview
 
@@ -254,7 +268,7 @@ If the first character in a path string is `/`, the path is absolute starting at
 
 All other paths are relative to the Object that's passed into an Object constructor. 
 
-Path elements starting with a circumflex character `^` will search upward from the current path location to find an ancestor Object of a specified type, so `^grandpa` is read as "search upward in the hierarchy from the current path location until you find an object of type `grandpa`.
+Path elements starting with a circumflex character `^` will search upward from the current path location to find an ancestor Object of a specified type, so `^grandpa` is read as "search upward in the hierarchy from the current path location until you find an object of type `grandpa`".
 
 A path element of `..` operates as it does in file systems, navigating to the parent of the current path location, so `../sibling` would find a sibling object of the current one, and `../../uncle` will look for a sibling of the current object's parent. 
 
@@ -568,7 +582,6 @@ public:
 There are parts of the `juce::ValueTree` API that are not available through the `cello` API; these may be added later, or you can use them directly by accessing the `ValueTree` object that an `Object` already owns. 
 
 ## Unit Tests
-
 There is a [separate repo](https://github.com/bgporter/cello_test) containing a small unit test runner; you can also add my [testSuite](https://github.com/bgporter/testSuite) JUCE module as a component in your application to execute the tests in your own app. 
 
 ## Release Notes
