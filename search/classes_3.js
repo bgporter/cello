@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['query_0',['Query',['../classcello_1_1_query.html',1,'cello']]]
+  ['path_0',['Path',['../classcello_1_1_path.html',1,'cello']]]
 ];

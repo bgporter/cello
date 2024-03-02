@@ -37,6 +37,7 @@ var classcello_1_1_object =
     [ "setUndoManager", "classcello_1_1_object.html#a14e852dd0a299e2d72bf07dd8970b52a", null ],
     [ "sort", "classcello_1_1_object.html#a16f55b2f7ddbfa99ad014da938144f1b", null ],
     [ "undo", "classcello_1_1_object.html#a9068e0306934dcbf2c24b71efe5c1024", null ],
+    [ "update", "classcello_1_1_object.html#abef5e5b7d054ac2ab811cde202b27889", null ],
     [ "upsert", "classcello_1_1_object.html#a26a8d3a310c6ac67498f762224f09daf", null ],
     [ "upsertAll", "classcello_1_1_object.html#ae4f3e07c7db1d4d8af104d9ea5c63883", null ],
     [ "wrap", "classcello_1_1_object.html#a41128bc9a0e36952a2ea053d332455e2", null ],

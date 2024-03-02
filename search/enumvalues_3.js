@@ -1,4 +1,5 @@
 var searchData=
 [
-  ['query_0',['query',['../classcello_1_1_path.html#a11d3057a624ca94e3eeb672d12a98fbfa1b1cc7f086b3f074da452bc3129981eb',1,'cello::Path']]]
+  ['nooptions_0',['noOptions',['../classcello_1_1_ipc_client.html#abb5ffadccb44032a0fae498831987376a8c2f14d584f7d82ea10eba4365df287a',1,'cello::IpcClient']]],
+  ['notfound_1',['notFound',['../classcello_1_1_path.html#a839048a48678e8ea37c54593ebc4bf05ac5ab409bed7925d73951e2b48b5475b8',1,'cello::Path']]]
 ];
