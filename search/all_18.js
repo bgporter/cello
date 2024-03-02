@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['xx_20xx_0',['1.3.0 * 2024-xx-xx',['../md__c_h_a_n_g_e_l_o_g.html#autotoc_md1',1,'']]]
+  ['_7eobject_0',['~Object',['../classcello_1_1_object.html#a34c001271075ceb3006e2fed75aef279',1,'cello::Object']]]
 ];

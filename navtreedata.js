@@ -26,7 +26,7 @@ var NAVTREE =
 [
   [ "cello", "index.html", [
     [ "Changelog", "md__c_h_a_n_g_e_l_o_g.html", [
-      [ "1.3.0 * 2024-xx-xx", "md__c_h_a_n_g_e_l_o_g.html#autotoc_md1", [
+      [ "1.3.0 * 2024-03-02", "md__c_h_a_n_g_e_l_o_g.html#autotoc_md1", [
         [ "Added", "md__c_h_a_n_g_e_l_o_g.html#autotoc_md2", null ]
       ] ],
       [ "1.2.0 * 2023-11-12", "md__c_h_a_n_g_e_l_o_g.html#autotoc_md3", [
