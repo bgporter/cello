@@ -5,7 +5,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## Unreleased 
+## 1.3.0 * 2024-xx-xx 
+
+### Added
+
+- `cello::Sync`: Perform thread-safe Object updates using the juce::ValueTreeSynchroniser class. The basic approach is that we rely on a pair of `cello::Object`s, each of which is only accessed by a single thread. A separate `cello::Sync` object (or pair of them if bidirectional sync is needed) watches for changes and communicates those deltas across the thread boundary where they're applied in a thread-safe manner to the other object/tree. 
+- `cello::IpcClient` (and related): Connect cello::Objects in separate processes using TCP or Named Pipe-based interprocess communications. This uses a similar approach, but communicates the deltas across process boundaries using the JUCE interprocess communication API. 
 
 ## 1.2.0 * 2023-11-12
 

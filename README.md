@@ -2,9 +2,7 @@
 
 Classes for working with juce ValueTree objects. 
 
-**Fall 2022 * Brett g Porter**
-
-brett@bgporter.net
+**Brett g Porter** * brett@bgporter.net
 
 API docs available [here](https://bgporter.github.io/cello/)
 
@@ -12,9 +10,20 @@ API docs available [here](https://bgporter.github.io/cello/)
 
 `Cello` is a set of C++ classes to work with [`ValueTree`](https://docs.juce.com/master/classValueTree.html) objects from the [JUCE](https://juce.com) application framework. 
 
-The primary intent of this project is to make working with ValueTrees more like working with C++ objects and less like calling API functions. 
+This project has several overlapping goals:
+- make working with ValueTrees more like working with C++ objects and less like calling API functions
+- explore the gray area between compile-time strong typing as in C++ and the kind of runtime dynamic typing that's possible using the ValueTree API
+- explore the available methods of reactive programming enabled with this system 
+- build out new functionality that's implied by the capabilities of ValueTrees but perhaps not obvious, like:
+  - creating a kind of NoSQL database
+  - creating a simple IPC implementation 
+- In general, add support for more complex use cases where the complexity can be hidden inside the framework. 
 
 A new `Value` type provides type safety (including transparent conversion from arbitrary C++ types and the JUCE `var` type used within ValueTrees), optional validator functions called on set/get, and implementation of all the in-place arithmetic operators (for numeric types).
+
+Additional support classes to safely use ValueTrees across thread and process boundaries (including over TCP connections and named pipes) simplify those use cases. 
+
+The design of the classes also simplifies the implementation of applications where the internals can be both loosely and dynamically coupled together using a super fine-grained implementation of the Observer pattern to support a reactive programming style.
 
 The `Object` type:
 
@@ -27,13 +36,19 @@ The `Object` type:
 
 `Cello` is released under the terms of the [MIT license](https://opensource.org/license/mit/).
 
+### Acknowledgements
+
+- This project was largely written in response/reaction to a similar set of classes originally written by Chris Roberts, aka `cpr2323`, used in products we worked on together at Artiphon. 
+- Those classes have over time seen modifications and refinements added by coworkers there including Vincent Berthiaume, Joël Langlois, Megan Jurek, Walter Kopacz, and Sean Maloney. 
+- David Rowland's [presentation on Value Trees](https://www.youtube.com/watch?v=3IaMjH5lBEY) from ADC'17 remains probably the best overview of the capabilities of the API itself
+- Matt Gonzalez from ECHO Audio tried to convince me long ago of the utility of ValueTrees, but I hadn't quite learned to trust his recommendations as quickly and deeply as I have since then. 
+
 ## Motivation and Overview
 
 ### Confessions of a `ValueTree` Skeptic
 
 I've been using the JUCE framework for over a decade now, but there's a major component of JUCE that never clicked for me as a developer &mdash; ValueTrees. This wasn't a problem for me until I changed jobs and started needing to work on a mature codebase that made significant use of them. This code makes efforts to hide some of the more cumbersome or repetitive aspects of integrating ValueTrees into an application, but that `ValueTreeWrapper` class still seemed like it required too much effort to work with; where I'm used to thinking in terms of objects that contain values, any time I needed to get near data that's stored in a ValueTree, it was impossible to avoid the awareness that I was always working through an API to perform operations on data that should just be directly manipulable, and while the wrapper class approach mitigated this to some extent, there was still more boilerplate code to write than seems good to me, as well as other places where the gaps around the abstraction were more obvious than I like. 
 
-I've always found that the only way for me to work through these kinds of issues when I encounter them is to sit down with a blank document in an editor and start enumerating the problems that I see with a system and use that as a guide to start thinking about ways that I can engineer around the parts that aren't my favorite, and sometimes how I can reframe my thinking to start seeing superpowers where I thought there were deficiencies. 
 I've always found that the only way for me to work through these kinds of issues when I encounter them is to sit down with a blank document in an editor and start enumerating the problems that I see with a system and use that as a guide to start thinking about ways that I can engineer around the parts that aren't my favorite, and sometimes how I can reframe my thinking to start seeing superpowers where I thought there were deficiencies. 
 
 One of my current teammates has expressed confusion that I wasn't immediately on board with ValueTrees, and his defense of them was key to my eventually starting this re-analysis. They give you: 
@@ -251,7 +266,7 @@ If the first character in a path string is `/`, the path is absolute starting at
 
 All other paths are relative to the Object that's passed into an Object constructor. 
 
-Path elements starting with a circumflex character `^` will search upward from the current path location to find an ancestor Object of a specified type, so `^grandpa` is read as "search upward in the hierarchy from the current path location until you find an object of type `grandpa`.
+Path elements starting with a circumflex character `^` will search upward from the current path location to find an ancestor Object of a specified type, so `^grandpa` is read as "search upward in the hierarchy from the current path location until you find an object of type `grandpa`".
 
 A path element of `..` operates as it does in file systems, navigating to the parent of the current path location, so `../sibling` would find a sibling object of the current one, and `../../uncle` will look for a sibling of the current object's parent. 
 
@@ -506,12 +521,65 @@ if (root.getCreationType () == cello::Object::CreationType::initialized)
 // else, we've re-loaded -- carry on! 
 ```
 
+### Thread-safe Updates
+
+When working with multiple threads, it's important to ensure that when two threads work with the same piece of data that they do so using techniques that prevent the common problems when using threads&mdash;race conditions, data corruption, deadlocks, etc. 
+
+`cello` provides the `cello::Sync` class to support clean updates across thread boundaries. We do this using a pair of `cello::Object`s of the same underlying ValueTree type, letting the `juce::ValueTreeSynchroniser` object perform most of the hard work: when the 'producer' object is changed, it generates a small binary payload containing the deltas that need to be applied to the `consumer` object to make them sync up. Because all the operations are performed on the ValueTrees themselves, once a `Sync` object is created to connect the pair, your code doesn't need to concern itself over the origin of a change. 
+
+`cello::Sync` objects are created with this constructor: 
+
+```cpp
+    /**
+     * @brief Construct a new Sync object
+     *
+     * @param producer cello::Object that will be sending updates
+     * @param consumer cello::Object that will be kept in sync with the producer
+     * @param thread non-owning pointer to the Thread on which the consumer will
+     *              be updated. If the consumer object is to be updated on the
+     *              message thread, pass a nullptr for this arg.
+     */
+    Sync (Object& producer, Object& consumer, juce::Thread* thread);
+```
+To perform bidirectional sync operations, create a pair of `Sync` objects with the products/consumer roles swapped appropriately. You'll need to be careful when doing this to avoid creating feedback loops where updates echo infinitely between Objects.
+
+When the consumer object is being updated on the message thread, the Sync class will handle executing the updates automatically for you. Consumers being updated in a worker thread will need to find a place in their `run()` loop to check for and execute any pending updates. A minimal worker thread class would look something like:
+
+```cpp
+class WorkerThread : public juce::Thread
+{
+public:
+    WorkerThread (const juce::String& name)
+    : juce::Thread (name)
+    {
+    }
+
+    void setSync (cello::Sync* syncObject)
+    {
+        jassert (syncObject != nullptr);
+        sync = syncObject;
+    }
+
+    void run () override
+    {
+        jassert (sync != nullptr);
+        while (!threadShouldExit ())
+        {
+            sync->performAllUpdates ();
+            wait (1000);
+        }
+    }
+
+    cello::Sync* sync;
+};
+```
+
+
 ## Missing Pieces
 
 There are parts of the `juce::ValueTree` API that are not available through the `cello` API; these may be added later, or you can use them directly by accessing the `ValueTree` object that an `Object` already owns. 
 
 ## Unit Tests
-
 There is a [separate repo](https://github.com/bgporter/cello_test) containing a small unit test runner; you can also add my [testSuite](https://github.com/bgporter/testSuite) JUCE module as a component in your application to execute the tests in your own app. 
 
 ## Release Notes

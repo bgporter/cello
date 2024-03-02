@@ -19,6 +19,7 @@
 
 #include <juce_core/juce_core.h>
 
+/// @cond TEST
 namespace
 {
 
@@ -627,3 +628,5 @@ private:
 };
 static Test_cello_object testcello_object;
 } // namespace cello
+
+/// @endcond TEST
