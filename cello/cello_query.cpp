@@ -40,7 +40,6 @@ Query& Query::addFilter (Predicate filter)
 
 juce::ValueTree Query::search (juce::ValueTree tree, bool deep) const
 {
-    // error for now; return an empty tree.
     juce::ValueTree result { type };
     for (auto child : tree)
     {
@@ -77,16 +76,14 @@ Query& Query::addComparison (Comparison sorter)
     return *this;
 }
 
-juce::ValueTree Query::sort (juce::ValueTree tree, juce::UndoManager* undo,
-                             bool stableSort) const
+juce::ValueTree Query::sort (juce::ValueTree tree, juce::UndoManager* undo, bool stableSort) const
 {
     if (sorters.size () > 0)
         tree.sort (*this, undo, stableSort);
     return tree;
 }
 
-int Query::compareElements (const juce::ValueTree& left,
-                            const juce::ValueTree& right) const
+int Query::compareElements (const juce::ValueTree& left, const juce::ValueTree& right) const
 {
     for (auto sorter : sorters)
     {

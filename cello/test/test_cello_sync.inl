@@ -107,25 +107,30 @@ public:
                   expect ((int) thread.tto.x == updateCount);
               });
 
-        test ("one way from worker",
-              [this] ()
-              {
-                  // if the test runner isn't on the message thread, skip this
-                  // test.
-                  if (!juce::MessageManager::existsAndIsCurrentThread ())
-                      return;
-                  const int updateCount { 100 };
-                  ThreadTestObject dest;
-                  GeneratorThread thread (updateCount);
-                  cello::Sync sync (thread.tto, dest, nullptr);
-
-                  thread.startThread ();
-                  do
+        // Looking for suggestions of how to test async updates into the
+        // message thread while keeping the tests located here and not
+        // intruding into the main application. The approach here (obviously)
+        // doesn't work because we loop and sleep and the message queue never
+        // gets serviced while we're doing this.
+        skipTest ("one way from worker",
+                  [this] ()
                   {
-                      DBG ("dest.x = " << (int) dest.x);
-                      juce::Thread::sleep (100);
-                  } while (thread.isThreadRunning ());
-              });
+                      // if the test runner isn't on the message thread, skip this
+                      // test.
+                      if (!juce::MessageManager::existsAndIsCurrentThread ())
+                          return;
+                      const int updateCount { 100 };
+                      ThreadTestObject dest;
+                      GeneratorThread thread (updateCount);
+                      cello::Sync sync (thread.tto, dest, nullptr);
+
+                      thread.startThread ();
+                      do
+                      {
+                          DBG ("dest.x = " << (int) dest.x);
+                          juce::Thread::sleep (100);
+                      } while (thread.isThreadRunning ());
+                  });
 
         test ("two-way thread updates",
               [this] ()
@@ -133,10 +138,8 @@ public:
                   WorkerThread leftThread ("left");
                   WorkerThread rightThread ("right");
                   // we need a pair of cello::Sync objects; one in each direction.
-                  cello::Sync syncLeftToRight (leftThread.tto, rightThread.tto,
-                                               &rightThread);
-                  cello::Sync syncRightToLeft (rightThread.tto, leftThread.tto,
-                                               &leftThread);
+                  cello::Sync syncLeftToRight (leftThread.tto, rightThread.tto, &rightThread);
+                  cello::Sync syncRightToLeft (rightThread.tto, leftThread.tto, &leftThread);
 
                   leftThread.setSync (&syncRightToLeft);
                   rightThread.setSync (&syncLeftToRight);

@@ -18,6 +18,7 @@
 */
 
 #include "cello_ipc.h"
+#include "JuceHeader.h"
 
 namespace
 {
@@ -31,10 +32,7 @@ namespace juce
 {
 template <> struct VariantConverter<cello::IpcServerStatus>
 {
-    static cello::IpcServerStatus fromVar (const var& v)
-    {
-        return static_cast<cello::IpcServerStatus> (int (v));
-    }
+    static cello::IpcServerStatus fromVar (const var& v) { return static_cast<cello::IpcServerStatus> (int (v)); }
 
     static var toVar (const cello::IpcServerStatus& t) { return static_cast<int> (t); }
 };
@@ -43,8 +41,7 @@ template <> struct VariantConverter<cello::IpcServerStatus>
 namespace cello
 {
 
-IpcClient::IpcClient (Object& objectToWatch, UpdateType updateType,
-                      const juce::String& hostName, int portNum,
+IpcClient::IpcClient (Object& objectToWatch, UpdateType updateType, const juce::String& hostName, int portNum,
                       const juce::String& pipeName, int msTimeout, Object* state)
 : juce::InterprocessConnection { true, CelloMagicIpcNumber }
 , juce::ValueTreeSynchroniser { objectToWatch }
@@ -64,15 +61,15 @@ IpcClient::IpcClient (Object& objectToWatch, UpdateType updateType,
              ((update & UpdateType::fullUpdateOnConnect) && (update & UpdateType::send)));
 }
 
-IpcClient::IpcClient (Object& objectToWatch, const juce::String& hostName, int portNum,
-                      int msTimeout, UpdateType updateType, Object* state)
+IpcClient::IpcClient (Object& objectToWatch, const juce::String& hostName, int portNum, int msTimeout,
+                      UpdateType updateType, Object* state)
 : IpcClient (objectToWatch, updateType, hostName, portNum, "", msTimeout, state)
 {
     jassert (host.isNotEmpty ());
 }
 
-IpcClient::IpcClient (Object& objectToWatch, const juce::String& pipeName, int msTimeout,
-                      UpdateType updateType, Object* state)
+IpcClient::IpcClient (Object& objectToWatch, const juce::String& pipeName, int msTimeout, UpdateType updateType,
+                      Object* state)
 : IpcClient (objectToWatch, updateType, "", 0, pipeName, msTimeout, state)
 {
     jassert (pipe.isNotEmpty ());
@@ -178,8 +175,7 @@ void IpcServerProperties::stopServer ()
     portNumber = -1;
 }
 
-IpcServer::IpcServer (Object& sync, IpcClient::UpdateType updateType,
-                      const juce::String& statePath, Object* state)
+IpcServer::IpcServer (Object& sync, IpcClient::UpdateType updateType, const juce::String& statePath, Object* state)
 : syncObject { sync }
 , update { updateType }
 , serverProperties { statePath, state }
@@ -246,8 +242,7 @@ juce::InterprocessConnection* IpcServer::createConnectionObject ()
     // create a new IpcConnection object, and take over its ownership;
     // pass back a non-owning pointer to it so the base server class can
     // finish setting up the client connection.
-    auto client { std::make_unique<IpcClient> (syncObject, "", 0, 0, update,
-                                               &serverProperties) };
+    auto client { std::make_unique<IpcClient> (syncObject, "", 0, 0, update, &serverProperties) };
     juce::InterprocessConnection* connection { client.get () };
     connections.push_back (std::move (client));
     return connection;
