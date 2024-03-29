@@ -26,74 +26,75 @@ var NAVTREE =
 [
   [ "cello", "index.html", [
     [ "Changelog", "md__c_h_a_n_g_e_l_o_g.html", [
-      [ "1.3.0 * 2024-03-02", "md__c_h_a_n_g_e_l_o_g.html#autotoc_md1", [
-        [ "Added", "md__c_h_a_n_g_e_l_o_g.html#autotoc_md2", null ]
+      [ "1.3.1 * 2024-03-29", "md__c_h_a_n_g_e_l_o_g.html#autotoc_md1", null ],
+      [ "1.3.0 * 2024-03-02", "md__c_h_a_n_g_e_l_o_g.html#autotoc_md2", [
+        [ "Added", "md__c_h_a_n_g_e_l_o_g.html#autotoc_md3", null ]
       ] ],
-      [ "1.2.0 * 2023-11-12", "md__c_h_a_n_g_e_l_o_g.html#autotoc_md3", [
-        [ "Added", "md__c_h_a_n_g_e_l_o_g.html#autotoc_md4", null ],
-        [ "Fixed", "md__c_h_a_n_g_e_l_o_g.html#autotoc_md5", null ]
+      [ "1.2.0 * 2023-11-12", "md__c_h_a_n_g_e_l_o_g.html#autotoc_md4", [
+        [ "Added", "md__c_h_a_n_g_e_l_o_g.html#autotoc_md5", null ],
+        [ "Fixed", "md__c_h_a_n_g_e_l_o_g.html#autotoc_md6", null ]
       ] ],
-      [ "1.1.3 * 2023-03-18", "md__c_h_a_n_g_e_l_o_g.html#autotoc_md6", [
-        [ "Fixed", "md__c_h_a_n_g_e_l_o_g.html#autotoc_md7", null ]
+      [ "1.1.3 * 2023-03-18", "md__c_h_a_n_g_e_l_o_g.html#autotoc_md7", [
+        [ "Fixed", "md__c_h_a_n_g_e_l_o_g.html#autotoc_md8", null ]
       ] ],
-      [ "1.1.2 * 2023-03-16", "md__c_h_a_n_g_e_l_o_g.html#autotoc_md8", [
-        [ "Fixed", "md__c_h_a_n_g_e_l_o_g.html#autotoc_md9", null ]
+      [ "1.1.2 * 2023-03-16", "md__c_h_a_n_g_e_l_o_g.html#autotoc_md9", [
+        [ "Fixed", "md__c_h_a_n_g_e_l_o_g.html#autotoc_md10", null ]
       ] ],
-      [ "1.1.1 * 2023-03-14", "md__c_h_a_n_g_e_l_o_g.html#autotoc_md10", [
-        [ "Fixed", "md__c_h_a_n_g_e_l_o_g.html#autotoc_md11", null ]
+      [ "1.1.1 * 2023-03-14", "md__c_h_a_n_g_e_l_o_g.html#autotoc_md11", [
+        [ "Fixed", "md__c_h_a_n_g_e_l_o_g.html#autotoc_md12", null ]
       ] ],
-      [ "1.1.0 * 2023-02-19", "md__c_h_a_n_g_e_l_o_g.html#autotoc_md12", [
-        [ "Added", "md__c_h_a_n_g_e_l_o_g.html#autotoc_md13", null ]
+      [ "1.1.0 * 2023-02-19", "md__c_h_a_n_g_e_l_o_g.html#autotoc_md13", [
+        [ "Added", "md__c_h_a_n_g_e_l_o_g.html#autotoc_md14", null ]
       ] ],
-      [ "1.0.1 * 2023-02-05", "md__c_h_a_n_g_e_l_o_g.html#autotoc_md14", [
-        [ "Added", "md__c_h_a_n_g_e_l_o_g.html#autotoc_md15", null ]
+      [ "1.0.1 * 2023-02-05", "md__c_h_a_n_g_e_l_o_g.html#autotoc_md15", [
+        [ "Added", "md__c_h_a_n_g_e_l_o_g.html#autotoc_md16", null ]
       ] ],
-      [ "1.0.0 * 2023-01-01", "md__c_h_a_n_g_e_l_o_g.html#autotoc_md16", null ]
+      [ "1.0.0 * 2023-01-01", "md__c_h_a_n_g_e_l_o_g.html#autotoc_md17", null ]
     ] ],
     [ "Cello", "md__r_e_a_d_m_e.html", [
-      [ "tl;dr", "md__r_e_a_d_m_e.html#autotoc_md18", [
-        [ "Acknowledgements", "md__r_e_a_d_m_e.html#autotoc_md19", null ]
+      [ "tl;dr", "md__r_e_a_d_m_e.html#autotoc_md19", [
+        [ "Acknowledgements", "md__r_e_a_d_m_e.html#autotoc_md20", null ]
       ] ],
-      [ "Motivation and Overview", "md__r_e_a_d_m_e.html#autotoc_md20", [
-        [ "Confessions of a ValueTree Skeptic", "md__r_e_a_d_m_e.html#autotoc_md21", null ],
-        [ "cello", "md__r_e_a_d_m_e.html#autotoc_md22", null ]
+      [ "Motivation and Overview", "md__r_e_a_d_m_e.html#autotoc_md21", [
+        [ "Confessions of a ValueTree Skeptic", "md__r_e_a_d_m_e.html#autotoc_md22", null ],
+        [ "cello", "md__r_e_a_d_m_e.html#autotoc_md23", null ]
       ] ],
-      [ "Values", "md__r_e_a_d_m_e.html#autotoc_md23", [
-        [ "VariantConverters", "md__r_e_a_d_m_e.html#autotoc_md24", null ],
-        [ "Validator Functions", "md__r_e_a_d_m_e.html#autotoc_md25", null ],
-        [ "Caching values", "md__r_e_a_d_m_e.html#autotoc_md26", null ],
-        [ "Forcing Update Callbacks", "md__r_e_a_d_m_e.html#autotoc_md27", null ],
-        [ "Excluding Listeners", "md__r_e_a_d_m_e.html#autotoc_md28", null ]
+      [ "Values", "md__r_e_a_d_m_e.html#autotoc_md24", [
+        [ "VariantConverters", "md__r_e_a_d_m_e.html#autotoc_md25", null ],
+        [ "Validator Functions", "md__r_e_a_d_m_e.html#autotoc_md26", null ],
+        [ "Caching values", "md__r_e_a_d_m_e.html#autotoc_md27", null ],
+        [ "Forcing Update Callbacks", "md__r_e_a_d_m_e.html#autotoc_md28", null ],
+        [ "Excluding Listeners", "md__r_e_a_d_m_e.html#autotoc_md29", null ]
       ] ],
-      [ "Objects", "md__r_e_a_d_m_e.html#autotoc_md29", [
-        [ "Creation Patterns: Creating vs Wrapping", "md__r_e_a_d_m_e.html#autotoc_md30", null ],
-        [ "Creating/Finding Objects in a Hierarchy", "md__r_e_a_d_m_e.html#autotoc_md31", null ],
-        [ "Working with Children", "md__r_e_a_d_m_e.html#autotoc_md32", [
-          [ "Adding Children", "md__r_e_a_d_m_e.html#autotoc_md33", null ],
-          [ "Removing Children", "md__r_e_a_d_m_e.html#autotoc_md34", null ],
-          [ "Finding Children", "md__r_e_a_d_m_e.html#autotoc_md35", null ],
-          [ "Moving / Sorting Children", "md__r_e_a_d_m_e.html#autotoc_md36", null ]
+      [ "Objects", "md__r_e_a_d_m_e.html#autotoc_md30", [
+        [ "Creation Patterns: Creating vs Wrapping", "md__r_e_a_d_m_e.html#autotoc_md31", null ],
+        [ "Creating/Finding Objects in a Hierarchy", "md__r_e_a_d_m_e.html#autotoc_md32", null ],
+        [ "Working with Children", "md__r_e_a_d_m_e.html#autotoc_md33", [
+          [ "Adding Children", "md__r_e_a_d_m_e.html#autotoc_md34", null ],
+          [ "Removing Children", "md__r_e_a_d_m_e.html#autotoc_md35", null ],
+          [ "Finding Children", "md__r_e_a_d_m_e.html#autotoc_md36", null ],
+          [ "Moving / Sorting Children", "md__r_e_a_d_m_e.html#autotoc_md37", null ]
         ] ],
-        [ "Database / Query", "md__r_e_a_d_m_e.html#autotoc_md37", [
-          [ "Query::Predicate", "md__r_e_a_d_m_e.html#autotoc_md38", null ],
-          [ "Query::Comparison", "md__r_e_a_d_m_e.html#autotoc_md39", null ],
-          [ "Object::find", "md__r_e_a_d_m_e.html#autotoc_md40", null ],
-          [ "Object::upsert and Object::upsertAll", "md__r_e_a_d_m_e.html#autotoc_md41", null ]
+        [ "Database / Query", "md__r_e_a_d_m_e.html#autotoc_md38", [
+          [ "Query::Predicate", "md__r_e_a_d_m_e.html#autotoc_md39", null ],
+          [ "Query::Comparison", "md__r_e_a_d_m_e.html#autotoc_md40", null ],
+          [ "Object::find", "md__r_e_a_d_m_e.html#autotoc_md41", null ],
+          [ "Object::upsert and Object::upsertAll", "md__r_e_a_d_m_e.html#autotoc_md42", null ]
         ] ],
-        [ "Undo/Redo", "md__r_e_a_d_m_e.html#autotoc_md42", null ],
-        [ "Change Callbacks", "md__r_e_a_d_m_e.html#autotoc_md43", [
-          [ "Property Changes", "md__r_e_a_d_m_e.html#autotoc_md44", null ],
-          [ "Child Changes", "md__r_e_a_d_m_e.html#autotoc_md45", null ],
-          [ "Tree Changes", "md__r_e_a_d_m_e.html#autotoc_md46", null ]
+        [ "Undo/Redo", "md__r_e_a_d_m_e.html#autotoc_md43", null ],
+        [ "Change Callbacks", "md__r_e_a_d_m_e.html#autotoc_md44", [
+          [ "Property Changes", "md__r_e_a_d_m_e.html#autotoc_md45", null ],
+          [ "Child Changes", "md__r_e_a_d_m_e.html#autotoc_md46", null ],
+          [ "Tree Changes", "md__r_e_a_d_m_e.html#autotoc_md47", null ]
         ] ],
-        [ "\"Pythonesque\" access", "md__r_e_a_d_m_e.html#autotoc_md47", null ],
-        [ "Persistence", "md__r_e_a_d_m_e.html#autotoc_md48", null ],
-        [ "Thread-safe Updates", "md__r_e_a_d_m_e.html#autotoc_md49", null ]
+        [ "\"Pythonesque\" access", "md__r_e_a_d_m_e.html#autotoc_md48", null ],
+        [ "Persistence", "md__r_e_a_d_m_e.html#autotoc_md49", null ],
+        [ "Thread-safe Updates", "md__r_e_a_d_m_e.html#autotoc_md50", null ]
       ] ],
-      [ "Missing Pieces", "md__r_e_a_d_m_e.html#autotoc_md50", null ],
-      [ "Unit Tests", "md__r_e_a_d_m_e.html#autotoc_md51", null ],
-      [ "Release Notes", "md__r_e_a_d_m_e.html#autotoc_md52", null ],
-      [ "License", "md__r_e_a_d_m_e.html#autotoc_md53", null ]
+      [ "Missing Pieces", "md__r_e_a_d_m_e.html#autotoc_md51", null ],
+      [ "Unit Tests", "md__r_e_a_d_m_e.html#autotoc_md52", null ],
+      [ "Release Notes", "md__r_e_a_d_m_e.html#autotoc_md53", null ],
+      [ "License", "md__r_e_a_d_m_e.html#autotoc_md54", null ]
     ] ],
     [ "Classes", "annotated.html", [
       [ "Class List", "annotated.html", "annotated_dup" ],

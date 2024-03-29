@@ -100,16 +100,21 @@ $(function(){initNavTree('md__c_h_a_n_g_e_l_o_g.html',''); initResizable(); });
 <div class="textblock"><p><a class="anchor" id="autotoc_md0"></a> All notable changes to this project will be documented in this file.</p>
 <p>The format is based on <a href="https://keepachangelog.com/en/1.0.0/">Keep a Changelog</a>, and this project adheres to <a href="https://semver.org/spec/v2.0.0.html">Semantic Versioning</a>.</p>
 <h1><a class="anchor" id="autotoc_md1"></a>
+1.3.1 * 2024-03-29</h1>
+<ul>
+<li>Cleaned up some buggy unit tests</li>
+</ul>
+<h1><a class="anchor" id="autotoc_md2"></a>
 1.3.0 * 2024-03-02</h1>
-<h2><a class="anchor" id="autotoc_md2"></a>
+<h2><a class="anchor" id="autotoc_md3"></a>
 Added</h2>
 <ul>
 <li><code><a class="el" href="classcello_1_1_sync.html" title="Permits thread-safe Object updates by using the juce::ValueTreeSynchroniser class to generate small b...">cello::Sync</a></code>: Perform thread-safe Object updates using the juce::ValueTreeSynchroniser class. The basic approach is that we rely on a pair of <code><a class="el" href="classcello_1_1_object.html">cello::Object</a></code>s, each of which is only accessed by a single thread. A separate <code><a class="el" href="classcello_1_1_sync.html" title="Permits thread-safe Object updates by using the juce::ValueTreeSynchroniser class to generate small b...">cello::Sync</a></code> object (or pair of them if bidirectional sync is needed) watches for changes and communicates those deltas across the thread boundary where they're applied in a thread-safe manner to the other object/tree.</li>
 <li><code><a class="el" href="classcello_1_1_ipc_client.html">cello::IpcClient</a></code> (and related): Connect cello::Objects in separate processes using TCP or Named Pipe-based interprocess communications. This uses a similar approach, but communicates the deltas across process boundaries using the JUCE interprocess communication API.</li>
 </ul>
-<h1><a class="anchor" id="autotoc_md3"></a>
+<h1><a class="anchor" id="autotoc_md4"></a>
 1.2.0 * 2023-11-12</h1>
-<h2><a class="anchor" id="autotoc_md4"></a>
+<h2><a class="anchor" id="autotoc_md5"></a>
 Added</h2>
 <ul>
 <li>new ctor that accepts another <code>Object</code> by reference.</li>
@@ -118,49 +123,49 @@ Added</h2>
 <li>added <code>Value::onPropertyChange()</code> to simplify subscribing to value objects that are public; instead of doing e.g. <code>myObject.onPropertyChange (myVal, callback)</code> you can just call <code>myVal.onPropertyChange(callback)</code>.</li>
 <li>added <code><a class="el" href="classcello_1_1_value.html" title="A class to abstract away the issues around storing and retrieving a value from a ValueTree....">cello::Value</a>&lt;T&gt;::Cached</code> class to store the last updated state of a <code>Value</code> object to make it usable without requiring a ValueTree lookup and validation each time it's needed.</li>
 </ul>
-<h2><a class="anchor" id="autotoc_md5"></a>
+<h2><a class="anchor" id="autotoc_md6"></a>
 Fixed</h2>
 <ul>
 <li><code>creationType</code> bug on re-wrapping a ValueTree.</li>
 </ul>
-<h1><a class="anchor" id="autotoc_md6"></a>
+<h1><a class="anchor" id="autotoc_md7"></a>
 1.1.3 * 2023-03-18</h1>
-<h2><a class="anchor" id="autotoc_md7"></a>
+<h2><a class="anchor" id="autotoc_md8"></a>
 Fixed</h2>
 <ul>
 <li>template error in <code>Object:getattr</code></li>
 </ul>
-<h1><a class="anchor" id="autotoc_md8"></a>
+<h1><a class="anchor" id="autotoc_md9"></a>
 1.1.2 * 2023-03-16</h1>
-<h2><a class="anchor" id="autotoc_md9"></a>
+<h2><a class="anchor" id="autotoc_md10"></a>
 Fixed</h2>
 <ul>
 <li><code>Object::save</code> now ensures that its file is created before attempting to save.</li>
 <li><code>Object::save</code> returns a <code>juce::Result</code> instead of bool, and will indicate the reason for a failure in that return value.</li>
 </ul>
-<h1><a class="anchor" id="autotoc_md10"></a>
+<h1><a class="anchor" id="autotoc_md11"></a>
 1.1.1 * 2023-03-14</h1>
-<h2><a class="anchor" id="autotoc_md11"></a>
+<h2><a class="anchor" id="autotoc_md12"></a>
 Fixed</h2>
 <ul>
 <li>some template errors.</li>
 </ul>
-<h1><a class="anchor" id="autotoc_md12"></a>
+<h1><a class="anchor" id="autotoc_md13"></a>
 1.1.0 * 2023-02-19</h1>
-<h2><a class="anchor" id="autotoc_md13"></a>
+<h2><a class="anchor" id="autotoc_md14"></a>
 Added</h2>
 <ul>
 <li><code><a class="el" href="classcello_1_1_query.html">cello::Query</a></code> class and updates to <code><a class="el" href="classcello_1_1_object.html">cello::Object</a></code> to perform database-like queries and in-place updating of child objects. See the "Database / Query" section of the README document.</li>
 </ul>
-<h1><a class="anchor" id="autotoc_md14"></a>
+<h1><a class="anchor" id="autotoc_md15"></a>
 1.0.1 * 2023-02-05</h1>
-<h2><a class="anchor" id="autotoc_md15"></a>
+<h2><a class="anchor" id="autotoc_md16"></a>
 Added</h2>
 <ul>
 <li>MIT license text to all source files.</li>
 <li><a href="https://github.com/jothepro/doxygen-awesome-css">Doxygen Awesome</a> CSS/etc to document generation.</li>
 </ul>
-<h1><a class="anchor" id="autotoc_md16"></a>
+<h1><a class="anchor" id="autotoc_md17"></a>
 1.0.0 * 2023-01-01</h1>
 <p>Original release. </p>
 </div></div><!-- contents -->
