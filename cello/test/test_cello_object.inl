@@ -242,8 +242,7 @@ public:
               {
                   OneValue ov (0);
                   int count { 0 };
-                  cello::PropertyUpdateFn callback = [&count] (juce::Identifier)
-                  { ++count; };
+                  cello::PropertyUpdateFn callback = [&count] (juce::Identifier) { ++count; };
                   ov.onPropertyChange (OneValue::valId, callback);
                   ov.setValue (2);
                   expect (count == 1);
@@ -279,8 +278,7 @@ public:
                   OneValue ov (22);
                   OneValue ov2 (ov);
                   int count { 0 };
-                  ov2.onPropertyChange (OneValue::valId,
-                                        [&count] (juce::Identifier) { ++count; });
+                  ov2.onPropertyChange (OneValue::valId, [&count] (juce::Identifier) { ++count; });
                   ov.setValue (2);
                   expect (count == 1);
                   ov.setValue (2);
@@ -309,26 +307,26 @@ public:
                   ov.setValue (3);
                   expect (count == 5);
               });
-        skipTest ("exclude listeners",
-                  [&] ()
-                  {
-                      OneValue ov (22);
-                      int count { 0 };
-                      ov.onPropertyChange (OneValue::valId,
-                                           [&count] (juce::Identifier) { ++count; });
-                      OneValue ov2 (ov);
-                      int count2 { 0 };
-                      ov2.onPropertyChange (OneValue::valId,
-                                            [&count2] (juce::Identifier) { ++count2; });
 
-                      ov.setValue (2);
-                      expect (count == 1);
-                      expect (count2 == 1);
-                      ov.excludeListener (&ov2);
-                      ov.setValue (100);
-                      expect (count == 2);
-                      expect (count2 == 1);
-                  });
+        test ("exclude listeners",
+              [&] ()
+              {
+                  OneValue ov (22);
+                  int count { 0 };
+                  ov.onPropertyChange (OneValue::valId, [&count] (juce::Identifier) { ++count; });
+                  OneValue ov2 (ov);
+                  int count2 { 0 };
+                  ov2.onPropertyChange (OneValue::valId, [&count2] (juce::Identifier) { ++count2; });
+
+                  ov.setValue (2);
+                  expect (count == 1);
+                  expect (count2 == 1);
+                  ov.excludeListener (&ov2);
+                  ov.setValue (100);
+                  expect (count == 2);
+                  expect (count2 == 1);
+              });
+
         test ("create child objects",
               [&] ()
               {
@@ -355,8 +353,7 @@ public:
                   juce::ValueTree dbgTree { root };
                   //   DBG (dbgTree.toXmlString ());
                   expect (fooBarBaz.getType ().toString () == "baz");
-                  expect (fooBarBaz.getCreationType () ==
-                          Object::CreationType::initialized);
+                  expect (fooBarBaz.getCreationType () == Object::CreationType::initialized);
                   // find bar relative to the root, but starting at the bottom level.
                   cello::Object bar { "/foo/bar", fooBarBaz };
                   expect (bar.getType ().toString () == "bar");
@@ -455,8 +452,7 @@ public:
                   int newChildIndex { -1 };
                   int oldChildIndex { -1 };
 
-                  Object::ChildUpdateFn callback =
-                      [&] (juce::ValueTree&, int oldIndex, int newIndex)
+                  Object::ChildUpdateFn callback = [&] (juce::ValueTree&, int oldIndex, int newIndex)
                   {
                       oldChildIndex = oldIndex;
                       newChildIndex = newIndex;
@@ -507,8 +503,7 @@ public:
               {
                   // loop through the formats that we support and verify
                   // store / re-load behavior
-                  for (auto format : { cello::Object::FileFormat::xml,
-                                       cello::Object::FileFormat::binary,
+                  for (auto format : { cello::Object::FileFormat::xml, cello::Object::FileFormat::binary,
                                        cello::Object::FileFormat::zipped })
                   {
                       cello::Object root ("root", nullptr);
@@ -524,9 +519,7 @@ public:
 
                       juce::TemporaryFile tempFile;
 
-                      const juce::String fileName {
-                          tempFile.getFile ().getFullPathName ()
-                      };
+                      const juce::String fileName { tempFile.getFile ().getFullPathName () };
                       expect (root.save (fileName, format));
 
                       cello::Object recoveredRoot ("root", fileName, format);
@@ -564,8 +557,7 @@ public:
               {
                   cello::Object parent ("root", nullptr);
                   bool childAdded { false };
-                  parent.onChildAdded = [&] (juce::ValueTree&, int, int)
-                  { childAdded = true; };
+                  parent.onChildAdded = [&] (juce::ValueTree&, int, int) { childAdded = true; };
 
                   cello::Object child ("c1", nullptr);
                   bool parentChanged { false };
@@ -578,8 +570,7 @@ public:
                   // make sure the parent really has it -- instantiate another
                   // Object from the child tree and verify how it was created.
                   cello::Object child2 ("c1", &parent);
-                  expect (child2.getCreationType () ==
-                          cello::Object::CreationType::wrapped);
+                  expect (child2.getCreationType () == cello::Object::CreationType::wrapped);
               });
 
         test ("sort children",
@@ -597,8 +588,7 @@ public:
 
                   struct ValSort
                   {
-                      int compareElements (const juce::ValueTree& first,
-                                           const juce::ValueTree& second)
+                      int compareElements (const juce::ValueTree& first, const juce::ValueTree& second)
                       {
                           // convert the trees back into the Object type
                           OneValue lhs (first);

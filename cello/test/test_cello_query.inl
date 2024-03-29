@@ -144,8 +144,7 @@ public:
                   auto loResult = root.find (lo, false);
                   auto hiResult = root.find (hi, false);
 
-                  expectEquals (loResult.getNumChildren () + hiResult.getNumChildren (),
-                                root.getNumChildren ());
+                  expectEquals (loResult.getNumChildren () + hiResult.getNumChildren (), root.getNumChildren ());
               });
 
         test ("multiple predicates",
@@ -155,11 +154,12 @@ public:
                   cello::Query::Predicate p2 { [] (juce::ValueTree tree)
                                                {
                                                    Data d { tree };
-                                                   return d.odd;
+                                                   return static_cast<bool> (d.odd);
                                                } };
                   cello::Query query { bottomHalf };
                   auto result1 { root.find (query) };
                   query.addFilter (p2);
+                  DBG (root.getNumChildren () << " children");
                   auto result2 { root.find (query) };
                   expect (result2.getNumChildren () < result1.getNumChildren ());
               });
