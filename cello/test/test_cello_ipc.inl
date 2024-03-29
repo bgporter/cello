@@ -6,11 +6,11 @@ class Test_cello_ipc : public TestSuite
 {
 public:
     Test_cello_ipc ()
-    : TestSuite ("cello_ipc", "!!! category !!!")
+    : TestSuite ("cello_ipc", "cello")
     {
     }
 
-    void runTest () override { beginTest ("!!! WRITE SOME TESTS FOR THE cello_ipc Class !!!"); }
+    void runTest () override { beginTest ("Not sure how to unit test IPC calls..."); }
 
 private:
     // !!! test class member vars here...
