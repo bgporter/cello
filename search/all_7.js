@@ -1,7 +1,8 @@
 var searchData=
 [
-  ['epsilon_0',['epsilon',['../classcello_1_1_value.html#a32c3b4c418b7087974b86f06cceb9c6b',1,'cello::Value']]],
-  ['excludedlistener_1',['excludedListener',['../classcello_1_1_object.html#a7c69af2cea29bfd1b1459bf262d58611',1,'cello::Object']]],
-  ['excludelistener_2',['excludeListener',['../classcello_1_1_object.html#a4b25ab25ee62b03dda46143a20054c02',1,'cello::Object::excludeListener()'],['../classcello_1_1_value.html#a5cb3116dff1d8fd02428ab0af613f79b',1,'cello::Value::excludeListener()']]],
-  ['excluding_20listeners_3',['Excluding Listeners',['../md__r_e_a_d_m_e.html#autotoc_md29',1,'']]]
+  ['data_0',['data',['../classcello_1_1_object.html#a368472e271247ac9336c4f8015270627',1,'cello::Object']]],
+  ['database_20query_1',['Database / Query',['../md__r_e_a_d_m_e.html#autotoc_md39',1,'']]],
+  ['delattr_2',['delattr',['../classcello_1_1_object.html#a7fd4f6b747c7c120ded85f09765378af',1,'cello::Object']]],
+  ['doforceupdates_3',['doForceUpdates',['../classcello_1_1_object.html#acd1018e5ee26cdd37c7208b37fb26485',1,'cello::Object']]],
+  ['dr_4',['tl;dr',['../md__r_e_a_d_m_e.html#autotoc_md20',1,'']]]
 ];

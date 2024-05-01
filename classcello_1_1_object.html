@@ -184,6 +184,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:aa28a19ff0e4f6e6c826e7293e1937d23" id="r_aa28a19ff0e4f6e6c826e7293e1937d23"><td class="memItemLeft" align="right" valign="top">juce::ValueTree&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa28a19ff0e4f6e6c826e7293e1937d23">find</a> (<a class="el" href="classcello_1_1_value.html">const</a> <a class="el" href="classcello_1_1_query.html">cello::Query</a> &amp;query, <a class="el" href="classcello_1_1_value.html">bool</a> <a class="el" href="classcello_1_1_value.html">deep</a>=<a class="el" href="classcello_1_1_value.html">false</a>)</td></tr>
 <tr class="memdesc:aa28a19ff0e4f6e6c826e7293e1937d23"><td class="mdescLeft">&#160;</td><td class="mdescRight">Perform a query against the children of this <a class="el" href="classcello_1_1_object.html">Object</a>, returning a new ValueTree containing zero or more copies of child trees that match the query, possibly sorted into a different order than they exist in this tree.  <br /></td></tr>
 <tr class="separator:aa28a19ff0e4f6e6c826e7293e1937d23"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa7230b2a5bdaedf19fd3b6487e40138f" id="r_aa7230b2a5bdaedf19fd3b6487e40138f"><td class="memItemLeft" align="right" valign="top">juce::ValueTree&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa7230b2a5bdaedf19fd3b6487e40138f">findOne</a> (<a class="el" href="classcello_1_1_value.html">const</a> <a class="el" href="classcello_1_1_query.html">cello::Query</a> &amp;query, <a class="el" href="classcello_1_1_value.html">bool</a> <a class="el" href="classcello_1_1_value.html">deep</a>=<a class="el" href="classcello_1_1_value.html">false</a>)</td></tr>
+<tr class="memdesc:aa7230b2a5bdaedf19fd3b6487e40138f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Perform a query against the children of this object, returning the a copy of the first child found that meets the predicates in the query object, or an empty tree if none is found.  <br /></td></tr>
+<tr class="separator:aa7230b2a5bdaedf19fd3b6487e40138f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a26a8d3a310c6ac67498f762224f09daf" id="r_a26a8d3a310c6ac67498f762224f09daf"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classcello_1_1_value.html">bool</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a26a8d3a310c6ac67498f762224f09daf">upsert</a> (<a class="el" href="classcello_1_1_value.html">const</a> <a class="el" href="classcello_1_1_object.html">Object</a> *object, <a class="el" href="classcello_1_1_value.html">const</a> juce::Identifier &amp;<a class="el" href="classcello_1_1_value.html">key</a>, <a class="el" href="classcello_1_1_value.html">bool</a> <a class="el" href="classcello_1_1_value.html">deep</a>=<a class="el" href="classcello_1_1_value.html">false</a>)</td></tr>
 <tr class="memdesc:a26a8d3a310c6ac67498f762224f09daf"><td class="mdescLeft">&#160;</td><td class="mdescRight">Update or insert a child object (concept borrowed from MongoDB) Looks for a child with a 'key' value that matches the one found in the object we've been passed. If a match is found, we update the entry in place (update). If no match is found, we append a copy of <code>object</code> to our children.  <br /></td></tr>
 <tr class="separator:a26a8d3a310c6ac67498f762224f09daf"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -295,8 +298,9 @@ Iterator&#160;</td><td class="memItemRight" valign="bottom"><b>end</b> ()</td></
 <tr class="separator:a16f55b2f7ddbfa99ad014da938144f1b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader">Callbacks</h2></td></tr>
-<tr class="memitem:aaa8878f384c6e73982afbc1718711c07" id="r_aaa8878f384c6e73982afbc1718711c07"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classcello_1_1_value.html">using</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aaa8878f384c6e73982afbc1718711c07">ChildUpdateFn</a></td></tr>
-<tr class="separator:aaa8878f384c6e73982afbc1718711c07"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af5b6242a9cd4b6c2a14c5be1229fd5b1" id="r_af5b6242a9cd4b6c2a14c5be1229fd5b1"><td class="memItemLeft" align="right" valign="top"><a id="af5b6242a9cd4b6c2a14c5be1229fd5b1" name="af5b6242a9cd4b6c2a14c5be1229fd5b1"></a>
+<a class="el" href="classcello_1_1_value.html">using</a>&#160;</td><td class="memItemRight" valign="bottom"><b>ChildUpdateFn</b> = std::function&lt;<a class="el" href="classcello_1_1_value.html">void</a> (juce::ValueTree&amp; <a class="el" href="classcello_1_1_value.html">child</a>, <a class="el" href="classcello_1_1_value.html">int</a> <a class="el" href="classcello_1_1_value.html">oldIndex</a>, <a class="el" href="classcello_1_1_value.html">int</a> <a class="el" href="classcello_1_1_value.html">newIndex</a>)&gt;</td></tr>
+<tr class="separator:af5b6242a9cd4b6c2a14c5be1229fd5b1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5fa5e523d8206f4ccaab5fa603203c18" id="r_a5fa5e523d8206f4ccaab5fa603203c18"><td class="memItemLeft" align="right" valign="top"><a id="a5fa5e523d8206f4ccaab5fa603203c18" name="a5fa5e523d8206f4ccaab5fa603203c18"></a>
 <a class="el" href="classcello_1_1_value.html">using</a>&#160;</td><td class="memItemRight" valign="bottom"><b>SelfUpdateFn</b> = std::function&lt;<a class="el" href="classcello_1_1_value.html">void</a> (<a class="el" href="classcello_1_1_value.html">void</a>)&gt;</td></tr>
 <tr class="separator:a5fa5e523d8206f4ccaab5fa603203c18"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -332,23 +336,6 @@ SelfUpdateFn&#160;</td><td class="memItemRight" valign="bottom"><b>onTreeRedirec
 <tr class="memdesc:ad05bcbdf54e3587a9060dba4caeba462"><td class="mdescLeft">&#160;</td><td class="mdescRight">Reload data from disk. Used in the ctor that accepts file name and format.  <br /></td></tr>
 <tr class="separator:ad05bcbdf54e3587a9060dba4caeba462"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<h2 class="groupheader">Member Typedef Documentation</h2>
-<a id="aaa8878f384c6e73982afbc1718711c07" name="aaa8878f384c6e73982afbc1718711c07"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aaa8878f384c6e73982afbc1718711c07">&#9670;&#160;</a></span>ChildUpdateFn</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="classcello_1_1_value.html">using</a> cello::Object::ChildUpdateFn</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-<b>Initial value:</b><div class="fragment"><div class="line"> </div>
-<div class="line">        std::function&lt;void (juce::ValueTree&amp; child, <span class="keywordtype">int</span> oldIndex, <span class="keywordtype">int</span> newIndex)&gt;</div>
-</div><!-- fragment -->
-</div>
-</div>
 <h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="a4e0aab983b0079b72a5cc652ef06e775" name="a4e0aab983b0079b72a5cc652ef06e775"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a4e0aab983b0079b72a5cc652ef06e775">&#9670;&#160;</a></span>Object() <span class="overload">[1/5]</span></h2>
@@ -686,6 +673,37 @@ SelfUpdateFn&#160;</td><td class="memItemRight" valign="bottom"><b>onTreeRedirec
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>juce::ValueTree </dd></dl>
+
+</div>
+</div>
+<a id="aa7230b2a5bdaedf19fd3b6487e40138f" name="aa7230b2a5bdaedf19fd3b6487e40138f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa7230b2a5bdaedf19fd3b6487e40138f">&#9670;&#160;</a></span>findOne()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">juce::ValueTree cello::Object::findOne </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classcello_1_1_value.html">const</a> <a class="el" href="classcello_1_1_query.html">cello::Query</a> &amp;</td>          <td class="paramname"><span class="paramname"><em>query</em>, </span></td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classcello_1_1_value.html">bool</a></td>          <td class="paramname"><span class="paramname"><em>deep</em><span class="paramdefsep"> = </span><span class="paramdefval"><a class="el" href="classcello_1_1_value.html">false</a></span></span>&#160;)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Perform a query against the children of this object, returning the a copy of the first child found that meets the predicates in the query object, or an empty tree if none is found. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">query</td><td><a class="el" href="classcello_1_1_query.html">Query</a> object that defines the search/sort criteria </td></tr>
+    <tr><td class="paramname">deep</td><td>if true, also copy sub-items from object. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>juce::ValueTree copy of a matching child tree or {} </dd></dl>
 
 </div>
 </div>

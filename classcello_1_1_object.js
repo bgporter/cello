@@ -14,6 +14,7 @@ var classcello_1_1_object =
     [ "delattr", "classcello_1_1_object.html#a7fd4f6b747c7c120ded85f09765378af", null ],
     [ "excludeListener", "classcello_1_1_object.html#a4b25ab25ee62b03dda46143a20054c02", null ],
     [ "find", "classcello_1_1_object.html#aa28a19ff0e4f6e6c826e7293e1937d23", null ],
+    [ "findOne", "classcello_1_1_object.html#aa7230b2a5bdaedf19fd3b6487e40138f", null ],
     [ "getattr", "classcello_1_1_object.html#a6a23c8172d0df906594e9d222dd6e441", null ],
     [ "getCreationType", "classcello_1_1_object.html#ae04aa9d628d2ee279d9d467c8caf73d8", null ],
     [ "getExcludedListener", "classcello_1_1_object.html#a36491bac36514cc7e88454d8444d0a0f", null ],

@@ -1,7 +1,7 @@
 var searchData=
 [
   ['save_0',['save',['../classcello_1_1_object.html#a5162885cca204640f836e776fcdd1cb9',1,'cello::Object']]],
-  ['search_1',['search',['../classcello_1_1_query.html#a2f1deb74703e06a61ceedd1c4053ffc9',1,'cello::Query']]],
+  ['search_1',['search',['../classcello_1_1_query.html#acb65484bc24e3eff713ca2cac0328e53',1,'cello::Query']]],
   ['set_2',['set',['../classcello_1_1_value.html#a8a0b6647877bd1709c32a4678d489e30',1,'cello::Value']]],
   ['setattr_3',['setattr',['../classcello_1_1_object.html#a39df4cb5bd79fd770ad23184d5ef8c87',1,'cello::Object']]],
   ['setundomanager_4',['setUndoManager',['../classcello_1_1_object.html#a14e852dd0a299e2d72bf07dd8970b52a',1,'cello::Object']]],

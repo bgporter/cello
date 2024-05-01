@@ -109,8 +109,9 @@ Public Types</h2></td></tr>
 <tr class="memitem:affedab084871d44130f6454913f8db77" id="r_affedab084871d44130f6454913f8db77"><td class="memItemLeft" align="right" valign="top"><a id="affedab084871d44130f6454913f8db77" name="affedab084871d44130f6454913f8db77"></a>
 <a class="el" href="classcello_1_1_value.html">using</a>&#160;</td><td class="memItemRight" valign="bottom"><b>Predicate</b> = std::function&lt;<a class="el" href="classcello_1_1_value.html">bool</a> (juce::ValueTree)&gt;</td></tr>
 <tr class="separator:affedab084871d44130f6454913f8db77"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1ad5c45e419ee2af32e487d4e88831ef" id="r_a1ad5c45e419ee2af32e487d4e88831ef"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classcello_1_1_value.html">using</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a1ad5c45e419ee2af32e487d4e88831ef">Comparison</a></td></tr>
-<tr class="separator:a1ad5c45e419ee2af32e487d4e88831ef"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aceaec76888f926cb2c0d29b893e71cb4" id="r_aceaec76888f926cb2c0d29b893e71cb4"><td class="memItemLeft" align="right" valign="top"><a id="aceaec76888f926cb2c0d29b893e71cb4" name="aceaec76888f926cb2c0d29b893e71cb4"></a>
+<a class="el" href="classcello_1_1_value.html">using</a>&#160;</td><td class="memItemRight" valign="bottom"><b>Comparison</b> = std::function&lt;<a class="el" href="classcello_1_1_value.html">int</a> (<a class="el" href="classcello_1_1_value.html">const</a> juce::ValueTree&amp;, <a class="el" href="classcello_1_1_value.html">const</a> juce::ValueTree&amp;)&gt;</td></tr>
+<tr class="separator:aceaec76888f926cb2c0d29b893e71cb4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
@@ -135,9 +136,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a7b5d32c81cd0c437f2ec2be8248523d7" id="r_a7b5d32c81cd0c437f2ec2be8248523d7"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classcello_1_1_query.html">Query</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a7b5d32c81cd0c437f2ec2be8248523d7">addFilter</a> (Predicate filter)</td></tr>
 <tr class="memdesc:a7b5d32c81cd0c437f2ec2be8248523d7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Append a filter predicate to the end of our list; these are executed in the sequence they're added, and we stop testing at the first filter that returns false.  <br /></td></tr>
 <tr class="separator:a7b5d32c81cd0c437f2ec2be8248523d7"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2f1deb74703e06a61ceedd1c4053ffc9" id="r_a2f1deb74703e06a61ceedd1c4053ffc9"><td class="memItemLeft" align="right" valign="top">juce::ValueTree&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a2f1deb74703e06a61ceedd1c4053ffc9">search</a> (juce::ValueTree <a class="el" href="classcello_1_1_value.html">tree</a>, <a class="el" href="classcello_1_1_value.html">bool</a> <a class="el" href="classcello_1_1_value.html">deep</a>) <a class="el" href="classcello_1_1_value.html">const</a></td></tr>
-<tr class="memdesc:a2f1deb74703e06a61ceedd1c4053ffc9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Execute the query we're programmed for &ndash; iterate through the children of <code>tree</code>, returning a new tree of type <code>resultType</code> that contains a copy (either shallow or deep) of each child that fulfills the query, sorted according to the sort criteria we've been given.  <br /></td></tr>
-<tr class="separator:a2f1deb74703e06a61ceedd1c4053ffc9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acb65484bc24e3eff713ca2cac0328e53" id="r_acb65484bc24e3eff713ca2cac0328e53"><td class="memItemLeft" align="right" valign="top">juce::ValueTree&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#acb65484bc24e3eff713ca2cac0328e53">search</a> (juce::ValueTree <a class="el" href="classcello_1_1_value.html">tree</a>, <a class="el" href="classcello_1_1_value.html">bool</a> <a class="el" href="classcello_1_1_value.html">deep</a>, <a class="el" href="classcello_1_1_value.html">bool</a> <a class="el" href="classcello_1_1_value.html">returnFirstFound</a>=<a class="el" href="classcello_1_1_value.html">false</a>) <a class="el" href="classcello_1_1_value.html">const</a></td></tr>
+<tr class="memdesc:acb65484bc24e3eff713ca2cac0328e53"><td class="mdescLeft">&#160;</td><td class="mdescRight">Execute the query we're programmed for &ndash; iterate through the children of <code>tree</code>, returning a new tree of type <code>resultType</code> that contains a copy (either shallow or deep) of each child that fulfills the query, sorted according to the sort criteria we've been given.  <br /></td></tr>
+<tr class="separator:acb65484bc24e3eff713ca2cac0328e53"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6590ad472f1f5393686b176ce2ce8e2c" id="r_a6590ad472f1f5393686b176ce2ce8e2c"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classcello_1_1_query.html">Query</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a6590ad472f1f5393686b176ce2ce8e2c">addComparison</a> (Comparison <a class="el" href="classcello_1_1_value.html">sorter</a>)</td></tr>
 <tr class="memdesc:a6590ad472f1f5393686b176ce2ce8e2c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Add a comparison function to the list we use to sort a list of children.  <br /></td></tr>
 <tr class="separator:a6590ad472f1f5393686b176ce2ce8e2c"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -158,23 +159,6 @@ Friends</h2></td></tr>
 <a class="el" href="classcello_1_1_value.html">class</a>&#160;</td><td class="memItemRight" valign="bottom"><b>juce::ValueTree</b></td></tr>
 <tr class="separator:acd638bcc982c11ae11dcc4f89a207d16"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<h2 class="groupheader">Member Typedef Documentation</h2>
-<a id="a1ad5c45e419ee2af32e487d4e88831ef" name="a1ad5c45e419ee2af32e487d4e88831ef"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a1ad5c45e419ee2af32e487d4e88831ef">&#9670;&#160;</a></span>Comparison</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="classcello_1_1_value.html">using</a> cello::Query::Comparison</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-<b>Initial value:</b><div class="fragment"><div class="line"> </div>
-<div class="line">        std::function&lt;int (<span class="keyword">const</span> juce::ValueTree&amp;, <span class="keyword">const</span> juce::ValueTree&amp;)&gt;</div>
-</div><!-- fragment -->
-</div>
-</div>
 <h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="a83e4da63677cd62c471a26f225d0f3a6" name="a83e4da63677cd62c471a26f225d0f3a6"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a83e4da63677cd62c471a26f225d0f3a6">&#9670;&#160;</a></span>Query() <span class="overload">[1/2]</span></h2>
@@ -284,8 +268,8 @@ Friends</h2></td></tr>
 
 </div>
 </div>
-<a id="a2f1deb74703e06a61ceedd1c4053ffc9" name="a2f1deb74703e06a61ceedd1c4053ffc9"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a2f1deb74703e06a61ceedd1c4053ffc9">&#9670;&#160;</a></span>search()</h2>
+<a id="acb65484bc24e3eff713ca2cac0328e53" name="acb65484bc24e3eff713ca2cac0328e53"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#acb65484bc24e3eff713ca2cac0328e53">&#9670;&#160;</a></span>search()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -298,7 +282,12 @@ Friends</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="classcello_1_1_value.html">bool</a></td>          <td class="paramname"><span class="paramname"><em>deep</em></span>&#160;) const</td>
+          <td class="paramtype"><a class="el" href="classcello_1_1_value.html">bool</a></td>          <td class="paramname"><span class="paramname"><em>deep</em>, </span></td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classcello_1_1_value.html">bool</a></td>          <td class="paramname"><span class="paramname"><em>returnFirstFound</em><span class="paramdefsep"> = </span><span class="paramdefval"><a class="el" href="classcello_1_1_value.html">false</a></span></span>&#160;) const</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -307,7 +296,8 @@ Friends</h2></td></tr>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">tree</td><td>ValueTree to search. </td></tr>
-    <tr><td class="paramname">deep</td><td>If true, the result tree will contain a deep copy of each chid found. </td></tr>
+    <tr><td class="paramname">deep</td><td>If true, the result tree will contain a deep copy of each child found. </td></tr>
+    <tr><td class="paramname">returnFirstFound</td><td>If true, will return a copy of the first matching child found, or an invalid tree if none was found. </td></tr>
   </table>
   </dd>
 </dl>
