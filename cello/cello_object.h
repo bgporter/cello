@@ -97,8 +97,7 @@ public:
      * @param file
      * @param format
      */
-    Object (const juce::String& type, juce::File file,
-            FileFormat format = FileFormat::xml);
+    Object (const juce::String& type, juce::File file, FileFormat format = FileFormat::xml);
 
     /**
      * @brief Construct a new Object object as a copy of an existing one.
@@ -205,6 +204,17 @@ public:
      * @return juce::ValueTree
      */
     juce::ValueTree find (const cello::Query& query, bool deep = false);
+
+    /**
+     * @brief Perform a query against the children of this object, returning
+     * the a copy of the first child found that meets the predicates in the
+     * query object, or an empty tree if none is found.
+     *
+     * @param query Query object that defines the search/sort criteria
+     * @param deep if true, also copy sub-items from object.
+     * @return juce::ValueTree copy of a matching child tree or {}
+     */
+    juce::ValueTree findOne (const cello::Query& query, bool deep = false);
 
     /**
      * @brief Update or insert a child object (concept borrowed from MongoDB)
@@ -384,10 +394,7 @@ public:
      *
      * @param listener
      */
-    void excludeListener (juce::ValueTree::Listener* listener)
-    {
-        excludedListener = listener;
-    }
+    void excludeListener (juce::ValueTree::Listener* listener) { excludedListener = listener; }
 
     /**
      * @brief Get a pointer to the listener to exclude from property change updates.
@@ -421,8 +428,7 @@ public:
      */
     void onPropertyChange (const ValueBase& val, PropertyUpdateFn callback);
 
-    using ChildUpdateFn =
-        std::function<void (juce::ValueTree& child, int oldIndex, int newIndex)>;
+    using ChildUpdateFn = std::function<void (juce::ValueTree& child, int oldIndex, int newIndex)>;
 
     ChildUpdateFn onChildAdded;
     ChildUpdateFn onChildRemoved;
@@ -456,8 +462,7 @@ public:
      * @param defaultVal
      * @return T
      */
-    template <typename T>
-    T getattr (const juce::Identifier& attr, const T& defaultVal) const
+    template <typename T> T getattr (const juce::Identifier& attr, const T& defaultVal) const
     {
         return juce::VariantConverter<T>::fromVar (data.getProperty (attr, defaultVal));
     }
@@ -481,8 +486,7 @@ public:
      */
     template <typename T> Object& setattr (const juce::Identifier& attr, const T& attrVal)
     {
-        data.setProperty (attr, juce::VariantConverter<T>::toVar (attrVal),
-                          getUndoManager ());
+        data.setProperty (attr, juce::VariantConverter<T>::toVar (attrVal), getUndoManager ());
         return (*this);
     }
 
@@ -553,8 +557,7 @@ private:
      * @param parentTree
      * @param childTree
      */
-    void valueTreeChildAdded (juce::ValueTree& parentTree,
-                              juce::ValueTree& childTree) override;
+    void valueTreeChildAdded (juce::ValueTree& parentTree, juce::ValueTree& childTree) override;
 
     /**
      * @brief Will execute the callback `onChildRemoved` if it exists.
@@ -563,8 +566,7 @@ private:
      * @param childTree
      * @param index
      */
-    void valueTreeChildRemoved (juce::ValueTree& parentTree, juce::ValueTree& childTree,
-                                int index) override;
+    void valueTreeChildRemoved (juce::ValueTree& parentTree, juce::ValueTree& childTree, int index) override;
 
     /**
      * @brief will execute the callback `onChildMoved` if it exists.
@@ -573,8 +575,7 @@ private:
      * @param oldIndex
      * @param newIndex
      */
-    void valueTreeChildOrderChanged (juce::ValueTree& childTree, int oldIndex,
-                                     int newIndex) override;
+    void valueTreeChildOrderChanged (juce::ValueTree& childTree, int oldIndex, int newIndex) override;
 
     /**
      * @brief Will execute the `onParentChanged` callback if it exists.

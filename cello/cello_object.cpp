@@ -25,8 +25,7 @@ namespace cello
 {
 
 Object::Object (const juce::String& type, const Object* state)
-: Object { type, (state != nullptr ? static_cast<juce::ValueTree> (*state)
-                                   : juce::ValueTree ()) }
+: Object { type, (state != nullptr ? static_cast<juce::ValueTree> (*state) : juce::ValueTree ()) }
 {
     if (state != nullptr)
         undoManager = state->getUndoManager ();
@@ -89,13 +88,17 @@ juce::ValueTree Object::clone (bool deep) const
 
 void Object::update (const juce::MemoryBlock& updateBlock)
 {
-    juce::ValueTreeSynchroniser::applyChange (data, updateBlock.getData (),
-                                              updateBlock.getSize (), getUndoManager ());
+    juce::ValueTreeSynchroniser::applyChange (data, updateBlock.getData (), updateBlock.getSize (), getUndoManager ());
 }
 
 juce::ValueTree Object::find (const cello::Query& query, bool deep)
 {
-    return query.search (data, deep);
+    return query.search (data, deep, false);
+}
+
+juce::ValueTree Object::findOne (const cello::Query& query, bool deep)
+{
+    return query.search (data, deep, true);
 }
 
 bool Object::upsert (const Object* object, const juce::Identifier& key, bool deep)
@@ -322,8 +325,7 @@ juce::Result Object::save (juce::File file, FileFormat format) const
     if (!fos.openedOk ())
     {
         jassertfalse;
-        return juce::Result::fail ("Unable to open " + file.getFullPathName () +
-                                   " for writing");
+        return juce::Result::fail ("Unable to open " + file.getFullPathName () + " for writing");
     }
 
     if (format == FileFormat::binary)
@@ -393,8 +395,7 @@ Object::CreationType Object::wrap (const juce::String& type, juce::ValueTree tre
     return creationType;
 }
 
-void Object::valueTreePropertyChanged (juce::ValueTree& treeWhosePropertyHasChanged,
-                                       const juce::Identifier& property)
+void Object::valueTreePropertyChanged (juce::ValueTree& treeWhosePropertyHasChanged, const juce::Identifier& property)
 {
     if (treeWhosePropertyHasChanged == data)
     {
@@ -422,15 +423,13 @@ void Object::valueTreeChildAdded (juce::ValueTree& parentTree, juce::ValueTree& 
         onChildAdded (childTree, -1, data.indexOf (childTree));
 }
 
-void Object::valueTreeChildRemoved (juce::ValueTree& parentTree,
-                                    juce::ValueTree& childTree, int index)
+void Object::valueTreeChildRemoved (juce::ValueTree& parentTree, juce::ValueTree& childTree, int index)
 {
     if (parentTree == data && onChildRemoved != nullptr)
         onChildRemoved (childTree, index, -1);
 }
 
-void Object::valueTreeChildOrderChanged (juce::ValueTree& parentTree, int oldIndex,
-                                         int newIndex)
+void Object::valueTreeChildOrderChanged (juce::ValueTree& parentTree, int oldIndex, int newIndex)
 {
     if (parentTree == data && onChildMoved != nullptr)
     {
