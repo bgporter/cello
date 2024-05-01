@@ -5,6 +5,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 1.4.0 * 2024-05-01
+
+- Added new `Object::findOne()` method to search for and return a single child tree from an object. 
+- Added new argument `returnFirstFound` to `Query::search`, used to implement the above. 
+- 
+
 ## 1.3.1 * 2024-03-29
 
 - Cleaned up some buggy unit tests

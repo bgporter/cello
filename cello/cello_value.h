@@ -151,8 +151,7 @@ public:
         {
             // when the underlying value changes, cache it here so it can
             // be used without needing to look it up, go through validation, etc.
-            value.onPropertyChange ([this] (juce::Identifier id)
-                                    { cachedValue = static_cast<T> (value); });
+            value.onPropertyChange ([this] (juce::Identifier /*id*/) { cachedValue = static_cast<T> (value); });
         }
 
         ~Cached () { value.onPropertyChange (nullptr); }
@@ -195,10 +194,7 @@ public:
      *
      * @param listener
      */
-    void excludeListener (juce::ValueTree::Listener* listener)
-    {
-        excludedListener = listener;
-    }
+    void excludeListener (juce::ValueTree::Listener* listener) { excludedListener = listener; }
 
     /**
      * @brief Register (or clear) a callback function to execute when this value
@@ -206,10 +202,7 @@ public:
      *
      * @param callback
      */
-    void onPropertyChange (PropertyUpdateFn callback)
-    {
-        object.onPropertyChange (getId (), callback);
-    }
+    void onPropertyChange (PropertyUpdateFn callback) { object.onPropertyChange (getId (), callback); }
 
 private:
     void doSet (const T& val)
@@ -221,13 +214,10 @@ private:
         {
             // check if this value or our parent object have a listener to exclude
             // from updates.
-            auto* excluded = (excludedListener != nullptr)
-                                 ? excludedListener
-                                 : object.getExcludedListener ();
+            auto* excluded = (excludedListener != nullptr) ? excludedListener : object.getExcludedListener ();
             const auto asVar { juce::VariantConverter<T>::toVar (val) };
             if (excluded)
-                tree.setPropertyExcludingListener (excluded, id, asVar,
-                                                   object.getUndoManager ());
+                tree.setPropertyExcludingListener (excluded, id, asVar, object.getUndoManager ());
             else
                 tree.setProperty (id, asVar, object.getUndoManager ());
         }

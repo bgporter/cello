@@ -32,7 +32,7 @@ class UpdateQueue
 {
 public:
     UpdateQueue (Object& consumer, juce::Thread* thread);
-    virtual ~UpdateQueue () {};
+    virtual ~UpdateQueue () {}
     UpdateQueue (const UpdateQueue&)            = delete;
     UpdateQueue& operator= (const UpdateQueue&) = delete;
     UpdateQueue (UpdateQueue&&)                 = delete;

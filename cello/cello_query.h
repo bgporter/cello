@@ -38,8 +38,7 @@ public:
     // return 0 if the two trees should sort equally.
     // return -1 if left should come before right
     // return +1 if right should come before left.
-    using Comparison =
-        std::function<int (const juce::ValueTree&, const juce::ValueTree&)>;
+    using Comparison = std::function<int (const juce::ValueTree&, const juce::ValueTree&)>;
 
     /**
      * @brief Construct a new Query object.
@@ -82,10 +81,12 @@ public:
      *
      * @param tree ValueTree to search.
      * @param deep  If true, the result tree will contain a deep copy of each
-     *      chid found.
+     *      child found.
+     * @param returnFirstFound If true, will return a copy of the first matching
+     *      child found, or an invalid tree if none was found.
      * @return juce::ValueTree with query results.
      */
-    juce::ValueTree search (juce::ValueTree tree, bool deep) const;
+    juce::ValueTree search (juce::ValueTree tree, bool deep, bool returnFirstFound = false) const;
 
     /**
      * @brief Add a comparison function to the list we use to sort a list
@@ -106,8 +107,7 @@ public:
      *      equal. This is slower, so only use it if needed.
      * @return juce::ValueTree
      */
-    juce::ValueTree sort (juce::ValueTree tree, juce::UndoManager* undo = nullptr,
-                          bool stableSort = false) const;
+    juce::ValueTree sort (juce::ValueTree tree, juce::UndoManager* undo = nullptr, bool stableSort = false) const;
 
 private:
     /**
