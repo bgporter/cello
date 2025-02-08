@@ -5,6 +5,14 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## Unreleased 
+
+### Added 
+
+- TODO: add `get()` method to value, simplfying accessing the underlying data of a `Value` in its correct compile-time type. 
+- TODO: fix behavior of listeners on an Object's type to return the ID of the property that has changed, not the ID of the tree itself, which isn't that useful. 
+  
+
 ## 1.4.0 * 2024-05-01
 
 - Added new `Object::findOne()` method to search for and return a single child tree from an object. 

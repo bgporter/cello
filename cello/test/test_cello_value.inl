@@ -137,10 +137,13 @@ public:
                   o.complexVal = orig;
 
                   std::complex<float> retrieved { o.complexVal };
-                  expectWithinAbsoluteError<float> (orig.real (), retrieved.real (),
-                                                    0.001f);
-                  expectWithinAbsoluteError<float> (orig.imag (), retrieved.imag (),
-                                                    0.001f);
+                  expectWithinAbsoluteError<float> (orig.real (), retrieved.real (), 0.001f);
+                  expectWithinAbsoluteError<float> (orig.imag (), retrieved.imag (), 0.001f);
+
+                  // test using the `get()` method into an `auto` variable
+                  auto retrieved2 { o.complexVal.get () };
+                  expectWithinAbsoluteError<float> (orig.real (), retrieved2.real (), 0.001f);
+                  expectWithinAbsoluteError<float> (orig.imag (), retrieved2.imag (), 0.001f);
               });
 
         test ("Cached value",

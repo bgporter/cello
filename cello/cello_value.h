@@ -120,7 +120,14 @@ public:
      *
      * @return T
      */
-    operator T () const
+    operator T () const { return get (); }
+
+    /**
+     * @brief Get the current value of this property from the tree.
+     *
+     * @return T
+     */
+    T get () const
     {
         if (onGet != nullptr)
             return onGet (doGet ());
