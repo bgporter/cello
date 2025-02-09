@@ -1,13 +1,13 @@
 var searchData=
 [
-  ['getattr_0',['getattr',['../classcello_1_1_object.html#a6a23c8172d0df906594e9d222dd6e441',1,'cello::Object']]],
-  ['getcached_1',['getCached',['../classcello_1_1_value.html#af18baa55efabfe09259855f6fa4d020c',1,'cello::Value']]],
-  ['getcreationtype_2',['getCreationType',['../classcello_1_1_object.html#ae04aa9d628d2ee279d9d467c8caf73d8',1,'cello::Object']]],
-  ['getexcludedlistener_3',['getExcludedListener',['../classcello_1_1_object.html#a36491bac36514cc7e88454d8444d0a0f',1,'cello::Object']]],
-  ['getid_4',['getId',['../classcello_1_1_value_base.html#a34e2aac3c6fb6b2247a6d5ad91aaac79',1,'cello::ValueBase']]],
-  ['getnumchildren_5',['getNumChildren',['../classcello_1_1_object.html#a86a5f2f969546e15cf78507a09b5b0dd',1,'cello::Object']]],
-  ['getpendingupdatecount_6',['getPendingUpdateCount',['../classcello_1_1_update_queue.html#a717024415d9c59c7a5f1bed4c8d3ec7e',1,'cello::UpdateQueue']]],
-  ['getsearchresult_7',['getSearchResult',['../classcello_1_1_path.html#a416fcfaeae96e894832810c684429034',1,'cello::Path']]],
-  ['gettype_8',['getType',['../classcello_1_1_object.html#a9365e8cc11d3d6ea98957cf150450b1a',1,'cello::Object']]],
-  ['getundomanager_9',['getUndoManager',['../classcello_1_1_object.html#aa19bde9dc0f5ae807641414d8e890d44',1,'cello::Object']]]
+  ['find_0',['find',['../classcello_1_1_object.html#aa28a19ff0e4f6e6c826e7293e1937d23',1,'cello::Object']]],
+  ['finding_20children_1',['Finding Children',['../md__r_e_a_d_m_e.html#autotoc_md39',1,'']]],
+  ['finding_20objects_20in_20a_20hierarchy_2',['Creating/Finding Objects in a Hierarchy',['../md__r_e_a_d_m_e.html#autotoc_md35',1,'']]],
+  ['findone_3',['findOne',['../classcello_1_1_object.html#aa7230b2a5bdaedf19fd3b6487e40138f',1,'cello::Object']]],
+  ['findvaluetree_4',['findValueTree',['../classcello_1_1_path.html#a7cdbb7cc2f6eb30b7ef66895863192ef',1,'cello::Path']]],
+  ['fixed_5',['Fixed',['../md__c_h_a_n_g_e_l_o_g.html#autotoc_md9',1,'Fixed'],['../md__c_h_a_n_g_e_l_o_g.html#autotoc_md11',1,'Fixed'],['../md__c_h_a_n_g_e_l_o_g.html#autotoc_md13',1,'Fixed'],['../md__c_h_a_n_g_e_l_o_g.html#autotoc_md15',1,'Fixed']]],
+  ['forceupdate_6',['forceUpdate',['../classcello_1_1_update_source.html#a776d44ec037a4cbbc8631118fa5876ca',1,'cello::UpdateSource']]],
+  ['forcing_20update_20callbacks_7',['Forcing Update Callbacks',['../md__r_e_a_d_m_e.html#autotoc_md31',1,'']]],
+  ['found_8',['found',['../classcello_1_1_path.html#a839048a48678e8ea37c54593ebc4bf05aed15e1843f4efeeb9dac34a45f8a339f',1,'cello::Path']]],
+  ['functions_9',['Validator Functions',['../md__r_e_a_d_m_e.html#autotoc_md29',1,'']]]
 ];

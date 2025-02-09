@@ -4,6 +4,7 @@ var classcello_1_1_value =
     [ "ValidatePropertyFn", "classcello_1_1_value.html#a9aba24cff29a73036eeac02c298568aa", null ],
     [ "Value", "classcello_1_1_value.html#a7c2156f94dec53dfa724a6e2aac11088", null ],
     [ "excludeListener", "classcello_1_1_value.html#a5cb3116dff1d8fd02428ab0af613f79b", null ],
+    [ "get", "classcello_1_1_value.html#a3e72a168c2a3de244a6be42cdf4a4301", null ],
     [ "getCached", "classcello_1_1_value.html#af18baa55efabfe09259855f6fa4d020c", null ],
     [ "onPropertyChange", "classcello_1_1_value.html#a284f9fd6d9e25e6acebf511fcf741fe8", null ],
     [ "operator T", "classcello_1_1_value.html#a7b34e884e1a6498b74c39ab055573565", null ],
