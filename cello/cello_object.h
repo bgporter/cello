@@ -147,11 +147,29 @@ public:
     bool operator!= (const juce::ValueTree& rhs) const noexcept { return data != rhs; }
 
     /**
-     * @brief Get the type of this object.
+     * @brief Get the type of this object as a juce::Identifier.
      *
      * @return juce::Identifier
      */
     juce::Identifier getType () const { return data.getType (); }
+
+    /**
+     * @brief Get the type of this object as a string.
+     *
+     * @return juce::String
+     */
+    juce::String getTypeName () const { return getType ().toString (); }
+
+    /**
+     * @brief Generate a string representation of this object's tree.
+     *
+     * @param format specifies details of the output.
+     * @return juce::String
+     */
+    juce::String toXmlString (const juce::XmlElement::TextFormat& format = {}) const
+    {
+        return data.toXmlString (format);
+    }
 
     /**
      * @brief Determine how this object was created, which will be one of:
@@ -165,6 +183,20 @@ public:
      * @return CreationType
      */
     CreationType getCreationType () const { return creationType; }
+
+    /**
+     * @brief utility method to test the creation type as a bool.
+     *
+     * @return true if this object was created by wrapping an existing tree.
+     */
+    bool wasWrapped () const { return creationType == CreationType::wrapped; }
+
+    /**
+     * @brief utility method to test the creation type as a bool.
+     *
+     * @return true if this object was created by default initialization.
+     */
+    bool wasInitialized () const { return creationType == CreationType::initialized; }
 
     /**
      * @brief Get the ValueTree we're using as our data store.
@@ -207,7 +239,7 @@ public:
 
     /**
      * @brief Perform a query against the children of this object, returning
-     * the a copy of the first child found that meets the predicates in the
+     * a copy of the first child found that meets the predicates in the
      * query object, or an empty tree if none is found.
      *
      * @param query Query object that defines the search/sort criteria
@@ -418,6 +450,15 @@ public:
      * @param callback function to call on update.
      */
     void onPropertyChange (juce::Identifier id, PropertyUpdateFn callback);
+
+    /**
+     * @brief install or clear a generic callback that will be called when any
+     * property in the object changes. The identifier of the property that changed
+     * will be passed to the callback.
+     *
+     * @param callback
+     */
+    void onPropertyChange (PropertyUpdateFn callback) { onPropertyChange (getType (), callback); }
 
     /**
      * @brief register a property change callback by passing in a reference

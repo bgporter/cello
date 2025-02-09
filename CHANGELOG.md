@@ -9,9 +9,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added 
 
-- TODO: add `get()` method to value, simplfying accessing the underlying data of a `Value` in its correct compile-time type. 
-- TODO: fix behavior of listeners on an Object's type to return the ID of the property that has changed, not the ID of the tree itself, which isn't that useful. 
-  
+- add `get()` method to value, simplfying accessing the underlying data of a `Value` in its correct compile-time type. 
+- fix behavior of listeners on an Object's type to return the ID of the property that has changed, not the ID of the tree itself, which isn't that useful. 
+- add `Object::wasWrapped()` and `Object::wasInitialized()` methods. 
+- add `Object::getTypeName()` for convenience. 
+- add `Object::toXmlString()` for convenience. 
 
 ## 1.4.0 * 2024-05-01
 
