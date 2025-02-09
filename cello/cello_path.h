@@ -64,7 +64,7 @@ public:
     {
         query,        ///< only search, do not create anything.
         createTarget, ///< create final tree in specification, but no intermediate trees
-        createAll ///< create final tree and all intermediate trees needed to reach it.
+        createAll     ///< create final tree and all intermediate trees needed to reach it.
     };
 
     enum SearchResult
@@ -82,8 +82,7 @@ public:
      * @param searchType
      * @return juce::ValueTree; if search type was `query` may be an invalid tree
      */
-    juce::ValueTree findValueTree (juce::ValueTree& origin, SearchType searchType,
-                                   juce::UndoManager* undo = nullptr);
+    juce::ValueTree findValueTree (juce::ValueTree& origin, SearchType searchType, juce::UndoManager* undo = nullptr);
 
     /**
      * @brief Find out whether performing a search succeeded, and if so, needed to
