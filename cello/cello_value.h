@@ -398,8 +398,9 @@ T operator-- (Value<T>& val, int)
  * as a member of a cello::Object, using the same name for the variable
  * as the identifier used for the property in its ValueTree.
  */
-#define MAKE_VALUE_MEMBER(type, name, init) \
-    cello::Value<type> name                 \
-    {                                       \
-        *this, #name, init                  \
+#define MAKE_VALUE_MEMBER(type, name, init)                  \
+    static const inline juce::Identifier name##Id { #name }; \
+    cello::Value<type> name                                  \
+    {                                                        \
+        *this, name##Id, init                                \
     }
