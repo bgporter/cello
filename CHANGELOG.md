@@ -13,8 +13,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
-- type of first argument to a `PropertyChangeFn` changed from `juce::Identifier` to `const juce::Identifier&`
-- cleaned up Value arithmetic operators by replacing noisy static_cast calls with the recently added `Value::get()` method that accomplishes the same thing. 
+- type of first argument to a `PropertyChangeFn` changed from `juce::Identifier` to `const juce::Identifier&`, which it always should have been.
+- cleaned up `Value` arithmetic operators by replacing noisy static_cast calls with the recently added `Value::get()` method that accomplishes the same thing.
 
 
 ## 1.5.0 * 2025-02-09 
