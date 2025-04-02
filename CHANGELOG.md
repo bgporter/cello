@@ -9,6 +9,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- the `MAKE_VALUE_MEMBER` macro now creates a static `juce::Identifer` that's used by all instances of the class to instantiate that member instead of re-converting from a string each time. Should be faster, and use the Identifier objects as they're intended to be used. 
+
 ### Fixed
 
 - type of first argument to a `PropertyChangeFn` changed from `juce::Identifier` to `const juce::Identifier&`
