@@ -25,8 +25,7 @@ namespace cello
 {
 
 Object::Object (const juce::String& type, const Object* state)
-: Object { type, (state != nullptr ? static_cast<juce::ValueTree> (*state)
-                                   : juce::ValueTree ()) }
+: Object { type, (state != nullptr ? static_cast<juce::ValueTree> (*state) : juce::ValueTree ()) }
 {
     if (state != nullptr)
         undoManager = state->getUndoManager ();
@@ -89,13 +88,17 @@ juce::ValueTree Object::clone (bool deep) const
 
 void Object::update (const juce::MemoryBlock& updateBlock)
 {
-    juce::ValueTreeSynchroniser::applyChange (data, updateBlock.getData (),
-                                              updateBlock.getSize (), getUndoManager ());
+    juce::ValueTreeSynchroniser::applyChange (data, updateBlock.getData (), updateBlock.getSize (), getUndoManager ());
 }
 
 juce::ValueTree Object::find (const cello::Query& query, bool deep)
 {
-    return query.search (data, deep);
+    return query.search (data, deep, false);
+}
+
+juce::ValueTree Object::findOne (const cello::Query& query, bool deep)
+{
+    return query.search (data, deep, true);
 }
 
 bool Object::upsert (const Object* object, const juce::Identifier& key, bool deep)
@@ -322,8 +325,7 @@ juce::Result Object::save (juce::File file, FileFormat format) const
     if (!fos.openedOk ())
     {
         jassertfalse;
-        return juce::Result::fail ("Unable to open " + file.getFullPathName () +
-                                   " for writing");
+        return juce::Result::fail ("Unable to open " + file.getFullPathName () + " for writing");
     }
 
     if (format == FileFormat::binary)
@@ -347,73 +349,43 @@ juce::Result Object::save (juce::File file, FileFormat format) const
 Object::CreationType Object::wrap (const juce::String& type, juce::ValueTree tree)
 {
     creationType = CreationType::wrapped;
-#if PATH_IMPL
     Path path { type };
     // DBG(tree.toXmlString());
     data = path.findValueTree (tree, Path::SearchType::createAll, nullptr);
     // DBG(data.toXmlString());
     if (path.getSearchResult () == Path::SearchResult::created)
         creationType = CreationType::initialized;
-#else
-    if (tree.isValid ())
-    {
-        // case 1: We're passed the tree we use as our store directly.
-        if (tree.getType () == type)
-            data = tree;
-        else
-        {
-            // case 2: look in the state tree for our data.
-            auto childTree = tree.getChildWithName (type);
-            if (childTree.isValid ())
-            {
-                data = childTree;
-            }
-            else
-            {
-                // case 3: the state tree doesn't have a tree for our data type
-                // yet. Create an empty tree of the correct type, mark ourselves
-                // as having been default-initialized.
-                data         = juce::ValueTree (type);
-                creationType = CreationType::initialized;
-                tree.appendChild (data, getUndoManager ());
-            }
-        }
-    }
-    else
-    {
-        // case 4: There's no state, just create an empty tree of the correct
-        // type and mark ourselves as needing to be initialized.
-        data         = juce::ValueTree (type);
-        creationType = CreationType::initialized;
-    }
-#endif
 
     // register to receive callbacks when the tree changes.
     data.addListener (this);
     return creationType;
 }
 
-void Object::valueTreePropertyChanged (juce::ValueTree& treeWhosePropertyHasChanged,
-                                       const juce::Identifier& property)
+void Object::valueTreePropertyChanged (juce::ValueTree& treeWhosePropertyHasChanged, const juce::Identifier& property)
 {
-    if (treeWhosePropertyHasChanged == data)
+    if (treeWhosePropertyHasChanged != data)
+        return;
+    // look for an update callback for this property. Returns true if a callback
+    // was registered and called.
+    auto callUpdaterForProperty = [this] (const juce::Identifier& key, const juce::Identifier& prop) -> bool
     {
-        // first, try to find a callback for that exact property.
         for (const auto& updater : propertyUpdaters)
         {
-            if (updater.id == property)
+            if (updater.id == key)
             {
                 if (updater.fn != nullptr)
-                    updater.fn (property);
-                return;
+                    updater.fn (prop);
+                return true;
             }
         }
-        // a cello extension: register a callback on the name of the tree's
-        // type, and you'll get a callback there for any property change that
-        // didn't have its own callback registered.
-        if (property != getType ())
-            valueTreePropertyChanged (data, getType ());
-    }
+        return false;
+    };
+
+    // first, try to find a callback for that exact property.
+    if (callUpdaterForProperty (property, property))
+        return;
+    // ...then see if a generic callback is registered for the type of the tree.
+    callUpdaterForProperty (getType (), property);
 }
 
 void Object::valueTreeChildAdded (juce::ValueTree& parentTree, juce::ValueTree& childTree)
@@ -422,15 +394,13 @@ void Object::valueTreeChildAdded (juce::ValueTree& parentTree, juce::ValueTree& 
         onChildAdded (childTree, -1, data.indexOf (childTree));
 }
 
-void Object::valueTreeChildRemoved (juce::ValueTree& parentTree,
-                                    juce::ValueTree& childTree, int index)
+void Object::valueTreeChildRemoved (juce::ValueTree& parentTree, juce::ValueTree& childTree, int index)
 {
     if (parentTree == data && onChildRemoved != nullptr)
         onChildRemoved (childTree, index, -1);
 }
 
-void Object::valueTreeChildOrderChanged (juce::ValueTree& parentTree, int oldIndex,
-                                         int newIndex)
+void Object::valueTreeChildOrderChanged (juce::ValueTree& parentTree, int oldIndex, int newIndex)
 {
     if (parentTree == data && onChildMoved != nullptr)
     {

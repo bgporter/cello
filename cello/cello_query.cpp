@@ -38,7 +38,7 @@ Query& Query::addFilter (Predicate filter)
     return *this;
 }
 
-juce::ValueTree Query::search (juce::ValueTree tree, bool deep) const
+juce::ValueTree Query::search (juce::ValueTree tree, bool deep, bool returnFirstFound) const
 {
     juce::ValueTree result { type };
     for (auto child : tree)
@@ -50,9 +50,15 @@ juce::ValueTree Query::search (juce::ValueTree tree, bool deep) const
                 childCopy.copyPropertiesAndChildrenFrom (child, nullptr);
             else
                 childCopy.copyPropertiesFrom (child, nullptr);
+            if (returnFirstFound)
+                return childCopy;
             result.appendChild (childCopy, nullptr);
         }
     }
+
+    if (returnFirstFound)
+        return {};
+
     return sort (result);
     // return result;
 }

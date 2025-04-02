@@ -97,8 +97,7 @@ public:
      * @param file
      * @param format
      */
-    Object (const juce::String& type, juce::File file,
-            FileFormat format = FileFormat::xml);
+    Object (const juce::String& type, juce::File file, FileFormat format = FileFormat::xml);
 
     /**
      * @brief Construct a new Object object as a copy of an existing one.
@@ -148,11 +147,29 @@ public:
     bool operator!= (const juce::ValueTree& rhs) const noexcept { return data != rhs; }
 
     /**
-     * @brief Get the type of this object.
+     * @brief Get the type of this object as a juce::Identifier.
      *
      * @return juce::Identifier
      */
     juce::Identifier getType () const { return data.getType (); }
+
+    /**
+     * @brief Get the type of this object as a string.
+     *
+     * @return juce::String
+     */
+    juce::String getTypeName () const { return getType ().toString (); }
+
+    /**
+     * @brief Generate a string representation of this object's tree.
+     *
+     * @param format specifies details of the output.
+     * @return juce::String
+     */
+    juce::String toXmlString (const juce::XmlElement::TextFormat& format = {}) const
+    {
+        return data.toXmlString (format);
+    }
 
     /**
      * @brief Determine how this object was created, which will be one of:
@@ -166,6 +183,20 @@ public:
      * @return CreationType
      */
     CreationType getCreationType () const { return creationType; }
+
+    /**
+     * @brief utility method to test the creation type as a bool.
+     *
+     * @return true if this object was created by wrapping an existing tree.
+     */
+    bool wasWrapped () const { return creationType == CreationType::wrapped; }
+
+    /**
+     * @brief utility method to test the creation type as a bool.
+     *
+     * @return true if this object was created by default initialization.
+     */
+    bool wasInitialized () const { return creationType == CreationType::initialized; }
 
     /**
      * @brief Get the ValueTree we're using as our data store.
@@ -205,6 +236,17 @@ public:
      * @return juce::ValueTree
      */
     juce::ValueTree find (const cello::Query& query, bool deep = false);
+
+    /**
+     * @brief Perform a query against the children of this object, returning
+     * a copy of the first child found that meets the predicates in the
+     * query object, or an empty tree if none is found.
+     *
+     * @param query Query object that defines the search/sort criteria
+     * @param deep if true, also copy sub-items from object.
+     * @return juce::ValueTree copy of a matching child tree or {}
+     */
+    juce::ValueTree findOne (const cello::Query& query, bool deep = false);
 
     /**
      * @brief Update or insert a child object (concept borrowed from MongoDB)
@@ -384,10 +426,7 @@ public:
      *
      * @param listener
      */
-    void excludeListener (juce::ValueTree::Listener* listener)
-    {
-        excludedListener = listener;
-    }
+    void excludeListener (juce::ValueTree::Listener* listener) { excludedListener = listener; }
 
     /**
      * @brief Get a pointer to the listener to exclude from property change updates.
@@ -413,6 +452,15 @@ public:
     void onPropertyChange (juce::Identifier id, PropertyUpdateFn callback);
 
     /**
+     * @brief install or clear a generic callback that will be called when any
+     * property in the object changes. The identifier of the property that changed
+     * will be passed to the callback.
+     *
+     * @param callback
+     */
+    void onPropertyChange (PropertyUpdateFn callback) { onPropertyChange (getType (), callback); }
+
+    /**
      * @brief register a property change callback by passing in a reference
      * to a Value object instead of its id.
      *
@@ -421,8 +469,7 @@ public:
      */
     void onPropertyChange (const ValueBase& val, PropertyUpdateFn callback);
 
-    using ChildUpdateFn =
-        std::function<void (juce::ValueTree& child, int oldIndex, int newIndex)>;
+    using ChildUpdateFn = std::function<void (juce::ValueTree& child, int oldIndex, int newIndex)>;
 
     ChildUpdateFn onChildAdded;
     ChildUpdateFn onChildRemoved;
@@ -456,8 +503,7 @@ public:
      * @param defaultVal
      * @return T
      */
-    template <typename T>
-    T getattr (const juce::Identifier& attr, const T& defaultVal) const
+    template <typename T> T getattr (const juce::Identifier& attr, const T& defaultVal) const
     {
         return juce::VariantConverter<T>::fromVar (data.getProperty (attr, defaultVal));
     }
@@ -481,8 +527,7 @@ public:
      */
     template <typename T> Object& setattr (const juce::Identifier& attr, const T& attrVal)
     {
-        data.setProperty (attr, juce::VariantConverter<T>::toVar (attrVal),
-                          getUndoManager ());
+        data.setProperty (attr, juce::VariantConverter<T>::toVar (attrVal), getUndoManager ());
         return (*this);
     }
 
@@ -553,8 +598,7 @@ private:
      * @param parentTree
      * @param childTree
      */
-    void valueTreeChildAdded (juce::ValueTree& parentTree,
-                              juce::ValueTree& childTree) override;
+    void valueTreeChildAdded (juce::ValueTree& parentTree, juce::ValueTree& childTree) override;
 
     /**
      * @brief Will execute the callback `onChildRemoved` if it exists.
@@ -563,8 +607,7 @@ private:
      * @param childTree
      * @param index
      */
-    void valueTreeChildRemoved (juce::ValueTree& parentTree, juce::ValueTree& childTree,
-                                int index) override;
+    void valueTreeChildRemoved (juce::ValueTree& parentTree, juce::ValueTree& childTree, int index) override;
 
     /**
      * @brief will execute the callback `onChildMoved` if it exists.
@@ -573,8 +616,7 @@ private:
      * @param oldIndex
      * @param newIndex
      */
-    void valueTreeChildOrderChanged (juce::ValueTree& childTree, int oldIndex,
-                                     int newIndex) override;
+    void valueTreeChildOrderChanged (juce::ValueTree& childTree, int oldIndex, int newIndex) override;
 
     /**
      * @brief Will execute the `onParentChanged` callback if it exists.

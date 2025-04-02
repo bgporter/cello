@@ -183,7 +183,7 @@ IpcServer::IpcServer (Object& sync, IpcClient::UpdateType updateType, const juce
     // the server properties will change its portNumber member to let us
     // know that we should start or stop ourselves.
     serverProperties.portNumber.onPropertyChange (
-        [this] (juce::Identifier id)
+        [this] (juce::Identifier /*id*/)
         {
             if (serverProperties.portNumber > 0)
                 startServer (serverProperties.portNumber, serverProperties.bindAddress);

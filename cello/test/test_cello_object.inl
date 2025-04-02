@@ -271,6 +271,34 @@ public:
                   expect (count == 1);
                   pt.y = -50;
                   expect (count == 2);
+
+                  juce::Identifier lastIdentifier;
+                  int lastValue { 0 };
+                  cello::PropertyUpdateFn callback2 = [&pt, &lastIdentifier, &lastValue] (juce::Identifier id)
+                  {
+                      lastIdentifier = id;
+                      lastValue      = pt.getattr<int> (id, 0);
+                  };
+
+                  pt.onPropertyChange (pt.getType (), callback2);
+                  // the generic callback should not be called because `pt` has
+                  // handlers for both x and y.
+                  pt.x = 200;
+                  expect (lastIdentifier.isNull ());
+                  expect (lastValue == 0);
+                  pt.y = 200;
+                  expect (lastIdentifier.isNull ());
+                  expect (lastValue == 0);
+            
+                  Vec2 pt2 = pt;
+                  // install the generic callback on pt2
+                  pt2.onPropertyChange (callback2);
+                  pt.x = 201;
+                  expect (lastIdentifier.toString () == "x");
+                  expect (lastValue == 201);
+                  pt.y = 1201;
+                  expect (lastIdentifier.toString () == "y");
+                  expect (lastValue == 1201);
               });
         test ("force updates",
               [&] ()

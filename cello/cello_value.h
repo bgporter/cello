@@ -62,6 +62,12 @@ protected:
  * - be supported by the `juce::var` type, or define a
  *   `juce::VariantConverter` structure to round-trip through a `juce::var`
  *
+ * **NOTE** that we have a special case for floating point types -- we compare
+ * the old and new versions of the value with a small epsilon value to let your
+ * code control how 'close' two floating point values must be to be considered
+ * equivalent. There's a static `epsilon` member of this class that you can
+ * set as needed in your application; the default is 0.001.
+ *
  * @tparam T Data type handled by this Value.
  */
 template <typename T> class Value : public ValueBase
@@ -120,7 +126,14 @@ public:
      *
      * @return T
      */
-    operator T () const
+    operator T () const { return get (); }
+
+    /**
+     * @brief Get the current value of this property from the tree.
+     *
+     * @return T
+     */
+    T get () const
     {
         if (onGet != nullptr)
             return onGet (doGet ());
@@ -151,8 +164,7 @@ public:
         {
             // when the underlying value changes, cache it here so it can
             // be used without needing to look it up, go through validation, etc.
-            value.onPropertyChange ([this] (juce::Identifier id)
-                                    { cachedValue = static_cast<T> (value); });
+            value.onPropertyChange ([this] (juce::Identifier /*id*/) { cachedValue = static_cast<T> (value); });
         }
 
         ~Cached () { value.onPropertyChange (nullptr); }
@@ -178,6 +190,7 @@ public:
      * retrieved.
      */
     using ValidatePropertyFn = std::function<T (const T&)>;
+
     /**
      * @brief validator function called before setting this Value.
      */
@@ -195,10 +208,7 @@ public:
      *
      * @param listener
      */
-    void excludeListener (juce::ValueTree::Listener* listener)
-    {
-        excludedListener = listener;
-    }
+    void excludeListener (juce::ValueTree::Listener* listener) { excludedListener = listener; }
 
     /**
      * @brief Register (or clear) a callback function to execute when this value
@@ -206,10 +216,7 @@ public:
      *
      * @param callback
      */
-    void onPropertyChange (PropertyUpdateFn callback)
-    {
-        object.onPropertyChange (getId (), callback);
-    }
+    void onPropertyChange (PropertyUpdateFn callback) { object.onPropertyChange (getId (), callback); }
 
 private:
     void doSet (const T& val)
@@ -221,13 +228,10 @@ private:
         {
             // check if this value or our parent object have a listener to exclude
             // from updates.
-            auto* excluded = (excludedListener != nullptr)
-                                 ? excludedListener
-                                 : object.getExcludedListener ();
+            auto* excluded = (excludedListener != nullptr) ? excludedListener : object.getExcludedListener ();
             const auto asVar { juce::VariantConverter<T>::toVar (val) };
             if (excluded)
-                tree.setPropertyExcludingListener (excluded, id, asVar,
-                                                   object.getUndoManager ());
+                tree.setPropertyExcludingListener (excluded, id, asVar, object.getUndoManager ());
             else
                 tree.setProperty (id, asVar, object.getUndoManager ());
         }
@@ -235,8 +239,7 @@ private:
         {
             // check if we or our parent object want us to always send
             // a property change callback for this value.
-            const auto forceUpdate = shouldForceUpdate () || object.shouldForceUpdate ();
-            if (forceUpdate)
+            if (shouldForceUpdate () || object.shouldForceUpdate ())
                 tree.sendPropertyChangeMessage (id);
         }
     }
@@ -263,8 +266,8 @@ private:
     }
 
 public:
-    /// when setting, delta must be larger than this to cause a property
-    /// change callback.
+    /// when setting a floating point value, delta must be larger than this to
+    /// cause a property change callback.
     static inline float epsilon { 0.001f };
 
 private:
@@ -368,7 +371,11 @@ T operator-- (Value<T>& val)
 }
 
 /**
- * @brief post-decrement;
+ * @brief post-decrement; note that the semantics of this don't follow 'real'
+ * C++ usage -- because this type relies on an underlying ValueTree object to
+ * provide the actual data storage, the idea of 'returning a copy of this object
+ * in its original state' doesn't work. Instead, we return an instance of the
+ * `T` data type itself.
  *
  * @tparam T
  * @tparam std::enable_if<std::is_arithmetic<T>::value, T>::type

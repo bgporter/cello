@@ -147,6 +147,24 @@ public:
                   expectEquals (loResult.getNumChildren () + hiResult.getNumChildren (), root.getNumChildren ());
               });
 
+        test ("select one",
+              [this] ()
+              {
+                  cello::Object root { "root", parentTree };
+                  // look for a key in the previous 100
+                  int target = Data::lastKey - 50;
+                  cello::Query half (
+                      [this, target] (juce::ValueTree tree)
+                      {
+                          Data d { tree };
+                          return (d.key == target);
+                      });
+                  auto found { root.findOne (half, false) };
+                  expect (found.isValid ());
+                  Data foundData { found };
+                  expect (foundData.key == target);
+              });
+
         test ("multiple predicates",
               [this] ()
               {
