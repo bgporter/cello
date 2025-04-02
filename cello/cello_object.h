@@ -449,7 +449,7 @@ public:
      * @param id the ID of the property that has changed.
      * @param callback function to call on update.
      */
-    void onPropertyChange (juce::Identifier id, PropertyUpdateFn callback);
+    void onPropertyChange (const juce::Identifier& id, PropertyUpdateFn callback);
 
     /**
      * @brief install or clear a generic callback that will be called when any

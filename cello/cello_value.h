@@ -164,7 +164,7 @@ public:
         {
             // when the underlying value changes, cache it here so it can
             // be used without needing to look it up, go through validation, etc.
-            value.onPropertyChange ([this] (juce::Identifier /*id*/) { cachedValue = static_cast<T> (value); });
+            value.onPropertyChange ([this] (const juce::Identifier& /*id*/) { cachedValue = static_cast<T> (value); });
         }
 
         ~Cached () { value.onPropertyChange (nullptr); }
