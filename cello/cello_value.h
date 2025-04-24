@@ -169,7 +169,19 @@ public:
 
         ~Cached () { value.onPropertyChange (nullptr); }
 
-        operator T () const { return cachedValue; }
+        /**
+         * @brief retrieve the current value of this cached object.
+         *
+         * @return T
+         */
+        T get () const { return cachedValue; }
+
+        /**
+         * @brief retrieve the current value of this cached object.
+         *
+         * @return T
+         */
+        operator T () const { return get (); }
 
     private:
         Value<T>& value;

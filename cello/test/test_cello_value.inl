@@ -21,6 +21,7 @@
 #include <juce_core/juce_core.h>
 
 #include "../cello_object.h"
+#include "../cello_value.h"
 
 namespace juce
 {
@@ -178,6 +179,21 @@ public:
                   obj.intVal = 200;
                   expectEquals (static_cast<int> (cachedInt), 200);
                   expectEquals (updateCount, 2);
+              });
+
+        test ("Cached member",
+              [&] ()
+              {
+                  struct TestObject
+                  {
+                      ObjectWithConvertibleValue owcv;
+                      cello::Value<std::complex<float>>::Cached cachedVal { owcv.complexVal };
+                  };
+
+                  TestObject to;
+
+                  to.owcv.complexVal = { 1.f, 2.f };
+                  expect (to.owcv.complexVal.get () == to.cachedVal.get ());
               });
     }
 
