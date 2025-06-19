@@ -413,5 +413,12 @@ T operator-- (Value<T>& val, int)
 // clang-format on
 
 // clang-format off
+/**
+ * @brief a macro to create a cached value of a cello::Value object. 
+ * Useful to create a `Value::Cached` object in a constructor. 
+ *
+ * @param name name of the cached value object.
+ * @param value the cello::Value object to cache.
+ */
 #define CACHED_VALUE(name, value)  decltype(value.getCached()) name { value }
 // clang-format on
