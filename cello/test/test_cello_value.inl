@@ -187,7 +187,11 @@ public:
                   struct TestObject
                   {
                       ObjectWithConvertibleValue owcv;
-                      cello::Value<std::complex<float>>::Cached cachedVal { owcv.complexVal };
+                      CACHED_VALUE (cachedVal, owcv.complexVal);
+                      // expands to
+                      // decltype(owcv.complexVal.getCached()) cachedVal { owcv.complexVal };
+                      // which expands to 
+                      // cello::Value<std::complex<float>>::Cached cachedVal { owcv.complexVal };
                   };
 
                   TestObject to;

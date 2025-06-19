@@ -411,3 +411,7 @@ T operator-- (Value<T>& val, int)
     static const inline juce::Identifier name##Id { #name }; \
     cello::Value<type> name { *this, name##Id, init }
 // clang-format on
+
+// clang-format off
+#define CACHED_VALUE(name, value)  decltype(value.getCached()) name { value }
+// clang-format on
