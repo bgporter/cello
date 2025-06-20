@@ -66,6 +66,8 @@ private:
     juce::CriticalSection mutex;
     /// @brief Queue of tree updates to communicate between threads
     std::deque<juce::MemoryBlock> queue;
+    /// @brief Flag to prevent feedback loops
+    bool applyingUpdate { false };
 };
 
 /**
@@ -96,6 +98,25 @@ public:
     Sync (const Sync&)            = delete;
     Sync& operator= (const Sync&) = delete;
 
+    /**
+     * @brief Set the reverse sync object -- we use this to prevent feedback loops.
+     * @param reverseSync pointer to the reverse sync object.
+     */
+    void setReverseSync (Sync* reverseSync);
+
+    /**
+     * @brief   Check our paired sync object to see if it's updating.
+     *          This is used to prevent feedback loops.
+     * @return true if the reverse sync is updating, false otherwise.
+     */
+    bool isReverseUpdating () const;
+
+    /**
+     * @brief Check if we're currently applying an update.
+     * @return true if we're applying an update, false otherwise.
+     */
+    bool isApplyingUpdate () const;
+
 private:
     /**
      * @brief Whenever the state of the producer tree changes, this callback will
@@ -108,6 +129,8 @@ private:
      * @param encodedChangeSize  length of the data.
      */
     void stateChanged (const void* encodedChange, size_t encodedChangeSize) override;
+
+    Sync* reverseSync { nullptr };
 };
 
 } // namespace cello

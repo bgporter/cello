@@ -53,7 +53,9 @@ void UpdateQueue::performNextUpdate ()
         block = std::move (queue.front ());
         queue.pop_front ();
     }
+    applyingUpdate = true;
     dest.update (block);
+    applyingUpdate = false;
 }
 
 void UpdateQueue::pushUpdate (juce::MemoryBlock&& update)
@@ -89,7 +91,26 @@ Sync::Sync (Object& producer, Object& consumer, juce::Thread* thread)
 
 void Sync::stateChanged (const void* encodedChange, size_t encodedChangeSize)
 {
+    if (isReverseUpdating ())
+        return;
+
     pushUpdate (juce::MemoryBlock (encodedChange, encodedChangeSize));
+}
+
+void Sync::setReverseSync (Sync* reverseSync_)
+{
+    jassert (reverseSync == nullptr);
+    reverseSync = reverseSync_;
+}
+
+bool Sync::isReverseUpdating () const
+{
+    return reverseSync != nullptr && reverseSync->isApplyingUpdate ();
+}
+
+bool Sync::isApplyingUpdate () const
+{
+    return applyingUpdate;
 }
 
 } // namespace cello
