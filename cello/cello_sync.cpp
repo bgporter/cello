@@ -53,9 +53,10 @@ void UpdateQueue::performNextUpdate ()
         block = std::move (queue.front ());
         queue.pop_front ();
     }
-    applyingUpdate = true;
+
+    startUpdate (block.getData (), block.getSize ());
     dest.update (block);
-    applyingUpdate = false;
+    endUpdate ();
 }
 
 void UpdateQueue::pushUpdate (juce::MemoryBlock&& update)
@@ -80,39 +81,84 @@ void UpdateQueue::pushUpdate (juce::MemoryBlock&& update)
         destThread->notify ();
 }
 
-Sync::Sync (Object& producer, Object& consumer, juce::Thread* thread)
+//
+//////////////////////////////////////////////////////////////////////////
+//
+
+Sync::Sync (Object& producer, Object& consumer, juce::Thread* thread, SyncController* controller)
 : UpdateQueue (consumer, thread)
 , juce::ValueTreeSynchroniser { producer }
+, controller (controller)
 {
     // cannot sync to yourself!
-    jassert (static_cast<juce::ValueTree> (producer) !=
-             static_cast<juce::ValueTree> (consumer));
+    jassert (static_cast<juce::ValueTree> (producer) != static_cast<juce::ValueTree> (consumer));
 }
 
 void Sync::stateChanged (const void* encodedChange, size_t encodedChangeSize)
 {
-    if (isReverseUpdating ())
-        return;
+    if (controller != nullptr)
+    {
+        if (!controller->shouldHandleUpdate (this, (char*)encodedChange, encodedChangeSize))
+            return;
+    }
 
     pushUpdate (juce::MemoryBlock (encodedChange, encodedChangeSize));
 }
 
-void Sync::setReverseSync (Sync* reverseSync_)
+void Sync::startUpdate (void* data, size_t size)
 {
-    jassert (reverseSync == nullptr);
-    reverseSync = reverseSync_;
+    if (controller != nullptr)
+        controller->startUpdate (this, data, size);
 }
 
-bool Sync::isReverseUpdating () const
+
+void Sync::endUpdate ()
 {
-    return reverseSync != nullptr && reverseSync->isApplyingUpdate ();
+    if (controller != nullptr)
+        controller->endUpdate (this);
 }
 
-bool Sync::isApplyingUpdate () const
+//
+//////////////////////////////////////////////////////////////////////////
+//
+
+SyncController::SyncController (Object& obj1, juce::Thread* thread1, Object& obj2, juce::Thread* thread2)
+: sync1to2 (obj1, obj2, thread2, this)
+, sync2to1 (obj2, obj1, thread1, this)
 {
-    return applyingUpdate;
+    jassert (thread2 != thread1);
 }
 
+void SyncController::startUpdate (Sync* sync, void* data, size_t size)
+{
+    if (sync == &sync1to2)
+        update1to2 = SyncData ((char*)data, size);
+    else if (sync == &sync2to1)
+        update2to1 = SyncData ((char*)data, size);
+    else
+        jassertfalse;
+}
+
+void SyncController::endUpdate (Sync* sync)
+{
+    if (sync == &sync1to2)
+        update1to2.data = {};
+    else if (sync == &sync2to1)
+        update2to1.data = {};
+    else
+        jassertfalse;
+}
+
+bool SyncController::shouldHandleUpdate (Sync* sync, void* data, size_t size) const
+{
+    if (sync == &sync1to2)
+        return update2to1 != SyncData { data, size };
+    else if (sync == &sync2to1)
+        return update1to2 != SyncData { data, size };
+    else
+        jassertfalse;
+    return false;
+}
 } // namespace cello
 
 #if RUN_UNIT_TESTS

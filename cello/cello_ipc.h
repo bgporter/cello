@@ -136,6 +136,10 @@ private:
      * @param encodedSize
      */
     void stateChanged (const void* encodedChange, size_t encodedSize) override;
+    // !!! IMPLEMENT THESE
+    void startUpdate (void* data, size_t size) override; 
+    void endUpdate () override; 
+
 
 private:
     /// @brief An Object that we can use to connect to the rest of an application.
@@ -152,6 +156,8 @@ private:
     const juce::String pipe;
     /// receive timeout in ms.
     const int timeout;
+
+    SyncData updateData;
 };
 
 //==============================================================================

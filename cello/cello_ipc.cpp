@@ -136,9 +136,22 @@ void IpcClient::stateChanged (const void* encodedChange, size_t encodedSize)
 {
     if ((update & UpdateType::send) && (clientProperties.connected))
     {
-        sendMessage ({ encodedChange, encodedSize });
-        clientProperties.txCount++;
+        if (updateData != SyncData { encodedChange, encodedSize })
+        {
+            sendMessage ({ encodedChange, encodedSize });
+            clientProperties.txCount++;
+        }
     }
+}
+
+void IpcClient::startUpdate (void* data, size_t size)
+{
+    updateData = SyncData { data, size };
+}
+
+void IpcClient::endUpdate ()
+{
+    updateData = SyncData {};
 }
 
 //==============================================================================

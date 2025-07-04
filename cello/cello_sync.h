@@ -57,6 +57,19 @@ public:
 protected:
     void pushUpdate (juce::MemoryBlock&& update);
 
+    /**
+     * @brief Called when a new update is pushed onto the queue. We use this 
+     * to prevent feedback loops.
+     * 
+     * @param data pointer to the update data
+     * @param size size of the update data
+     */
+    virtual void startUpdate (void* data, size_t size) = 0;
+    /**
+     * @brief Called when the update is complete. clear the update data. 
+     */
+    virtual void endUpdate () = 0;
+
 private:
     /// @brief  Cello object that is being updated
     Object& dest;
@@ -66,9 +79,9 @@ private:
     juce::CriticalSection mutex;
     /// @brief Queue of tree updates to communicate between threads
     std::deque<juce::MemoryBlock> queue;
-    /// @brief Flag to prevent feedback loops
-    bool applyingUpdate { false };
 };
+
+class SyncController;
 
 /**
  * @class Sync
@@ -80,6 +93,33 @@ private:
  *
  * Take care to not generate infinite update loops.
  */
+/**
+ * @struct SyncData
+ * @brief Data structure for holding synchronization update information
+ */
+struct SyncData
+{
+    const char* data { nullptr };
+    size_t size { 0 };
+
+    SyncData () = default;
+    SyncData (const void* data_, size_t size_)
+    : data (static_cast<const char*> (data_))
+    , size (size_)
+    {
+    }
+    bool operator== (const SyncData& other) const
+    {
+        if (size != other.size)
+            return false;
+        for (size_t i { 0 }; i < size; ++i)
+            if (data[i] != other.data[i])
+                return false;
+        return true;
+    }
+    bool operator!= (const SyncData& other) const { return !(*this == other); }
+};
+
 class Sync : public UpdateQueue,
              public juce::ValueTreeSynchroniser
 {
@@ -93,29 +133,10 @@ public:
      *              be updated. If the consumer object is to be updated on the
      *              message thread, pass a nullptr for this arg.
      */
-    Sync (Object& producer, Object& consumer, juce::Thread* thread);
+    Sync (Object& producer, Object& consumer, juce::Thread* thread, SyncController* controller = nullptr);
 
     Sync (const Sync&)            = delete;
     Sync& operator= (const Sync&) = delete;
-
-    /**
-     * @brief Set the reverse sync object -- we use this to prevent feedback loops.
-     * @param reverseSync pointer to the reverse sync object.
-     */
-    void setReverseSync (Sync* reverseSync);
-
-    /**
-     * @brief   Check our paired sync object to see if it's updating.
-     *          This is used to prevent feedback loops.
-     * @return true if the reverse sync is updating, false otherwise.
-     */
-    bool isReverseUpdating () const;
-
-    /**
-     * @brief Check if we're currently applying an update.
-     * @return true if we're applying an update, false otherwise.
-     */
-    bool isApplyingUpdate () const;
 
 private:
     /**
@@ -130,7 +151,63 @@ private:
      */
     void stateChanged (const void* encodedChange, size_t encodedChangeSize) override;
 
-    Sync* reverseSync { nullptr };
+    void startUpdate (void* data, size_t size) override;
+    void endUpdate () override;
+
+    SyncController* controller { nullptr };
+};
+
+/**
+ * @brief Class to manage bi-directional sync between two Objects in different
+ * threads, preventing feedback loops. Each SyncController contains a pair
+ * of Sync objects, one for each direction of the sync.
+ */
+class SyncController
+{
+public:
+    SyncController (Object& obj1, juce::Thread* threadForObj1, Object& obj2, juce::Thread* threadForObj2);
+    ~SyncController () = default;
+
+    SyncController (const SyncController&)            = delete;
+    SyncController& operator= (const SyncController&) = delete;
+    SyncController (SyncController&&)                 = delete;
+    SyncController& operator= (SyncController&&)      = delete;
+
+private:
+    Sync sync1to2;
+    Sync sync2to1; 
+
+
+
+    SyncData update1to2;
+    SyncData update2to1;
+
+    friend class Sync;
+    /**
+     * @brief Called by Sync object to let us know that it's about to apply an update.
+     * 
+     * @param sync pointer to the Sync object that is about to apply the update
+     * @param data pointer to the update data
+     * @param size size of the update data
+     */
+    void startUpdate (Sync* sync, void* data, size_t size);
+    /**
+     * @brief Called by Sync object to let us know that it's finished applying the update.
+     * 
+     * @param sync pointer to the Sync object that has finished applying the update
+     */
+    void endUpdate (Sync* sync);
+
+    /**
+     * @brief Check if the update is valid. If this is the data the other side 
+     * just sent us, we don't want to apply it again.
+     * 
+     * @param sync pointer to the Sync object that is about to apply the update
+     * @param data pointer to the update data
+     * @param size size of the update data
+     */
+    bool shouldHandleUpdate (Sync* sync, void* data, size_t size) const;
+
 };
 
 } // namespace cello
