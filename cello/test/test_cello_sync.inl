@@ -31,17 +31,29 @@ public:
         sync = syncObject;
     }
 
+    void setSyncController (cello::SyncController* syncControllerObject)
+    {
+        jassert (syncControllerObject != nullptr);
+        syncController = syncControllerObject;
+    }
+
     void run () override
     {
-        jassert (sync != nullptr);
+        jassert (sync != nullptr || syncController != nullptr);
         while (!threadShouldExit ())
         {
-            sync->performAllUpdates ();
+            if (syncController != nullptr)
+                syncController->performAllUpdates (this);
+            else if (sync != nullptr)
+                sync->performAllUpdates ();
+            else
+                jassertfalse;
             wait (1000);
         }
     }
 
-    cello::Sync* sync;
+    cello::Sync* sync { nullptr };
+    cello::SyncController* syncController { nullptr };
     ThreadTestObject tto;
 };
 
@@ -88,7 +100,7 @@ public:
 
                   const int updateCount { 100 };
                   thread.tto.x.onPropertyChange (
-                      [&thread] (juce::Identifier)
+                      [&thread] (const juce::Identifier&)
                       {
                           if ((int) thread.tto.x >= updateCount)
                               thread.signalThreadShouldExit ();
@@ -136,13 +148,12 @@ public:
               [this] ()
               {
                   WorkerThread leftThread ("left");
-                  WorkerThread rightThread ("right");
-                  // we need a pair of cello::Sync objects; one in each direction.
-                  cello::Sync syncLeftToRight (leftThread.tto, rightThread.tto, &rightThread);
-                  cello::Sync syncRightToLeft (rightThread.tto, leftThread.tto, &leftThread);
+                  WorkerThread rightThread ("right");   
+                  cello::SyncController syncController (leftThread.tto, &leftThread, rightThread.tto, &rightThread);
 
-                  leftThread.setSync (&syncRightToLeft);
-                  rightThread.setSync (&syncLeftToRight);
+                  leftThread.setSyncController (&syncController);
+                  rightThread.setSyncController (&syncController);
+                  
 
                   // each of the WorkerThread objects listens to a different value in the
                   // shared tree; when the value being watched changes, the thread updates
@@ -150,19 +161,17 @@ public:
                   // between the threads. We tell the threads to exit when the value they
                   // are watching is greater than 100.
                   leftThread.tto.y.onPropertyChange (
-                      [&leftThread] (juce::Identifier)
+                      [&leftThread] (const juce::Identifier&)
                       {
                           int yVal { leftThread.tto.y };
-                          //   DBG ("leftThread x = " << yVal + 1);
                           leftThread.tto.x = yVal + 1;
                           if (yVal > 100)
                               leftThread.signalThreadShouldExit ();
                       });
                   rightThread.tto.x.onPropertyChange (
-                      [&rightThread] (juce::Identifier)
+                      [&rightThread] (const juce::Identifier&)
                       {
                           int xVal { rightThread.tto.x };
-                          //   DBG ("rightThread y = " << xVal + 1);
                           rightThread.tto.y = xVal + 1;
                           if (xVal > 100)
                               rightThread.signalThreadShouldExit ();
@@ -175,12 +184,43 @@ public:
                   leftThread.tto.x = 1;
                   // spin here a bit while waiting for the two worker threads to
                   // update each other...
-                  while (leftThread.isThreadRunning () && rightThread.isThreadRunning ())
+                  while (leftThread.isThreadRunning () || rightThread.isThreadRunning ())
                   {
                       juce::Thread::sleep (100);
                   }
-                  expectEquals ((int) leftThread.tto.x, 103);
-                  expectEquals ((int) rightThread.tto.y, 102);
+                  expectEquals (leftThread.tto.x.get(), 103);
+                  expectEquals (rightThread.tto.y.get(), 102);
+              });
+
+        test ("prevent feedback loops",
+              [this] ()
+              {
+                  WorkerThread leftThread ("left");
+                  WorkerThread rightThread ("right");
+                  cello::SyncController syncController (leftThread.tto, &leftThread, rightThread.tto, &rightThread);
+                  
+                  leftThread.setSyncController (&syncController);
+                  rightThread.setSyncController (&syncController);
+
+                  leftThread.startThread ();
+                  rightThread.startThread ();
+
+                  // adding a child to one of the Objects should add a child to the other 
+                  // and NOT keep echoing. 
+                  auto child { cello::Object("childType", nullptr) };
+                  leftThread.tto.append (&child);
+                  auto child2 { cello::Object("childType", nullptr) };
+                  leftThread.tto.append (&child2);
+                  juce::Thread::sleep (100);
+                  expectEquals (rightThread.tto.getNumChildren(), 2);
+
+                  leftThread.signalThreadShouldExit ();
+                  rightThread.signalThreadShouldExit ();
+
+                  while (leftThread.isThreadRunning () || rightThread.isThreadRunning ())
+                  {
+                      juce::Thread::sleep (100);
+                  }
               });
     }
 };

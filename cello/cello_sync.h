@@ -54,6 +54,14 @@ public:
      */
     void performNextUpdate ();
 
+    /**
+     * @brief Check if the given thread is the destination thread for this update queue.
+     * 
+     * @param thread pointer to the thread to check
+     * @return true if the thread is the destination thread, false otherwise
+     */
+    bool isDestinationThread (juce::Thread* thread) const { return thread == destThread; }
+
 protected:
     void pushUpdate (juce::MemoryBlock&& update);
 
@@ -132,6 +140,8 @@ public:
      * @param thread non-owning pointer to the Thread on which the consumer will
      *              be updated. If the consumer object is to be updated on the
      *              message thread, pass a nullptr for this arg.
+     * @param controller pointer to the (optional) SyncController that will be 
+     *                   used when we are performing a bidirectional sync.
      */
     Sync (Object& producer, Object& consumer, juce::Thread* thread, SyncController* controller = nullptr);
 
@@ -173,11 +183,21 @@ public:
     SyncController (SyncController&&)                 = delete;
     SyncController& operator= (SyncController&&)      = delete;
 
+    /**
+     * @brief Perform the next update for the given thread.
+     *
+     * @param thread pointer to the thread to perform the update
+     */
+    void performNextUpdate (juce::Thread* thread);
+
+    /**
+     * @brief Perform all updates for the given thread.
+     */
+    void performAllUpdates (juce::Thread* thread);
+
 private:
     Sync sync1to2;
     Sync sync2to1; 
-
-
 
     SyncData update1to2;
     SyncData update2to1;

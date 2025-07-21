@@ -159,6 +159,28 @@ bool SyncController::shouldHandleUpdate (Sync* sync, void* data, size_t size) co
         jassertfalse;
     return false;
 }
+
+void SyncController::performNextUpdate (juce::Thread* thread)
+{
+    // This method should perform the next update for the specified thread
+    if (sync1to2.isDestinationThread (thread))
+        sync1to2.performNextUpdate ();
+    else if (sync2to1.isDestinationThread (thread))
+        sync2to1.performNextUpdate ();
+    else
+        jassertfalse;
+}
+
+void SyncController::performAllUpdates (juce::Thread* thread)
+{   
+    // This method should perform all updates for the specified thread
+    if (sync1to2.isDestinationThread (thread))
+        sync1to2.performAllUpdates ();
+    else if (sync2to1.isDestinationThread (thread))
+        sync2to1.performAllUpdates ();
+    else
+        jassertfalse;
+}
 } // namespace cello
 
 #if RUN_UNIT_TESTS
