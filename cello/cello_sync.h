@@ -175,6 +175,14 @@ private:
 class SyncController
 {
 public:
+    /**
+     * @brief Construct a new SyncController object.
+     * 
+     * @param obj1 pointer to the first Object
+     * @param threadForObj1 pointer to the thread for the first Object
+     * @param obj2 pointer to the second Object
+     * @param threadForObj2 pointer to the thread for the second Object
+     */
     SyncController (Object& obj1, juce::Thread* threadForObj1, Object& obj2, juce::Thread* threadForObj2);
     ~SyncController () = default;
 
