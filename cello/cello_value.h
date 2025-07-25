@@ -19,6 +19,8 @@
 
 #pragma once
 
+#include <optional>
+
 #include "cello_update_source.h"
 
 namespace cello
@@ -116,7 +118,11 @@ public:
     void set (const T& val)
     {
         if (onSet != nullptr)
-            doSet (onSet (val));
+        {
+            const auto validated { onSet (val) };
+            if (validated.has_value ())
+                doSet (validated.value ());
+        }
         else
             doSet (val);
     }
@@ -195,25 +201,28 @@ public:
     Cached getCached () { return Cached (*this); }
 
     /**
-     * @brief We define the signature of a 'validator' function that
-     * can validate/modify/replace values as your application requires.
-     *
-     * These will be called (if present) whenever this value is set or
-     * retrieved.
+     * @brief An optional validator function that can be used to modify the value 
+     * when it's retrieved. 
      */
-    using ValidatePropertyFn = std::function<T (const T&)>;
+    using ValidateGetFn = std::function<T (const T&)>;
+    
+    /**
+     * @brief 
+     * 
+     */
+    using ValidateSetFn = std::function<std::optional<T> (const T)&>;
 
     /**
      * @brief validator function called before setting this Value.
      */
-    ValidatePropertyFn onSet;
+    ValidateSetFn onSet;
 
     /**
      * @brief validator function called when retrieving this Value.
      * This function is called with the current stored value, and might
      * return a different value.
      */
-    ValidatePropertyFn onGet;
+    ValidateGetFn onGet;
 
     /**
      * @brief A listener to exclude from property change updates.

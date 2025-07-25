@@ -17,8 +17,8 @@
     SOFTWARE.
 */
 
-#include "cello_ipc.h"
 #include "JuceHeader.h"
+#include "cello_ipc.h"
 
 namespace
 {
