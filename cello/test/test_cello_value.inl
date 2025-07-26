@@ -199,6 +199,22 @@ public:
                   to.owcv.complexVal = { 1.f, 2.f };
                   expect (to.owcv.complexVal.get () == to.cachedVal.get ());
               });
+
+        test ("onSet validation",
+              [&] ()
+              {
+                  ObjectWithOperators obj;
+                  obj.intVal = 100;
+                  expect (obj.intVal == 100);
+                  obj.intVal.onSet = [] (const int& v) { return v + 1; };
+                  obj.intVal = 100;
+                  expect (obj.intVal == 101);
+
+                  // returning std::nullopt will not change the value
+                  obj.intVal.onSet = [] (const int& v) { return std::nullopt; };
+                  obj.intVal = 200;
+                  expect (obj.intVal == 101);   
+              });
     }
 
 private:

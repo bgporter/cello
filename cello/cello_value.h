@@ -207,10 +207,14 @@ public:
     using ValidateGetFn = std::function<T (const T&)>;
     
     /**
-     * @brief 
-     * 
+     * @brief an optional validator function that can be used to modify the value 
+     * when it's set. If the function returns std::nullopt, the value will not be 
+     * changed (so you can either ignore attempts to change the value to something 
+     * invalid, or you can always return nullopt to treat the value as if it were 
+     * `const`. Obviously, other code touching the underlying value tree can still 
+     * change the value)
      */
-    using ValidateSetFn = std::function<std::optional<T> (const T)&>;
+    using ValidateSetFn = std::function<std::optional<T> (const T&)>;
 
     /**
      * @brief validator function called before setting this Value.
