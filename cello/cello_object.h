@@ -616,7 +616,7 @@ private:
      * @param oldIndex
      * @param newIndex
      */
-    void valueTreeChildOrderChanged (juce::ValueTree& childTree, int oldIndex, int newIndex) override;
+    void valueTreeChildOrderChanged (juce::ValueTree& parentTree, int oldIndex, int newIndex) override;
 
     /**
      * @brief Will execute the `onParentChanged` callback if it exists.

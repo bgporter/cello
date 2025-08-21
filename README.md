@@ -6,7 +6,7 @@
 
 API docs available [here](https://bgporter.github.io/cello/)
 
-A more complete discussion of this library is available on a [collection of posts](https://bgporter.net/tags.html#cello-ref) on my personal website; start with this [Overview](https://bgporter.net/posts/cello/cello-overview/). 
+**A more complete discussion of this library is available on a [collection of posts](https://bgporter.net/tags.html#cello-ref) on my personal website; start with this [Overview](https://bgporter.net/posts/cello/cello-overview/).**
 
 ## tl;dr 
 
