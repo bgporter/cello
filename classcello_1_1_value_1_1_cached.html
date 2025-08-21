@@ -116,8 +116,11 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a429518ef8b47c4a09553e2ffb5503e37" id="r_a429518ef8b47c4a09553e2ffb5503e37"><td class="memItemLeft" align="right" valign="top"><a id="a429518ef8b47c4a09553e2ffb5503e37" name="a429518ef8b47c4a09553e2ffb5503e37"></a>
 &#160;</td><td class="memItemRight" valign="bottom"><b>Cached</b> (<a class="el" href="classcello_1_1_value.html">Value</a>&lt; T &gt; &amp;val)</td></tr>
 <tr class="separator:a429518ef8b47c4a09553e2ffb5503e37"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a52868bb45cfe6e7f63fb7bb2ac08c5d0" id="r_a52868bb45cfe6e7f63fb7bb2ac08c5d0"><td class="memItemLeft" align="right" valign="top"><a id="a52868bb45cfe6e7f63fb7bb2ac08c5d0" name="a52868bb45cfe6e7f63fb7bb2ac08c5d0"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>operator T</b> () const</td></tr>
+<tr class="memitem:a6b08791eac5f4fe0a89a0ff89e9b1820" id="r_a6b08791eac5f4fe0a89a0ff89e9b1820"><td class="memItemLeft" align="right" valign="top">T&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a6b08791eac5f4fe0a89a0ff89e9b1820">get</a> () const</td></tr>
+<tr class="memdesc:a6b08791eac5f4fe0a89a0ff89e9b1820"><td class="mdescLeft">&#160;</td><td class="mdescRight">retrieve the current value of this cached object.  <br /></td></tr>
+<tr class="separator:a6b08791eac5f4fe0a89a0ff89e9b1820"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a52868bb45cfe6e7f63fb7bb2ac08c5d0" id="r_a52868bb45cfe6e7f63fb7bb2ac08c5d0"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a52868bb45cfe6e7f63fb7bb2ac08c5d0">operator T</a> () const</td></tr>
+<tr class="memdesc:a52868bb45cfe6e7f63fb7bb2ac08c5d0"><td class="mdescLeft">&#160;</td><td class="mdescRight">retrieve the current value of this cached object.  <br /></td></tr>
 <tr class="separator:a52868bb45cfe6e7f63fb7bb2ac08c5d0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
@@ -129,7 +132,68 @@ class cello::Value&lt; T &gt;::Cached</div><p>A utility class to maintain the la
 </ul>
 <p>Objects of this type will store the last value of the associated <a class="el" href="classcello_1_1_value.html" title="A class to abstract away the issues around storing and retrieving a value from a ValueTree....">Value</a> object each time it's changed, and can be used directly without additional overhead.</p>
 <p>NOTE that we store a reference to a <a class="el" href="classcello_1_1_value.html" title="A class to abstract away the issues around storing and retrieving a value from a ValueTree....">Value</a> object owned by another <a class="el" href="classcello_1_1_object.html">cello::Object</a>; be careful that the lifetime of this cached value object is not longer than that owning object. </p>
-</div><hr/>The documentation for this class was generated from the following file:<ul>
+</div><h2 class="groupheader">Member Function Documentation</h2>
+<a id="a6b08791eac5f4fe0a89a0ff89e9b1820" name="a6b08791eac5f4fe0a89a0ff89e9b1820"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6b08791eac5f4fe0a89a0ff89e9b1820">&#9670;&#160;</a></span>get()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">T <a class="el" href="classcello_1_1_value.html">cello::Value</a>&lt; T &gt;::Cached::get </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel inline">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>retrieve the current value of this cached object. </p>
+<dl class="section return"><dt>Returns</dt><dd>T </dd></dl>
+
+</div>
+</div>
+<a id="a52868bb45cfe6e7f63fb7bb2ac08c5d0" name="a52868bb45cfe6e7f63fb7bb2ac08c5d0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a52868bb45cfe6e7f63fb7bb2ac08c5d0">&#9670;&#160;</a></span>operator T()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classcello_1_1_value.html">cello::Value</a>&lt; T &gt;::Cached::operator T </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel inline">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>retrieve the current value of this cached object. </p>
+<dl class="section return"><dt>Returns</dt><dd>T </dd></dl>
+
+</div>
+</div>
+<hr/>The documentation for this class was generated from the following file:<ul>
 <li>cello/<a class="el" href="cello__value_8h_source.html">cello_value.h</a></li>
 </ul>
 </div><!-- contents -->

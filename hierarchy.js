@@ -16,6 +16,8 @@ var hierarchy =
     [ "cello::Path", "classcello_1_1_path.html", null ],
     [ "cello::Query", "classcello_1_1_query.html", null ],
     [ "cello::ScopedForceUpdater", "classcello_1_1_scoped_force_updater.html", null ],
+    [ "cello::SyncController", "classcello_1_1_sync_controller.html", null ],
+    [ "cello::SyncData", "structcello_1_1_sync_data.html", null ],
     [ "TestSuite", null, [
       [ "Test_cello_ipc", "class_test__cello__ipc.html", null ],
       [ "Test_cello_query", "class_test__cello__query.html", null ],

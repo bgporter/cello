@@ -133,9 +133,14 @@ Classes</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-types" name="pub-types"></a>
 Public Types</h2></td></tr>
-<tr class="memitem:a9aba24cff29a73036eeac02c298568aa" id="r_a9aba24cff29a73036eeac02c298568aa"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a9aba24cff29a73036eeac02c298568aa">ValidatePropertyFn</a> = std::function&lt;T (const T&amp;)&gt;</td></tr>
-<tr class="memdesc:a9aba24cff29a73036eeac02c298568aa"><td class="mdescLeft">&#160;</td><td class="mdescRight">We define the signature of a 'validator' function that can validate/modify/replace values as your application requires.  <br /></td></tr>
-<tr class="separator:a9aba24cff29a73036eeac02c298568aa"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a10cf611f46c2d8211018263df624e808" id="r_a10cf611f46c2d8211018263df624e808"><td class="memItemLeft" align="right" valign="top"><a id="a10cf611f46c2d8211018263df624e808" name="a10cf611f46c2d8211018263df624e808"></a>
+using&#160;</td><td class="memItemRight" valign="bottom"><b>ValidateGetFn</b> = std::function&lt;T (const T&amp;)&gt;</td></tr>
+<tr class="memdesc:a10cf611f46c2d8211018263df624e808"><td class="mdescLeft">&#160;</td><td class="mdescRight">An optional validator function that can be used to modify the value when it's retrieved. <br /></td></tr>
+<tr class="separator:a10cf611f46c2d8211018263df624e808"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af0427df06ddc40e81c728b28e309c238" id="r_af0427df06ddc40e81c728b28e309c238"><td class="memItemLeft" align="right" valign="top"><a id="af0427df06ddc40e81c728b28e309c238" name="af0427df06ddc40e81c728b28e309c238"></a>
+using&#160;</td><td class="memItemRight" valign="bottom"><b>ValidateSetFn</b> = std::function&lt;std::optional&lt;T&gt; (const T&amp;)&gt;</td></tr>
+<tr class="memdesc:af0427df06ddc40e81c728b28e309c238"><td class="mdescLeft">&#160;</td><td class="mdescRight">an optional validator function that can be used to modify the value when it's set. If the function returns std::nullopt, the value will not be changed (so you can either ignore attempts to change the value to something invalid, or you can always return nullopt to treat the value as if it were <code>const</code>. Obviously, other code touching the underlying value tree can still change the value) <br /></td></tr>
+<tr class="separator:af0427df06ddc40e81c728b28e309c238"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
@@ -174,14 +179,14 @@ Public Member Functions</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-attribs" name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
-<tr class="memitem:aa9daacc449975a52080abf290070caba" id="r_aa9daacc449975a52080abf290070caba"><td class="memItemLeft" align="right" valign="top"><a id="aa9daacc449975a52080abf290070caba" name="aa9daacc449975a52080abf290070caba"></a>
-<a class="el" href="#a9aba24cff29a73036eeac02c298568aa">ValidatePropertyFn</a>&#160;</td><td class="memItemRight" valign="bottom"><b>onSet</b></td></tr>
-<tr class="memdesc:aa9daacc449975a52080abf290070caba"><td class="mdescLeft">&#160;</td><td class="mdescRight">validator function called before setting this <a class="el" href="classcello_1_1_value.html" title="A class to abstract away the issues around storing and retrieving a value from a ValueTree....">Value</a>. <br /></td></tr>
-<tr class="separator:aa9daacc449975a52080abf290070caba"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:adf88f9ea5917883107c832361c3a23f5" id="r_adf88f9ea5917883107c832361c3a23f5"><td class="memItemLeft" align="right" valign="top"><a id="adf88f9ea5917883107c832361c3a23f5" name="adf88f9ea5917883107c832361c3a23f5"></a>
-<a class="el" href="#a9aba24cff29a73036eeac02c298568aa">ValidatePropertyFn</a>&#160;</td><td class="memItemRight" valign="bottom"><b>onGet</b></td></tr>
-<tr class="memdesc:adf88f9ea5917883107c832361c3a23f5"><td class="mdescLeft">&#160;</td><td class="mdescRight">validator function called when retrieving this <a class="el" href="classcello_1_1_value.html" title="A class to abstract away the issues around storing and retrieving a value from a ValueTree....">Value</a>. This function is called with the current stored value, and might return a different value. <br /></td></tr>
-<tr class="separator:adf88f9ea5917883107c832361c3a23f5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af295f57a21028238790a316cfdc0b097" id="r_af295f57a21028238790a316cfdc0b097"><td class="memItemLeft" align="right" valign="top"><a id="af295f57a21028238790a316cfdc0b097" name="af295f57a21028238790a316cfdc0b097"></a>
+<a class="el" href="#af0427df06ddc40e81c728b28e309c238">ValidateSetFn</a>&#160;</td><td class="memItemRight" valign="bottom"><b>onSet</b></td></tr>
+<tr class="memdesc:af295f57a21028238790a316cfdc0b097"><td class="mdescLeft">&#160;</td><td class="mdescRight">validator function called before setting this <a class="el" href="classcello_1_1_value.html" title="A class to abstract away the issues around storing and retrieving a value from a ValueTree....">Value</a>. <br /></td></tr>
+<tr class="separator:af295f57a21028238790a316cfdc0b097"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae19bce71944499fb4946e8e94deb5699" id="r_ae19bce71944499fb4946e8e94deb5699"><td class="memItemLeft" align="right" valign="top"><a id="ae19bce71944499fb4946e8e94deb5699" name="ae19bce71944499fb4946e8e94deb5699"></a>
+<a class="el" href="#a10cf611f46c2d8211018263df624e808">ValidateGetFn</a>&#160;</td><td class="memItemRight" valign="bottom"><b>onGet</b></td></tr>
+<tr class="memdesc:ae19bce71944499fb4946e8e94deb5699"><td class="mdescLeft">&#160;</td><td class="mdescRight">validator function called when retrieving this <a class="el" href="classcello_1_1_value.html" title="A class to abstract away the issues around storing and retrieving a value from a ValueTree....">Value</a>. This function is called with the current stored value, and might return a different value. <br /></td></tr>
+<tr class="separator:ae19bce71944499fb4946e8e94deb5699"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-static-attribs" name="pub-static-attribs"></a>
 Static Public Attributes</h2></td></tr>
@@ -214,27 +219,7 @@ class cello::Value&lt; T &gt;</div><p>A class to abstract away the issues around
   </table>
   </dd>
 </dl>
-</div><h2 class="groupheader">Member Typedef Documentation</h2>
-<a id="a9aba24cff29a73036eeac02c298568aa" name="a9aba24cff29a73036eeac02c298568aa"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a9aba24cff29a73036eeac02c298568aa">&#9670;&#160;</a></span>ValidatePropertyFn</h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;typename T&gt; </div>
-      <table class="memname">
-        <tr>
-          <td class="memname">using <a class="el" href="classcello_1_1_value.html">cello::Value</a>&lt; T &gt;::ValidatePropertyFn = std::function&lt;T (const T&amp;)&gt;</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>We define the signature of a 'validator' function that can validate/modify/replace values as your application requires. </p>
-<p>These will be called (if present) whenever this value is set or retrieved. </p>
-
-</div>
-</div>
-<h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="a7c2156f94dec53dfa724a6e2aac11088" name="a7c2156f94dec53dfa724a6e2aac11088"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a7c2156f94dec53dfa724a6e2aac11088">&#9670;&#160;</a></span>Value()</h2>
 

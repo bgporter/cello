@@ -122,9 +122,9 @@ Inheritance diagram for cello::Sync:</div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a6cd80e63a059d4154ab4253f74451ff3" id="r_a6cd80e63a059d4154ab4253f74451ff3"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a6cd80e63a059d4154ab4253f74451ff3">Sync</a> (<a class="el" href="classcello_1_1_object.html">Object</a> &amp;producer, <a class="el" href="classcello_1_1_object.html">Object</a> &amp;consumer, juce::Thread *thread)</td></tr>
-<tr class="memdesc:a6cd80e63a059d4154ab4253f74451ff3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Construct a new <a class="el" href="classcello_1_1_sync.html" title="Permits thread-safe Object updates by using the juce::ValueTreeSynchroniser class to generate small b...">Sync</a> object.  <br /></td></tr>
-<tr class="separator:a6cd80e63a059d4154ab4253f74451ff3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5ddbcf9c12b7c38af8cd165e849724c2" id="r_a5ddbcf9c12b7c38af8cd165e849724c2"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a5ddbcf9c12b7c38af8cd165e849724c2">Sync</a> (<a class="el" href="classcello_1_1_object.html">Object</a> &amp;producer, <a class="el" href="classcello_1_1_object.html">Object</a> &amp;consumer, juce::Thread *thread, <a class="el" href="classcello_1_1_sync_controller.html">SyncController</a> *controller=nullptr)</td></tr>
+<tr class="memdesc:a5ddbcf9c12b7c38af8cd165e849724c2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Construct a new <a class="el" href="classcello_1_1_sync.html" title="Permits thread-safe Object updates by using the juce::ValueTreeSynchroniser class to generate small b...">Sync</a> object.  <br /></td></tr>
+<tr class="separator:a5ddbcf9c12b7c38af8cd165e849724c2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a56824d9b0a3bb24fd44ec66192c059b8" id="r_a56824d9b0a3bb24fd44ec66192c059b8"><td class="memItemLeft" align="right" valign="top"><a id="a56824d9b0a3bb24fd44ec66192c059b8" name="a56824d9b0a3bb24fd44ec66192c059b8"></a>
 &#160;</td><td class="memItemRight" valign="bottom"><b>Sync</b> (const <a class="el" href="classcello_1_1_sync.html">Sync</a> &amp;)=delete</td></tr>
 <tr class="separator:a56824d9b0a3bb24fd44ec66192c059b8"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -157,6 +157,9 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>performAllUpdates</b>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>performNextUpdate</b> ()</td></tr>
 <tr class="memdesc:af6d6551dbd6977f742644255dc1b0f6e inherit pub_methods_classcello_1_1_update_queue"><td class="mdescLeft">&#160;</td><td class="mdescRight">Pop the next event from the queue and apply the change to the destination value tree. <br /></td></tr>
 <tr class="separator:af6d6551dbd6977f742644255dc1b0f6e inherit pub_methods_classcello_1_1_update_queue"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0dfa02efcd961df4af2dcf206d4301aa inherit pub_methods_classcello_1_1_update_queue" id="r_a0dfa02efcd961df4af2dcf206d4301aa"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcello_1_1_update_queue.html#a0dfa02efcd961df4af2dcf206d4301aa">isDestinationThread</a> (juce::Thread *thread) const</td></tr>
+<tr class="memdesc:a0dfa02efcd961df4af2dcf206d4301aa inherit pub_methods_classcello_1_1_update_queue"><td class="mdescLeft">&#160;</td><td class="mdescRight">Check if the given thread is the destination thread for this update queue.  <br /></td></tr>
+<tr class="separator:a0dfa02efcd961df4af2dcf206d4301aa inherit pub_methods_classcello_1_1_update_queue"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="inherited" name="inherited"></a>
 Additional Inherited Members</h2></td></tr>
@@ -169,8 +172,8 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>pushUpdate</b> (juce:
 <div class="textblock"><p>Permits thread-safe <a class="el" href="classcello_1_1_object.html">Object</a> updates by using the juce::ValueTreeSynchroniser class to generate small binary patches that are used to pass updates from one copy of a ValueTree to another, each in separate threads. This sync is only performed in one direction, so you will need a pair of these objects to perform bidirectional syncs. </p>
 <p>Take care to not generate infinite update loops. </p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a id="a6cd80e63a059d4154ab4253f74451ff3" name="a6cd80e63a059d4154ab4253f74451ff3"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a6cd80e63a059d4154ab4253f74451ff3">&#9670;&#160;</a></span>Sync()</h2>
+<a id="a5ddbcf9c12b7c38af8cd165e849724c2" name="a5ddbcf9c12b7c38af8cd165e849724c2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5ddbcf9c12b7c38af8cd165e849724c2">&#9670;&#160;</a></span>Sync()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -188,7 +191,12 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>pushUpdate</b> (juce:
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">juce::Thread *</td>          <td class="paramname"><span class="paramname"><em>thread</em></span>&#160;)</td>
+          <td class="paramtype">juce::Thread *</td>          <td class="paramname"><span class="paramname"><em>thread</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classcello_1_1_sync_controller.html">SyncController</a> *</td>          <td class="paramname"><span class="paramname"><em>controller</em></span><span class="paramdefsep"> = </span><span class="paramdefval">nullptr</span>&#160;)</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -199,6 +207,7 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>pushUpdate</b> (juce:
     <tr><td class="paramname">producer</td><td><a class="el" href="classcello_1_1_object.html">cello::Object</a> that will be sending updates </td></tr>
     <tr><td class="paramname">consumer</td><td><a class="el" href="classcello_1_1_object.html">cello::Object</a> that will be kept in sync with the producer </td></tr>
     <tr><td class="paramname">thread</td><td>non-owning pointer to the Thread on which the consumer will be updated. If the consumer object is to be updated on the message thread, pass a nullptr for this arg. </td></tr>
+    <tr><td class="paramname">controller</td><td>pointer to the (optional) <a class="el" href="classcello_1_1_sync_controller.html" title="Class to manage bi-directional sync between two Objects in different threads, preventing feedback loo...">SyncController</a> that will be used when we are performing a bidirectional sync. </td></tr>
   </table>
   </dd>
 </dl>

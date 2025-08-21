@@ -1,6 +1,6 @@
 var searchData=
 [
-  ['get_0',['get',['../classcello_1_1_value.html#a3e72a168c2a3de244a6be42cdf4a4301',1,'cello::Value']]],
+  ['get_0',['get',['../classcello_1_1_value.html#a3e72a168c2a3de244a6be42cdf4a4301',1,'cello::Value::get()'],['../classcello_1_1_value_1_1_cached.html#a6b08791eac5f4fe0a89a0ff89e9b1820',1,'cello::Value::Cached::get()']]],
   ['getattr_1',['getattr',['../classcello_1_1_object.html#a6a23c8172d0df906594e9d222dd6e441',1,'cello::Object']]],
   ['getcached_2',['getCached',['../classcello_1_1_value.html#af18baa55efabfe09259855f6fa4d020c',1,'cello::Value']]],
   ['getcreationtype_3',['getCreationType',['../classcello_1_1_object.html#ae04aa9d628d2ee279d9d467c8caf73d8',1,'cello::Object']]],

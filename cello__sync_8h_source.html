@@ -148,39 +148,116 @@ $(function(){initNavTree('cello__sync_8h_source.html',''); initResizable(true); 
 <div class="line"><a id="l00049" name="l00049"></a><span class="lineno">   49</span>    <span class="keywordtype">void</span> <a class="code hl_function" href="classcello_1_1_update_queue.html#a65ba56b5ad3fe3637a2862ab336df575">performAllUpdates</a> ();</div>
 <div class="line"><a id="l00050" name="l00050"></a><span class="lineno">   50</span></div>
 <div class="line"><a id="l00055" name="l00055"></a><span class="lineno">   55</span>    <span class="keywordtype">void</span> <a class="code hl_function" href="classcello_1_1_update_queue.html#af6d6551dbd6977f742644255dc1b0f6e">performNextUpdate</a> ();</div>
-<div class="line"><a id="l00056" name="l00056"></a><span class="lineno">   56</span> </div>
-<div class="line"><a id="l00057" name="l00057"></a><span class="lineno">   57</span><span class="keyword">protected</span>:</div>
-<div class="line"><a id="l00058" name="l00058"></a><span class="lineno">   58</span>    <span class="keywordtype">void</span> pushUpdate (juce::MemoryBlock&amp;&amp; update);</div>
-<div class="line"><a id="l00059" name="l00059"></a><span class="lineno">   59</span> </div>
-<div class="line"><a id="l00060" name="l00060"></a><span class="lineno">   60</span><span class="keyword">private</span>:</div>
-<div class="line"><a id="l00062" name="l00062"></a><span class="lineno">   62</span>    <a class="code hl_class" href="classcello_1_1_object.html">Object</a>&amp; dest;</div>
-<div class="line"><a id="l00064" name="l00064"></a><span class="lineno">   64</span>    juce::Thread* destThread;</div>
-<div class="line"><a id="l00066" name="l00066"></a><span class="lineno">   66</span>    juce::CriticalSection mutex;</div>
-<div class="line"><a id="l00068" name="l00068"></a><span class="lineno">   68</span>    std::deque&lt;juce::MemoryBlock&gt; queue;</div>
-<div class="line"><a id="l00069" name="l00069"></a><span class="lineno">   69</span>};</div>
+<div class="line"><a id="l00056" name="l00056"></a><span class="lineno">   56</span></div>
+<div class="line"><a id="l00063" name="l00063"></a><span class="lineno"><a class="line" href="classcello_1_1_update_queue.html#a0dfa02efcd961df4af2dcf206d4301aa">   63</a></span>    <span class="keywordtype">bool</span> <a class="code hl_function" href="classcello_1_1_update_queue.html#a0dfa02efcd961df4af2dcf206d4301aa">isDestinationThread</a> (juce::Thread* thread)<span class="keyword"> const </span>{ <span class="keywordflow">return</span> thread == destThread; }</div>
+<div class="line"><a id="l00064" name="l00064"></a><span class="lineno">   64</span> </div>
+<div class="line"><a id="l00065" name="l00065"></a><span class="lineno">   65</span><span class="keyword">protected</span>:</div>
+<div class="line"><a id="l00066" name="l00066"></a><span class="lineno">   66</span>    <span class="keywordtype">void</span> pushUpdate (juce::MemoryBlock&amp;&amp; update);</div>
+<div class="line"><a id="l00067" name="l00067"></a><span class="lineno">   67</span></div>
+<div class="line"><a id="l00075" name="l00075"></a><span class="lineno"><a class="line" href="classcello_1_1_update_queue.html#aa465ff6a99ac7f3bad1659e8af359d92">   75</a></span>    <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code hl_function" href="classcello_1_1_update_queue.html#aa465ff6a99ac7f3bad1659e8af359d92">startUpdate</a> (<span class="keywordtype">void</span>* data, <span class="keywordtype">size_t</span> size) = 0;</div>
+<div class="line"><a id="l00079" name="l00079"></a><span class="lineno"><a class="line" href="classcello_1_1_update_queue.html#a6be496f26e6f4fd91a91ec54a6e76a4e">   79</a></span>    <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code hl_function" href="classcello_1_1_update_queue.html#a6be496f26e6f4fd91a91ec54a6e76a4e">endUpdate</a> () = 0;</div>
+<div class="line"><a id="l00080" name="l00080"></a><span class="lineno">   80</span> </div>
+<div class="line"><a id="l00081" name="l00081"></a><span class="lineno">   81</span><span class="keyword">private</span>:</div>
+<div class="line"><a id="l00083" name="l00083"></a><span class="lineno">   83</span>    <a class="code hl_class" href="classcello_1_1_object.html">Object</a>&amp; dest;</div>
+<div class="line"><a id="l00085" name="l00085"></a><span class="lineno">   85</span>    juce::Thread* destThread;</div>
+<div class="line"><a id="l00087" name="l00087"></a><span class="lineno">   87</span>    juce::CriticalSection mutex;</div>
+<div class="line"><a id="l00089" name="l00089"></a><span class="lineno">   89</span>    std::deque&lt;juce::MemoryBlock&gt; queue;</div>
+<div class="line"><a id="l00090" name="l00090"></a><span class="lineno">   90</span>};</div>
 </div>
-<div class="line"><a id="l00070" name="l00070"></a><span class="lineno">   70</span></div>
-<div class="foldopen" id="foldopen00081" data-start="{" data-end="};">
-<div class="line"><a id="l00081" name="l00081"></a><span class="lineno"><a class="line" href="classcello_1_1_sync.html">   81</a></span><span class="keyword">class </span><a class="code hl_function" href="classcello_1_1_sync.html#a6cd80e63a059d4154ab4253f74451ff3">Sync</a> : <span class="keyword">public</span> UpdateQueue,</div>
-<div class="line"><a id="l00082" name="l00082"></a><span class="lineno">   82</span>             <span class="keyword">public</span> juce::ValueTreeSynchroniser</div>
-<div class="line"><a id="l00083" name="l00083"></a><span class="lineno">   83</span>{</div>
-<div class="line"><a id="l00084" name="l00084"></a><span class="lineno">   84</span><span class="keyword">public</span>:</div>
-<div class="line"><a id="l00094" name="l00094"></a><span class="lineno">   94</span>    <a class="code hl_function" href="classcello_1_1_sync.html#a6cd80e63a059d4154ab4253f74451ff3">Sync</a> (<a class="code hl_class" href="classcello_1_1_object.html">Object</a>&amp; producer, <a class="code hl_class" href="classcello_1_1_object.html">Object</a>&amp; consumer, juce::Thread* thread);</div>
-<div class="line"><a id="l00095" name="l00095"></a><span class="lineno">   95</span> </div>
-<div class="line"><a id="l00096" name="l00096"></a><span class="lineno">   96</span>    <a class="code hl_function" href="classcello_1_1_sync.html#a6cd80e63a059d4154ab4253f74451ff3">Sync</a> (<span class="keyword">const</span> <a class="code hl_function" href="classcello_1_1_sync.html#a6cd80e63a059d4154ab4253f74451ff3">Sync</a>&amp;)            = <span class="keyword">delete</span>;</div>
-<div class="line"><a id="l00097" name="l00097"></a><span class="lineno">   97</span>    <a class="code hl_function" href="classcello_1_1_sync.html#a6cd80e63a059d4154ab4253f74451ff3">Sync</a>&amp; operator= (<span class="keyword">const</span> <a class="code hl_function" href="classcello_1_1_sync.html#a6cd80e63a059d4154ab4253f74451ff3">Sync</a>&amp;) = <span class="keyword">delete</span>;</div>
-<div class="line"><a id="l00098" name="l00098"></a><span class="lineno">   98</span> </div>
-<div class="line"><a id="l00099" name="l00099"></a><span class="lineno">   99</span><span class="keyword">private</span>:</div>
-<div class="line"><a id="l00110" name="l00110"></a><span class="lineno">  110</span>    <span class="keywordtype">void</span> stateChanged (<span class="keyword">const</span> <span class="keywordtype">void</span>* encodedChange, <span class="keywordtype">size_t</span> encodedChangeSize) <span class="keyword">override</span>;</div>
-<div class="line"><a id="l00111" name="l00111"></a><span class="lineno">  111</span>};</div>
-</div>
+<div class="line"><a id="l00091" name="l00091"></a><span class="lineno">   91</span> </div>
+<div class="line"><a id="l00092" name="l00092"></a><span class="lineno">   92</span><span class="keyword">class </span><a class="code hl_class" href="classcello_1_1_sync_controller.html">SyncController</a>;</div>
+<div class="line"><a id="l00093" name="l00093"></a><span class="lineno">   93</span></div>
+<div class="foldopen" id="foldopen00108" data-start="{" data-end="};">
+<div class="line"><a id="l00108" name="l00108"></a><span class="lineno"><a class="line" href="structcello_1_1_sync_data.html">  108</a></span><span class="keyword">struct </span>SyncData</div>
+<div class="line"><a id="l00109" name="l00109"></a><span class="lineno">  109</span>{</div>
+<div class="line"><a id="l00110" name="l00110"></a><span class="lineno">  110</span>    <span class="keyword">const</span> <span class="keywordtype">char</span>* data { <span class="keyword">nullptr</span> };</div>
+<div class="line"><a id="l00111" name="l00111"></a><span class="lineno">  111</span>    <span class="keywordtype">size_t</span> size { 0 };</div>
 <div class="line"><a id="l00112" name="l00112"></a><span class="lineno">  112</span> </div>
-<div class="line"><a id="l00113" name="l00113"></a><span class="lineno">  113</span>} <span class="comment">// namespace cello</span></div>
+<div class="line"><a id="l00113" name="l00113"></a><span class="lineno">  113</span>    SyncData () = <span class="keywordflow">default</span>;</div>
+<div class="line"><a id="l00114" name="l00114"></a><span class="lineno">  114</span>    SyncData (<span class="keyword">const</span> <span class="keywordtype">void</span>* data_, <span class="keywordtype">size_t</span> size_)</div>
+<div class="line"><a id="l00115" name="l00115"></a><span class="lineno">  115</span>    : data (<span class="keyword">static_cast&lt;</span><span class="keyword">const </span><span class="keywordtype">char</span>*<span class="keyword">&gt;</span> (data_))</div>
+<div class="line"><a id="l00116" name="l00116"></a><span class="lineno">  116</span>    , size (size_)</div>
+<div class="line"><a id="l00117" name="l00117"></a><span class="lineno">  117</span>    {</div>
+<div class="line"><a id="l00118" name="l00118"></a><span class="lineno">  118</span>    }</div>
+<div class="line"><a id="l00119" name="l00119"></a><span class="lineno">  119</span>    <span class="keywordtype">bool</span> operator== (<span class="keyword">const</span> SyncData&amp; other)<span class="keyword"> const</span></div>
+<div class="line"><a id="l00120" name="l00120"></a><span class="lineno">  120</span><span class="keyword">    </span>{</div>
+<div class="line"><a id="l00121" name="l00121"></a><span class="lineno">  121</span>        <span class="keywordflow">if</span> (size != other.size)</div>
+<div class="line"><a id="l00122" name="l00122"></a><span class="lineno">  122</span>            <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
+<div class="line"><a id="l00123" name="l00123"></a><span class="lineno">  123</span>        <span class="keywordflow">for</span> (<span class="keywordtype">size_t</span> i { 0 }; i &lt; size; ++i)</div>
+<div class="line"><a id="l00124" name="l00124"></a><span class="lineno">  124</span>            <span class="keywordflow">if</span> (data[i] != other.data[i])</div>
+<div class="line"><a id="l00125" name="l00125"></a><span class="lineno">  125</span>                <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
+<div class="line"><a id="l00126" name="l00126"></a><span class="lineno">  126</span>        <span class="keywordflow">return</span> <span class="keyword">true</span>;</div>
+<div class="line"><a id="l00127" name="l00127"></a><span class="lineno">  127</span>    }</div>
+<div class="line"><a id="l00128" name="l00128"></a><span class="lineno">  128</span>    <span class="keywordtype">bool</span> operator!= (<span class="keyword">const</span> SyncData&amp; other)<span class="keyword"> const </span>{ <span class="keywordflow">return</span> !(*<span class="keyword">this</span> == other); }</div>
+<div class="line"><a id="l00129" name="l00129"></a><span class="lineno">  129</span>};</div>
+</div>
+<div class="line"><a id="l00130" name="l00130"></a><span class="lineno">  130</span> </div>
+<div class="foldopen" id="foldopen00131" data-start="{" data-end="};">
+<div class="line"><a id="l00131" name="l00131"></a><span class="lineno"><a class="line" href="classcello_1_1_sync.html">  131</a></span><span class="keyword">class </span><a class="code hl_function" href="classcello_1_1_sync.html#a5ddbcf9c12b7c38af8cd165e849724c2">Sync</a> : <span class="keyword">public</span> UpdateQueue,</div>
+<div class="line"><a id="l00132" name="l00132"></a><span class="lineno">  132</span>             <span class="keyword">public</span> juce::ValueTreeSynchroniser</div>
+<div class="line"><a id="l00133" name="l00133"></a><span class="lineno">  133</span>{</div>
+<div class="line"><a id="l00134" name="l00134"></a><span class="lineno">  134</span><span class="keyword">public</span>:</div>
+<div class="line"><a id="l00146" name="l00146"></a><span class="lineno">  146</span>    <a class="code hl_function" href="classcello_1_1_sync.html#a5ddbcf9c12b7c38af8cd165e849724c2">Sync</a> (<a class="code hl_class" href="classcello_1_1_object.html">Object</a>&amp; producer, <a class="code hl_class" href="classcello_1_1_object.html">Object</a>&amp; consumer, juce::Thread* thread, <a class="code hl_class" href="classcello_1_1_sync_controller.html">SyncController</a>* controller = <span class="keyword">nullptr</span>);</div>
+<div class="line"><a id="l00147" name="l00147"></a><span class="lineno">  147</span> </div>
+<div class="line"><a id="l00148" name="l00148"></a><span class="lineno">  148</span>    <a class="code hl_function" href="classcello_1_1_sync.html#a5ddbcf9c12b7c38af8cd165e849724c2">Sync</a> (<span class="keyword">const</span> <a class="code hl_function" href="classcello_1_1_sync.html#a5ddbcf9c12b7c38af8cd165e849724c2">Sync</a>&amp;)            = <span class="keyword">delete</span>;</div>
+<div class="line"><a id="l00149" name="l00149"></a><span class="lineno">  149</span>    <a class="code hl_function" href="classcello_1_1_sync.html#a5ddbcf9c12b7c38af8cd165e849724c2">Sync</a>&amp; operator= (<span class="keyword">const</span> <a class="code hl_function" href="classcello_1_1_sync.html#a5ddbcf9c12b7c38af8cd165e849724c2">Sync</a>&amp;) = <span class="keyword">delete</span>;</div>
+<div class="line"><a id="l00150" name="l00150"></a><span class="lineno">  150</span> </div>
+<div class="line"><a id="l00151" name="l00151"></a><span class="lineno">  151</span><span class="keyword">private</span>:</div>
+<div class="line"><a id="l00162" name="l00162"></a><span class="lineno">  162</span>    <span class="keywordtype">void</span> stateChanged (<span class="keyword">const</span> <span class="keywordtype">void</span>* encodedChange, <span class="keywordtype">size_t</span> encodedChangeSize) <span class="keyword">override</span>;</div>
+<div class="line"><a id="l00163" name="l00163"></a><span class="lineno">  163</span> </div>
+<div class="line"><a id="l00164" name="l00164"></a><span class="lineno">  164</span>    <span class="keywordtype">void</span> startUpdate (<span class="keywordtype">void</span>* data, <span class="keywordtype">size_t</span> size) <span class="keyword">override</span>;</div>
+<div class="line"><a id="l00165" name="l00165"></a><span class="lineno">  165</span>    <span class="keywordtype">void</span> endUpdate () <span class="keyword">override</span>;</div>
+<div class="line"><a id="l00166" name="l00166"></a><span class="lineno">  166</span> </div>
+<div class="line"><a id="l00167" name="l00167"></a><span class="lineno">  167</span>    <a class="code hl_class" href="classcello_1_1_sync_controller.html">SyncController</a>* controller { <span class="keyword">nullptr</span> };</div>
+<div class="line"><a id="l00168" name="l00168"></a><span class="lineno">  168</span>};</div>
+</div>
+<div class="line"><a id="l00169" name="l00169"></a><span class="lineno">  169</span></div>
+<div class="foldopen" id="foldopen00175" data-start="{" data-end="};">
+<div class="line"><a id="l00175" name="l00175"></a><span class="lineno"><a class="line" href="classcello_1_1_sync_controller.html">  175</a></span><span class="keyword">class </span><a class="code hl_function" href="classcello_1_1_sync_controller.html#aab053f9b934f7f349f7bbedd9214dec6">SyncController</a></div>
+<div class="line"><a id="l00176" name="l00176"></a><span class="lineno">  176</span>{</div>
+<div class="line"><a id="l00177" name="l00177"></a><span class="lineno">  177</span><span class="keyword">public</span>:</div>
+<div class="line"><a id="l00186" name="l00186"></a><span class="lineno">  186</span>    <a class="code hl_function" href="classcello_1_1_sync_controller.html#aab053f9b934f7f349f7bbedd9214dec6">SyncController</a> (<a class="code hl_class" href="classcello_1_1_object.html">Object</a>&amp; obj1, juce::Thread* threadForObj1, <a class="code hl_class" href="classcello_1_1_object.html">Object</a>&amp; obj2, juce::Thread* threadForObj2);</div>
+<div class="line"><a id="l00187" name="l00187"></a><span class="lineno">  187</span>    <a class="code hl_function" href="classcello_1_1_sync_controller.html#aab053f9b934f7f349f7bbedd9214dec6">~SyncController</a> () = <span class="keywordflow">default</span>;</div>
+<div class="line"><a id="l00188" name="l00188"></a><span class="lineno">  188</span> </div>
+<div class="line"><a id="l00189" name="l00189"></a><span class="lineno">  189</span>    <a class="code hl_function" href="classcello_1_1_sync_controller.html#aab053f9b934f7f349f7bbedd9214dec6">SyncController</a> (<span class="keyword">const</span> <a class="code hl_function" href="classcello_1_1_sync_controller.html#aab053f9b934f7f349f7bbedd9214dec6">SyncController</a>&amp;)            = <span class="keyword">delete</span>;</div>
+<div class="line"><a id="l00190" name="l00190"></a><span class="lineno">  190</span>    <a class="code hl_function" href="classcello_1_1_sync_controller.html#aab053f9b934f7f349f7bbedd9214dec6">SyncController</a>&amp; operator= (<span class="keyword">const</span> <a class="code hl_function" href="classcello_1_1_sync_controller.html#aab053f9b934f7f349f7bbedd9214dec6">SyncController</a>&amp;) = <span class="keyword">delete</span>;</div>
+<div class="line"><a id="l00191" name="l00191"></a><span class="lineno">  191</span>    <a class="code hl_function" href="classcello_1_1_sync_controller.html#aab053f9b934f7f349f7bbedd9214dec6">SyncController</a> (<a class="code hl_function" href="classcello_1_1_sync_controller.html#aab053f9b934f7f349f7bbedd9214dec6">SyncController</a>&amp;&amp;)                 = <span class="keyword">delete</span>;</div>
+<div class="line"><a id="l00192" name="l00192"></a><span class="lineno">  192</span>    <a class="code hl_function" href="classcello_1_1_sync_controller.html#aab053f9b934f7f349f7bbedd9214dec6">SyncController</a>&amp; operator= (<a class="code hl_function" href="classcello_1_1_sync_controller.html#aab053f9b934f7f349f7bbedd9214dec6">SyncController</a>&amp;&amp;)      = <span class="keyword">delete</span>;</div>
+<div class="line"><a id="l00193" name="l00193"></a><span class="lineno">  193</span></div>
+<div class="line"><a id="l00199" name="l00199"></a><span class="lineno">  199</span>    <span class="keywordtype">void</span> <a class="code hl_function" href="classcello_1_1_sync_controller.html#a27847cd83a7f71b1588e82d6522f898c">performNextUpdate</a> (juce::Thread* thread);</div>
+<div class="line"><a id="l00200" name="l00200"></a><span class="lineno">  200</span></div>
+<div class="line"><a id="l00204" name="l00204"></a><span class="lineno">  204</span>    <span class="keywordtype">void</span> <a class="code hl_function" href="classcello_1_1_sync_controller.html#ae7de96cb49486b8e343f0944a8d9ce04">performAllUpdates</a> (juce::Thread* thread);</div>
+<div class="line"><a id="l00205" name="l00205"></a><span class="lineno">  205</span> </div>
+<div class="line"><a id="l00206" name="l00206"></a><span class="lineno">  206</span><span class="keyword">private</span>:</div>
+<div class="line"><a id="l00207" name="l00207"></a><span class="lineno">  207</span>    Sync sync1to2;</div>
+<div class="line"><a id="l00208" name="l00208"></a><span class="lineno">  208</span>    Sync sync2to1; </div>
+<div class="line"><a id="l00209" name="l00209"></a><span class="lineno">  209</span> </div>
+<div class="line"><a id="l00210" name="l00210"></a><span class="lineno">  210</span>    <a class="code hl_struct" href="structcello_1_1_sync_data.html">SyncData</a> update1to2;</div>
+<div class="line"><a id="l00211" name="l00211"></a><span class="lineno">  211</span>    <a class="code hl_struct" href="structcello_1_1_sync_data.html">SyncData</a> update2to1;</div>
+<div class="line"><a id="l00212" name="l00212"></a><span class="lineno">  212</span> </div>
+<div class="line"><a id="l00213" name="l00213"></a><span class="lineno">  213</span>    <span class="keyword">friend</span> <span class="keyword">class </span>Sync;</div>
+<div class="line"><a id="l00221" name="l00221"></a><span class="lineno">  221</span>    <span class="keywordtype">void</span> startUpdate (Sync* sync, <span class="keywordtype">void</span>* data, <span class="keywordtype">size_t</span> size);</div>
+<div class="line"><a id="l00227" name="l00227"></a><span class="lineno">  227</span>    <span class="keywordtype">void</span> endUpdate (Sync* sync);</div>
+<div class="line"><a id="l00228" name="l00228"></a><span class="lineno">  228</span></div>
+<div class="line"><a id="l00237" name="l00237"></a><span class="lineno">  237</span>    <span class="keywordtype">bool</span> shouldHandleUpdate (Sync* sync, <span class="keywordtype">void</span>* data, <span class="keywordtype">size_t</span> size) <span class="keyword">const</span>;</div>
+<div class="line"><a id="l00238" name="l00238"></a><span class="lineno">  238</span> </div>
+<div class="line"><a id="l00239" name="l00239"></a><span class="lineno">  239</span>};</div>
+</div>
+<div class="line"><a id="l00240" name="l00240"></a><span class="lineno">  240</span> </div>
+<div class="line"><a id="l00241" name="l00241"></a><span class="lineno">  241</span>} <span class="comment">// namespace cello</span></div>
 <div class="ttc" id="aclasscello_1_1_object_html"><div class="ttname"><a href="classcello_1_1_object.html">cello::Object</a></div><div class="ttdef"><b>Definition</b> cello_object.h:34</div></div>
-<div class="ttc" id="aclasscello_1_1_sync_html_a6cd80e63a059d4154ab4253f74451ff3"><div class="ttname"><a href="classcello_1_1_sync.html#a6cd80e63a059d4154ab4253f74451ff3">cello::Sync::Sync</a></div><div class="ttdeci">Sync(Object &amp;producer, Object &amp;consumer, juce::Thread *thread)</div><div class="ttdoc">Construct a new Sync object.</div><div class="ttdef"><b>Definition</b> cello_sync.cpp:81</div></div>
+<div class="ttc" id="aclasscello_1_1_sync_controller_html"><div class="ttname"><a href="classcello_1_1_sync_controller.html">cello::SyncController</a></div><div class="ttdoc">Class to manage bi-directional sync between two Objects in different threads, preventing feedback loo...</div><div class="ttdef"><b>Definition</b> cello_sync.h:176</div></div>
+<div class="ttc" id="aclasscello_1_1_sync_controller_html_a27847cd83a7f71b1588e82d6522f898c"><div class="ttname"><a href="classcello_1_1_sync_controller.html#a27847cd83a7f71b1588e82d6522f898c">cello::SyncController::performNextUpdate</a></div><div class="ttdeci">void performNextUpdate(juce::Thread *thread)</div><div class="ttdoc">Perform the next update for the given thread.</div><div class="ttdef"><b>Definition</b> cello_sync.cpp:163</div></div>
+<div class="ttc" id="aclasscello_1_1_sync_controller_html_aab053f9b934f7f349f7bbedd9214dec6"><div class="ttname"><a href="classcello_1_1_sync_controller.html#aab053f9b934f7f349f7bbedd9214dec6">cello::SyncController::SyncController</a></div><div class="ttdeci">SyncController(Object &amp;obj1, juce::Thread *threadForObj1, Object &amp;obj2, juce::Thread *threadForObj2)</div><div class="ttdoc">Construct a new SyncController object.</div><div class="ttdef"><b>Definition</b> cello_sync.cpp:125</div></div>
+<div class="ttc" id="aclasscello_1_1_sync_controller_html_ae7de96cb49486b8e343f0944a8d9ce04"><div class="ttname"><a href="classcello_1_1_sync_controller.html#ae7de96cb49486b8e343f0944a8d9ce04">cello::SyncController::performAllUpdates</a></div><div class="ttdeci">void performAllUpdates(juce::Thread *thread)</div><div class="ttdoc">Perform all updates for the given thread.</div><div class="ttdef"><b>Definition</b> cello_sync.cpp:174</div></div>
+<div class="ttc" id="aclasscello_1_1_sync_html_a5ddbcf9c12b7c38af8cd165e849724c2"><div class="ttname"><a href="classcello_1_1_sync.html#a5ddbcf9c12b7c38af8cd165e849724c2">cello::Sync::Sync</a></div><div class="ttdeci">Sync(Object &amp;producer, Object &amp;consumer, juce::Thread *thread, SyncController *controller=nullptr)</div><div class="ttdoc">Construct a new Sync object.</div><div class="ttdef"><b>Definition</b> cello_sync.cpp:88</div></div>
+<div class="ttc" id="aclasscello_1_1_update_queue_html_a0dfa02efcd961df4af2dcf206d4301aa"><div class="ttname"><a href="classcello_1_1_update_queue.html#a0dfa02efcd961df4af2dcf206d4301aa">cello::UpdateQueue::isDestinationThread</a></div><div class="ttdeci">bool isDestinationThread(juce::Thread *thread) const</div><div class="ttdoc">Check if the given thread is the destination thread for this update queue.</div><div class="ttdef"><b>Definition</b> cello_sync.h:63</div></div>
 <div class="ttc" id="aclasscello_1_1_update_queue_html_a65ba56b5ad3fe3637a2862ab336df575"><div class="ttname"><a href="classcello_1_1_update_queue.html#a65ba56b5ad3fe3637a2862ab336df575">cello::UpdateQueue::performAllUpdates</a></div><div class="ttdeci">void performAllUpdates()</div><div class="ttdoc">Execute each of the updates that are ready.</div><div class="ttdef"><b>Definition</b> cello_sync.cpp:38</div></div>
+<div class="ttc" id="aclasscello_1_1_update_queue_html_a6be496f26e6f4fd91a91ec54a6e76a4e"><div class="ttname"><a href="classcello_1_1_update_queue.html#a6be496f26e6f4fd91a91ec54a6e76a4e">cello::UpdateQueue::endUpdate</a></div><div class="ttdeci">virtual void endUpdate()=0</div><div class="ttdoc">Called when the update is complete. clear the update data.</div></div>
 <div class="ttc" id="aclasscello_1_1_update_queue_html_a717024415d9c59c7a5f1bed4c8d3ec7e"><div class="ttname"><a href="classcello_1_1_update_queue.html#a717024415d9c59c7a5f1bed4c8d3ec7e">cello::UpdateQueue::getPendingUpdateCount</a></div><div class="ttdeci">int getPendingUpdateCount() const</div><div class="ttdef"><b>Definition</b> cello_sync.cpp:32</div></div>
+<div class="ttc" id="aclasscello_1_1_update_queue_html_aa465ff6a99ac7f3bad1659e8af359d92"><div class="ttname"><a href="classcello_1_1_update_queue.html#aa465ff6a99ac7f3bad1659e8af359d92">cello::UpdateQueue::startUpdate</a></div><div class="ttdeci">virtual void startUpdate(void *data, size_t size)=0</div><div class="ttdoc">Called when a new update is pushed onto the queue. We use this to prevent feedback loops.</div></div>
 <div class="ttc" id="aclasscello_1_1_update_queue_html_af6d6551dbd6977f742644255dc1b0f6e"><div class="ttname"><a href="classcello_1_1_update_queue.html#af6d6551dbd6977f742644255dc1b0f6e">cello::UpdateQueue::performNextUpdate</a></div><div class="ttdeci">void performNextUpdate()</div><div class="ttdoc">Pop the next event from the queue and apply the change to the destination value tree.</div><div class="ttdef"><b>Definition</b> cello_sync.cpp:44</div></div>
+<div class="ttc" id="astructcello_1_1_sync_data_html"><div class="ttname"><a href="structcello_1_1_sync_data.html">cello::SyncData</a></div><div class="ttdoc">Data structure for holding synchronization update information.</div><div class="ttdef"><b>Definition</b> cello_sync.h:109</div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->

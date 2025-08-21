@@ -103,7 +103,7 @@ $(function(){initNavTree('classcello_1_1_update_queue.html',''); initResizable(t
 <a href="#pub-methods">Public Member Functions</a> &#124;
 <a href="#pro-methods">Protected Member Functions</a> &#124;
 <a href="classcello_1_1_update_queue-members.html">List of all members</a>  </div>
-  <div class="headertitle"><div class="title">cello::UpdateQueue Class Reference</div></div>
+  <div class="headertitle"><div class="title">cello::UpdateQueue Class Reference<span class="mlabels"><span class="mlabel abstract">abstract</span></span></div></div>
 </div><!--header-->
 <div class="contents">
 <div class="dynheader">
@@ -144,12 +144,22 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>performAllUpdates</b>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>performNextUpdate</b> ()</td></tr>
 <tr class="memdesc:af6d6551dbd6977f742644255dc1b0f6e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Pop the next event from the queue and apply the change to the destination value tree. <br /></td></tr>
 <tr class="separator:af6d6551dbd6977f742644255dc1b0f6e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0dfa02efcd961df4af2dcf206d4301aa" id="r_a0dfa02efcd961df4af2dcf206d4301aa"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a0dfa02efcd961df4af2dcf206d4301aa">isDestinationThread</a> (juce::Thread *thread) const</td></tr>
+<tr class="memdesc:a0dfa02efcd961df4af2dcf206d4301aa"><td class="mdescLeft">&#160;</td><td class="mdescRight">Check if the given thread is the destination thread for this update queue.  <br /></td></tr>
+<tr class="separator:a0dfa02efcd961df4af2dcf206d4301aa"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pro-methods" name="pro-methods"></a>
 Protected Member Functions</h2></td></tr>
 <tr class="memitem:a562c3eb1fdcd399e609486ca73ce4637" id="r_a562c3eb1fdcd399e609486ca73ce4637"><td class="memItemLeft" align="right" valign="top"><a id="a562c3eb1fdcd399e609486ca73ce4637" name="a562c3eb1fdcd399e609486ca73ce4637"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>pushUpdate</b> (juce::MemoryBlock &amp;&amp;update)</td></tr>
 <tr class="separator:a562c3eb1fdcd399e609486ca73ce4637"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa465ff6a99ac7f3bad1659e8af359d92" id="r_aa465ff6a99ac7f3bad1659e8af359d92"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa465ff6a99ac7f3bad1659e8af359d92">startUpdate</a> (void *data, size_t size)=0</td></tr>
+<tr class="memdesc:aa465ff6a99ac7f3bad1659e8af359d92"><td class="mdescLeft">&#160;</td><td class="mdescRight">Called when a new update is pushed onto the queue. We use this to prevent feedback loops.  <br /></td></tr>
+<tr class="separator:aa465ff6a99ac7f3bad1659e8af359d92"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6be496f26e6f4fd91a91ec54a6e76a4e" id="r_a6be496f26e6f4fd91a91ec54a6e76a4e"><td class="memItemLeft" align="right" valign="top"><a id="a6be496f26e6f4fd91a91ec54a6e76a4e" name="a6be496f26e6f4fd91a91ec54a6e76a4e"></a>
+virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>endUpdate</b> ()=0</td></tr>
+<tr class="memdesc:a6be496f26e6f4fd91a91ec54a6e76a4e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Called when the update is complete. clear the update data. <br /></td></tr>
+<tr class="separator:a6be496f26e6f4fd91a91ec54a6e76a4e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Member Function Documentation</h2>
 <a id="a717024415d9c59c7a5f1bed4c8d3ec7e" name="a717024415d9c59c7a5f1bed4c8d3ec7e"></a>
@@ -167,6 +177,78 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>pushUpdate</b> (juce:
       </table>
 </div><div class="memdoc">
 <dl class="section return"><dt>Returns</dt><dd>int = number of updates that are ready to apply to the consumer side. </dd></dl>
+
+</div>
+</div>
+<a id="a0dfa02efcd961df4af2dcf206d4301aa" name="a0dfa02efcd961df4af2dcf206d4301aa"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0dfa02efcd961df4af2dcf206d4301aa">&#9670;&#160;</a></span>isDestinationThread()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool cello::UpdateQueue::isDestinationThread </td>
+          <td>(</td>
+          <td class="paramtype">juce::Thread *</td>          <td class="paramname"><span class="paramname"><em>thread</em></span></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel inline">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Check if the given thread is the destination thread for this update queue. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">thread</td><td>pointer to the thread to check </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>true if the thread is the destination thread, false otherwise </dd></dl>
+
+</div>
+</div>
+<a id="aa465ff6a99ac7f3bad1659e8af359d92" name="aa465ff6a99ac7f3bad1659e8af359d92"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa465ff6a99ac7f3bad1659e8af359d92">&#9670;&#160;</a></span>startUpdate()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual void cello::UpdateQueue::startUpdate </td>
+          <td>(</td>
+          <td class="paramtype">void *</td>          <td class="paramname"><span class="paramname"><em>data</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">size_t</td>          <td class="paramname"><span class="paramname"><em>size</em></span>&#160;)</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel protected">protected</span><span class="mlabel pure-virtual">pure virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Called when a new update is pushed onto the queue. We use this to prevent feedback loops. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">data</td><td>pointer to the update data </td></tr>
+    <tr><td class="paramname">size</td><td>size of the update data </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>

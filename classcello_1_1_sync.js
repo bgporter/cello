@@ -1,4 +1,4 @@
 var classcello_1_1_sync =
 [
-    [ "Sync", "classcello_1_1_sync.html#a6cd80e63a059d4154ab4253f74451ff3", null ]
+    [ "Sync", "classcello_1_1_sync.html#a5ddbcf9c12b7c38af8cd165e849724c2", null ]
 ];

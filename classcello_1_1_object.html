@@ -336,9 +336,9 @@ SelfUpdateFn&#160;</td><td class="memItemRight" valign="bottom"><b>onParentChang
 <tr class="memitem:a2598690dfd07d3a36e4ae1ba0f08ae58" id="r_a2598690dfd07d3a36e4ae1ba0f08ae58"><td class="memItemLeft" align="right" valign="top"><a id="a2598690dfd07d3a36e4ae1ba0f08ae58" name="a2598690dfd07d3a36e4ae1ba0f08ae58"></a>
 SelfUpdateFn&#160;</td><td class="memItemRight" valign="bottom"><b>onTreeRedirected</b></td></tr>
 <tr class="separator:a2598690dfd07d3a36e4ae1ba0f08ae58"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2af14feec2238a3318bbfcd8954025ac" id="r_a2af14feec2238a3318bbfcd8954025ac"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a2af14feec2238a3318bbfcd8954025ac">onPropertyChange</a> (juce::Identifier id, PropertyUpdateFn callback)</td></tr>
-<tr class="memdesc:a2af14feec2238a3318bbfcd8954025ac"><td class="mdescLeft">&#160;</td><td class="mdescRight">Install (or clear) a function to be called when one of this <a class="el" href="classcello_1_1_object.html">Object</a>'s properties changes. A cello extension to this mechanism is that you can pass in the type id of this tree, and you'll receive a callback on that key when any of the other properties that don't have a handler have changed.  <br /></td></tr>
-<tr class="separator:a2af14feec2238a3318bbfcd8954025ac"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3d19efd1b7b1e1c9fa3dd2cd20a11c90" id="r_a3d19efd1b7b1e1c9fa3dd2cd20a11c90"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a3d19efd1b7b1e1c9fa3dd2cd20a11c90">onPropertyChange</a> (const juce::Identifier &amp;id, PropertyUpdateFn callback)</td></tr>
+<tr class="memdesc:a3d19efd1b7b1e1c9fa3dd2cd20a11c90"><td class="mdescLeft">&#160;</td><td class="mdescRight">Install (or clear) a function to be called when one of this <a class="el" href="classcello_1_1_object.html">Object</a>'s properties changes. A cello extension to this mechanism is that you can pass in the type id of this tree, and you'll receive a callback on that key when any of the other properties that don't have a handler have changed.  <br /></td></tr>
+<tr class="separator:a3d19efd1b7b1e1c9fa3dd2cd20a11c90"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5307d2bbb3280be1b9d544bad4fcac64" id="r_a5307d2bbb3280be1b9d544bad4fcac64"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a5307d2bbb3280be1b9d544bad4fcac64">onPropertyChange</a> (PropertyUpdateFn callback)</td></tr>
 <tr class="memdesc:a5307d2bbb3280be1b9d544bad4fcac64"><td class="mdescLeft">&#160;</td><td class="mdescRight">install or clear a generic callback that will be called when any property in the object changes. The identifier of the property that changed will be passed to the callback.  <br /></td></tr>
 <tr class="separator:a5307d2bbb3280be1b9d544bad4fcac64"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -1058,8 +1058,38 @@ false </dd></dl>
 
 </div>
 </div>
+<a id="a3d19efd1b7b1e1c9fa3dd2cd20a11c90" name="a3d19efd1b7b1e1c9fa3dd2cd20a11c90"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3d19efd1b7b1e1c9fa3dd2cd20a11c90">&#9670;&#160;</a></span>onPropertyChange() <span class="overload">[1/3]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void cello::Object::onPropertyChange </td>
+          <td>(</td>
+          <td class="paramtype">const juce::Identifier &amp;</td>          <td class="paramname"><span class="paramname"><em>id</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">PropertyUpdateFn</td>          <td class="paramname"><span class="paramname"><em>callback</em></span>&#160;)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Install (or clear) a function to be called when one of this <a class="el" href="classcello_1_1_object.html">Object</a>'s properties changes. A cello extension to this mechanism is that you can pass in the type id of this tree, and you'll receive a callback on that key when any of the other properties that don't have a handler have changed. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">id</td><td>the ID of the property that has changed. </td></tr>
+    <tr><td class="paramname">callback</td><td>function to call on update. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
 <a id="ab76c604f03632096881fbcbd33835b6f" name="ab76c604f03632096881fbcbd33835b6f"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ab76c604f03632096881fbcbd33835b6f">&#9670;&#160;</a></span>onPropertyChange() <span class="overload">[1/3]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#ab76c604f03632096881fbcbd33835b6f">&#9670;&#160;</a></span>onPropertyChange() <span class="overload">[2/3]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1082,36 +1112,6 @@ false </dd></dl>
   <table class="params">
     <tr><td class="paramname">val</td><td></td></tr>
     <tr><td class="paramname">callback</td><td></td></tr>
-  </table>
-  </dd>
-</dl>
-
-</div>
-</div>
-<a id="a2af14feec2238a3318bbfcd8954025ac" name="a2af14feec2238a3318bbfcd8954025ac"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a2af14feec2238a3318bbfcd8954025ac">&#9670;&#160;</a></span>onPropertyChange() <span class="overload">[2/3]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void cello::Object::onPropertyChange </td>
-          <td>(</td>
-          <td class="paramtype">juce::Identifier</td>          <td class="paramname"><span class="paramname"><em>id</em></span>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">PropertyUpdateFn</td>          <td class="paramname"><span class="paramname"><em>callback</em></span>&#160;)</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Install (or clear) a function to be called when one of this <a class="el" href="classcello_1_1_object.html">Object</a>'s properties changes. A cello extension to this mechanism is that you can pass in the type id of this tree, and you'll receive a callback on that key when any of the other properties that don't have a handler have changed. </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">id</td><td>the ID of the property that has changed. </td></tr>
-    <tr><td class="paramname">callback</td><td>function to call on update. </td></tr>
   </table>
   </dd>
 </dl>

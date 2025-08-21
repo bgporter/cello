@@ -10,6 +10,8 @@ var annotated_dup =
       [ "Query", "classcello_1_1_query.html", "classcello_1_1_query" ],
       [ "ScopedForceUpdater", "classcello_1_1_scoped_force_updater.html", null ],
       [ "Sync", "classcello_1_1_sync.html", "classcello_1_1_sync" ],
+      [ "SyncController", "classcello_1_1_sync_controller.html", "classcello_1_1_sync_controller" ],
+      [ "SyncData", "structcello_1_1_sync_data.html", null ],
       [ "Test_cello_path", "classcello_1_1_test__cello__path.html", null ],
       [ "UpdateQueue", "classcello_1_1_update_queue.html", "classcello_1_1_update_queue" ],
       [ "UpdateSource", "classcello_1_1_update_source.html", "classcello_1_1_update_source" ],
