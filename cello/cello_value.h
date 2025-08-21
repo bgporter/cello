@@ -19,6 +19,8 @@
 
 #pragma once
 
+#include <optional>
+
 #include "cello_update_source.h"
 
 namespace cello
@@ -116,7 +118,11 @@ public:
     void set (const T& val)
     {
         if (onSet != nullptr)
-            doSet (onSet (val));
+        {
+            const auto validated { onSet (val) };
+            if (validated.has_value ())
+                doSet (validated.value ());
+        }
         else
             doSet (val);
     }
@@ -164,12 +170,24 @@ public:
         {
             // when the underlying value changes, cache it here so it can
             // be used without needing to look it up, go through validation, etc.
-            value.onPropertyChange ([this] (juce::Identifier /*id*/) { cachedValue = static_cast<T> (value); });
+            value.onPropertyChange ([this] (const juce::Identifier& /*id*/) { cachedValue = static_cast<T> (value); });
         }
 
         ~Cached () { value.onPropertyChange (nullptr); }
 
-        operator T () const { return cachedValue; }
+        /**
+         * @brief retrieve the current value of this cached object.
+         *
+         * @return T
+         */
+        T get () const { return cachedValue; }
+
+        /**
+         * @brief retrieve the current value of this cached object.
+         *
+         * @return T
+         */
+        operator T () const { return get (); }
 
     private:
         Value<T>& value;
@@ -183,25 +201,32 @@ public:
     Cached getCached () { return Cached (*this); }
 
     /**
-     * @brief We define the signature of a 'validator' function that
-     * can validate/modify/replace values as your application requires.
-     *
-     * These will be called (if present) whenever this value is set or
-     * retrieved.
+     * @brief An optional validator function that can be used to modify the value 
+     * when it's retrieved. 
      */
-    using ValidatePropertyFn = std::function<T (const T&)>;
+    using ValidateGetFn = std::function<T (const T&)>;
+    
+    /**
+     * @brief an optional validator function that can be used to modify the value 
+     * when it's set. If the function returns std::nullopt, the value will not be 
+     * changed (so you can either ignore attempts to change the value to something 
+     * invalid, or you can always return nullopt to treat the value as if it were 
+     * `const`. Obviously, other code touching the underlying value tree can still 
+     * change the value)
+     */
+    using ValidateSetFn = std::function<std::optional<T> (const T&)>;
 
     /**
      * @brief validator function called before setting this Value.
      */
-    ValidatePropertyFn onSet;
+    ValidateSetFn onSet;
 
     /**
      * @brief validator function called when retrieving this Value.
      * This function is called with the current stored value, and might
      * return a different value.
      */
-    ValidatePropertyFn onGet;
+    ValidateGetFn onGet;
 
     /**
      * @brief A listener to exclude from property change updates.
@@ -282,8 +307,7 @@ template <typename T, // the actual type
           typename = typename std::enable_if<std::is_arithmetic<T>::value, T>::type>
 Value<T>& operator+= (Value<T>& val, const T& rhs)
 {
-    const auto current { static_cast<T> (val) };
-    val = current + rhs;
+    val = val.get () + rhs;
     return val;
 }
 
@@ -291,8 +315,7 @@ template <typename T, // the actual type
           typename = typename std::enable_if<std::is_arithmetic<T>::value, T>::type>
 Value<T>& operator-= (Value<T>& val, const T& rhs)
 {
-    const auto current { static_cast<T> (val) };
-    val = current - rhs;
+    val = val.get () - rhs;
     return val;
 }
 
@@ -300,8 +323,7 @@ template <typename T, // the actual type
           typename = typename std::enable_if<std::is_arithmetic<T>::value, T>::type>
 Value<T>& operator*= (Value<T>& val, const T& rhs)
 {
-    const auto current { static_cast<T> (val) };
-    val = current * rhs;
+    val = val.get () * rhs;
     return val;
 }
 
@@ -310,8 +332,7 @@ template <typename T, // the actual type
 Value<T>& operator/= (Value<T>& val, const T& rhs)
 {
     jassert (rhs != 0);
-    const auto current { static_cast<T> (val) };
-    val = current / rhs;
+    val = val.get () / rhs;
     return val;
 }
 
@@ -327,8 +348,8 @@ template <typename T, // the actual type
           typename = typename std::enable_if<std::is_arithmetic<T>::value, T>::type>
 T operator++ (Value<T>& val)
 {
-    const auto newVal { static_cast<T> (val) + static_cast<int> (1) };
-    val.set (newVal);
+    const auto newVal { val.get () + static_cast<int> (1) };
+    val = newVal;
     return newVal;
 }
 
@@ -348,7 +369,7 @@ template <typename T, // the actual type
           typename = typename std::enable_if<std::is_arithmetic<T>::value, T>::type>
 T operator++ (Value<T>& val, int)
 {
-    const auto original { static_cast<T> (val) };
+    const auto original { val.get () };
     val.set (original + static_cast<T> (1));
     return original;
 }
@@ -365,7 +386,7 @@ template <typename T, // the actual type
           typename = typename std::enable_if<std::is_arithmetic<T>::value, T>::type>
 T operator-- (Value<T>& val)
 {
-    const auto newVal { static_cast<T> (val) - static_cast<T> (1) };
+    const auto newVal { val.get () - static_cast<T> (1) };
     val.set (newVal);
     return newVal;
 }
@@ -386,7 +407,7 @@ template <typename T, // the actual type
           typename = typename std::enable_if<std::is_arithmetic<T>::value, T>::type>
 T operator-- (Value<T>& val, int)
 {
-    const auto original { static_cast<T> (val) };
+    const auto original { val.get () };
     val.set (original - static_cast<T> (1));
     return original;
 }
@@ -398,8 +419,19 @@ T operator-- (Value<T>& val, int)
  * as a member of a cello::Object, using the same name for the variable
  * as the identifier used for the property in its ValueTree.
  */
-#define MAKE_VALUE_MEMBER(type, name, init) \
-    cello::Value<type> name                 \
-    {                                       \
-        *this, #name, init                  \
-    }
+// clang-format off
+#define MAKE_VALUE_MEMBER(type, name, init)                  \
+    static const inline juce::Identifier name##Id { #name }; \
+    cello::Value<type> name { *this, name##Id, init }
+// clang-format on
+
+// clang-format off
+/**
+ * @brief a macro to create a cached value of a cello::Value object. 
+ * Useful to create a `Value::Cached` object in a constructor. 
+ *
+ * @param name name of the cached value object.
+ * @param value the cello::Value object to cache.
+ */
+#define CACHED_VALUE(name, value)  decltype(value.getCached()) name { value }
+// clang-format on

@@ -151,7 +151,7 @@ public:
               [this] ()
               {
                   cello::Object root { "root", parentTree };
-                 // look for a key in the previous 100
+                  // look for a key in the previous 100
                   int target = Data::lastKey - 50;
                   cello::Query half (
                       [this, target] (juce::ValueTree tree)

@@ -17,8 +17,8 @@
     SOFTWARE.
 */
 
-#include "cello_ipc.h"
 #include "JuceHeader.h"
+#include "cello_ipc.h"
 
 namespace
 {
@@ -136,9 +136,22 @@ void IpcClient::stateChanged (const void* encodedChange, size_t encodedSize)
 {
     if ((update & UpdateType::send) && (clientProperties.connected))
     {
-        sendMessage ({ encodedChange, encodedSize });
-        clientProperties.txCount++;
+        if (updateData != SyncData { encodedChange, encodedSize })
+        {
+            sendMessage ({ encodedChange, encodedSize });
+            clientProperties.txCount++;
+        }
     }
+}
+
+void IpcClient::startUpdate (void* data, size_t size)
+{
+    updateData = SyncData { data, size };
+}
+
+void IpcClient::endUpdate ()
+{
+    updateData = SyncData {};
 }
 
 //==============================================================================
@@ -183,7 +196,7 @@ IpcServer::IpcServer (Object& sync, IpcClient::UpdateType updateType, const juce
     // the server properties will change its portNumber member to let us
     // know that we should start or stop ourselves.
     serverProperties.portNumber.onPropertyChange (
-        [this] (juce::Identifier /*id*/)
+        [this] (const juce::Identifier& /*id*/)
         {
             if (serverProperties.portNumber > 0)
                 startServer (serverProperties.portNumber, serverProperties.bindAddress);

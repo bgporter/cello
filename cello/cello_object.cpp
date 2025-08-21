@@ -252,7 +252,7 @@ juce::UndoManager* Object::getUndoManager () const
     return undoManager;
 }
 
-void Object::onPropertyChange (juce::Identifier id, PropertyUpdateFn callback)
+void Object::onPropertyChange (const juce::Identifier& id, PropertyUpdateFn callback)
 {
     // replace an existing callback?
     for (auto& updater : propertyUpdaters)

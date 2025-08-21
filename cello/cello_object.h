@@ -449,7 +449,7 @@ public:
      * @param id the ID of the property that has changed.
      * @param callback function to call on update.
      */
-    void onPropertyChange (juce::Identifier id, PropertyUpdateFn callback);
+    void onPropertyChange (const juce::Identifier& id, PropertyUpdateFn callback);
 
     /**
      * @brief install or clear a generic callback that will be called when any
@@ -616,7 +616,7 @@ private:
      * @param oldIndex
      * @param newIndex
      */
-    void valueTreeChildOrderChanged (juce::ValueTree& childTree, int oldIndex, int newIndex) override;
+    void valueTreeChildOrderChanged (juce::ValueTree& parentTree, int oldIndex, int newIndex) override;
 
     /**
      * @brief Will execute the `onParentChanged` callback if it exists.

@@ -5,6 +5,29 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 1.6.0 * 2025-08-21
+
+### Added
+
+- the `MAKE_VALUE_MEMBER` macro now creates a static `juce::Identifer` that's used by all instances of the class to instantiate that member instead of re-converting from a string each time. Should be faster, and use the Identifier objects as they're intended to be used. 
+- Added `CACHED_VALUE(name, value)` macro to simplify creating cached value members for `cello::Value` objects.
+- Added `get()` method to `Value<T>::Cached` for easier access to the cached value (e.g., you can use it to initialize an `auto` variable).
+- Added support for bidirectional synchronization between `cello::Object`s in different threads via the new `cello::SyncController` class, which manages a pair of `Sync` objects and prevents feedback loops during updates.
+- Added new methods to `SyncController` for performing updates: `performNextUpdate` and `performAllUpdates` for a given thread.
+- Added new tests for bidirectional sync and feedback prevention.
+
+### Changed 
+
+- changed the signature of the `Value<T>::onSet()` callable. This now returns `std::optional<T>`; if this callable returns `std::nullopt`, the Value will not be modified, so you can ignore set calls that are invalid, or always return `nullopt` from your set validator to treat the Value as if it were const. 
+
+### Fixed
+
+- type of first argument to a `PropertyChangeFn` changed from `juce::Identifier` to `const juce::Identifier&`, which it always should have been.
+- cleaned up `Value` arithmetic operators by replacing noisy static_cast calls with the recently added `Value::get()` method that accomplishes the same thing.
+- Improved feedback prevention in synchronization logic to avoid infinite update loops when syncing between objects.
+- Updated `IpcClient` to implement `startUpdate` and `endUpdate` for better state management during IPC sync.
+- Minor documentation improvements and added missing comments for clarity.
+
 ## 1.5.0 * 2025-02-09 
 
 ### Added 
