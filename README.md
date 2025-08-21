@@ -1,10 +1,12 @@
 # Cello
 
-Classes for working with juce ValueTree objects. 
+[JUCE](https://juce.com) [ValueTrees](https://docs.juce.com/master/classValueTree.html) for [humans](https://en.wikipedia.org/wiki/Human).
 
 **Brett g Porter** * brett@bgporter.net
 
 API docs available [here](https://bgporter.github.io/cello/)
+
+A more complete discussion of this library is available on a [collection of posts](https://bgporter.net/tags.html#cello-ref) on my personal website; start with this [Overview](https://bgporter.net/posts/cello/cello-overview/). 
 
 ## tl;dr 
 
@@ -106,7 +108,7 @@ demoObject.x = 100;
 - arithmetic types have all of the in-place operators (`++`, `--`, `+=`, `-=`, `*=`, `/=`) defined.
 - can be used to access any C++ value data type for which a `juce::VariantConverter` struct has been defined. 
 
-`cello::Value` objects only make sense as members of a class derived from `cello::Object` (below). The signature of the Value constuctor is:
+`cello::Value` objects only make sense as members of a class derived from `cello::Object` (below). The signature of the Value constructor is:
 
 ```cpp
 template <typename T>
@@ -245,7 +247,7 @@ The constructors of `cello::Object` handle both these cases for us, using the lo
 * `Object (const juce::String& type, juce::ValueTree tree);`
 
 1. If the `state` or `tree` argument is of type `type`, wrap that inside the object being created. 
-2. If the `state` or `tree` arguments has a child of type `type`, wrap that child inside the object beng created. 
+2. If the `state` or `tree` arguments has a child of type `type`, wrap that child inside the object being created. 
 3. Else, we create a new ValueTree of type `type` and initialize it as appropriate. If the `state` arg was not null (or the `tree` is valid), add this new tree as a child. 
 
 It is sometimes useful to know whether a new Object was created or wrapped &mdash; for example, it might be an error in your application if a child that's expected to be present isn't. 
@@ -482,7 +484,7 @@ A `SelfUpdateFn` callback with the signature `std::function<void (void)>` will b
 
 ### "Pythonesque" access
 
-Not everything can or should be done with the kind of compile-time API `cello` was written to support. These methods take their names and inspriation from similar methods in the Python object model.
+Not everything can or should be done with the kind of compile-time API `cello` was written to support. These methods take their names and inspiration from similar methods in the Python object model.
 
 These methods do provide some level of type-safety and type-coercion using `VariantConverter`s that our `Value` types have.
 
@@ -541,7 +543,7 @@ When working with multiple threads, it's important to ensure that when two threa
      */
     Sync (Object& producer, Object& consumer, juce::Thread* thread);
 ```
-To perform bidirectional sync operations, create a pair of `Sync` objects with the products/consumer roles swapped appropriately. You'll need to be careful when doing this to avoid creating feedback loops where updates echo infinitely between Objects.
+To perform bidirectional sync operations, create a pair of `Sync` objects with the producer/consumer roles swapped appropriately. You'll need to be careful when doing this to avoid creating feedback loops where updates echo infinitely between Objects.
 
 When the consumer object is being updated on the message thread, the Sync class will handle executing the updates automatically for you. Consumers being updated in a worker thread will need to find a place in their `run()` loop to check for and execute any pending updates. A minimal worker thread class would look something like:
 
