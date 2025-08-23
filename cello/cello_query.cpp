@@ -63,6 +63,21 @@ juce::ValueTree Query::search (juce::ValueTree tree, bool deep, bool returnFirst
     // return result;
 }
 
+int Query::remove (juce::ValueTree tree) const
+{
+    int removed { 0 };
+    for (int i = tree.getNumChildren () - 1; i >= 0; i--)
+    {
+        if (filter (tree.getChild (i)))
+        {
+            tree.removeChild (i, nullptr);
+            removed++;
+        }
+    }
+    return removed;
+}
+
+
 bool Query::filter (juce::ValueTree tree) const
 {
     if (filters.size () > 0)

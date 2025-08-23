@@ -89,6 +89,14 @@ public:
     juce::ValueTree search (juce::ValueTree tree, bool deep, bool returnFirstFound = false) const;
 
     /**
+     * @brief Remove all children from the tree that match the query.
+     *
+     * @param tree
+     * @return int number of children removed.
+     */
+    int remove (juce::ValueTree tree) const;
+
+    /**
      * @brief Add a comparison function to the list we use to sort a list
      * of children.
      *

@@ -249,6 +249,14 @@ public:
     juce::ValueTree findOne (const cello::Query& query, bool deep = false);
 
     /**
+     * @brief Remove all children from the tree that match the query.
+     *
+     * @param query
+     * @return int number of children removed.
+     */
+    int remove (const cello::Query& query);
+
+    /**
      * @brief Update or insert a child object (concept borrowed from MongoDB)
      * Looks for a child with a 'key' value that matches the one found in the
      * object we've been passed. If a match is found, we update the entry in place
