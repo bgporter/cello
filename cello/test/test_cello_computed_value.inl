@@ -61,12 +61,16 @@ public:
             ObjectWithArea obj;
             obj.width = 10.f;
             obj.height = 20.f;
-            expect (obj.area == 200.f);
+            expectWithinAbsoluteError (obj.area.get(), 200.f, 0.001f);
             obj.height = 30.f;
-            expect (obj.area == 300.f);
+            expectWithinAbsoluteError (obj.area.get(), 300.f, 0.001f);
 
             // asserts because we didn't set the setImpl lambda
             // obj.area = 400.f;
+            obj.area.getImpl = nullptr;
+            // accessing a ComputedValue with no getImpl lambda will assert
+            // expectWithinAbsoluteError (obj.area.get(), 300.f, 0.001f);
+
         });
 
         test ("bi-directional computed value", [&] ()
