@@ -42,3 +42,4 @@ END_JUCE_MODULE_DECLARATION
 #include "cello/cello_sync.h"
 #include "cello/cello_update_source.h"
 #include "cello/cello_value.h"
+#include "cello/cello_computed_value.h"

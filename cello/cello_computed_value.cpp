@@ -1,5 +1,5 @@
 /*
-    Copyright (c) 2023 Brett g Porter
+    Copyright (c) 2025 Brett g Porter
     Permission is hereby granted, free of charge, to any person obtaining a copy
     of this software and associated documentation files (the "Software"), to deal
     in the Software without restriction, including without limitation the rights
@@ -17,20 +17,12 @@
     SOFTWARE.
 */
 
-#ifdef CELLO_H_INCLUDED
-/* When you add this cpp file to your project, you mustn't include it in a file where
-   you've already included any other headers - just put it inside a file on its own,
-   possibly with your config flags preceding it, but don't include anything else. That
-   also includes avoiding any automatic prefix header files that the compiler may be
-   using.
-*/
-#error "Incorrect use of JUCE cpp file"
-#endif
+#include "JuceHeader.h"
 
-#include "cello/cello_ipc.cpp"
-#include "cello/cello_object.cpp"
-#include "cello/cello_path.cpp"
-#include "cello/cello_query.cpp"
-#include "cello/cello_sync.cpp"
-#include "cello/cello_value.cpp"
-#include "cello/cello_computed_value.cpp"
+#include "cello_computed_value.h"
+
+    
+
+#if RUN_UNIT_TESTS
+#include "test/test_cello_computed_value.inl"
+#endif
