@@ -21,8 +21,6 @@
 
 #include "cello_computed_value.h"
 
-    
-
 #if RUN_UNIT_TESTS
 #include "test/test_cello_computed_value.inl"
 #endif

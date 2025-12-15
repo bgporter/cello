@@ -17,16 +17,15 @@
     SOFTWARE.
 */
 
-
-#include <juce_core/juce_core.h>
 #include "../cello_object.h"
 #include "../cello_value.h"
+#include <juce_core/juce_core.h>
 
 class ObjectWithArea : public cello::Object
 {
 public:
-    ObjectWithArea()
-    : cello::Object("area", nullptr)
+    ObjectWithArea ()
+    : cello::Object ("area", nullptr)
     {
     }
     MAKE_VALUE_MEMBER (float, width, 0.f);
@@ -37,50 +36,51 @@ public:
 class ObjectWithConversion : public cello::Object
 {
 public:
-    ObjectWithConversion()
-    : cello::Object("conversion", nullptr)
+    ObjectWithConversion ()
+    : cello::Object ("conversion", nullptr)
     {
     }
     MAKE_VALUE_MEMBER (float, metric, 0.f);
-    cello::ComputedValue<float> imperial { *this, "imperial", [this] () -> float { return metric / 2.54f; }, [this] (const float& val) { metric = val * 2.54f; } };
+    cello::ComputedValue<float> imperial { *this, "imperial", [this] () -> float { return metric / 2.54f; },
+                                           [this] (const float& val) { metric = val * 2.54f; } };
 };
 
 class Test_ComputedValue : public TestSuite
 {
 public:
-    Test_ComputedValue() 
-    : TestSuite("computed_value", "cello")
+    Test_ComputedValue ()
+    : TestSuite ("computed_value", "cello")
     {
-
     }
 
-    void runTest() override
+    void runTest () override
     {
-        test("Read-only computed value", [&] ()
-        {
-            ObjectWithArea obj;
-            obj.width = 10.f;
-            obj.height = 20.f;
-            expectWithinAbsoluteError (obj.area.get(), 200.f, 0.001f);
-            obj.height = 30.f;
-            expectWithinAbsoluteError (obj.area.get(), 300.f, 0.001f);
+        test ("Read-only computed value",
+              [&] ()
+              {
+                  ObjectWithArea obj;
+                  obj.width  = 10.f;
+                  obj.height = 20.f;
+                  expectWithinAbsoluteError (obj.area.get (), 200.f, 0.001f);
+                  obj.height = 30.f;
+                  expectWithinAbsoluteError (obj.area.get (), 300.f, 0.001f);
 
-            // asserts because we didn't set the setImpl lambda
-            // obj.area = 400.f;
-            obj.area.getImpl = nullptr;
-            // accessing a ComputedValue with no getImpl lambda will assert
-            // expectWithinAbsoluteError (obj.area.get(), 300.f, 0.001f);
+                  // asserts because we didn't set the setImpl lambda
+                  // obj.area = 400.f;
+                  obj.area.getImpl = nullptr;
+                  // accessing a ComputedValue with no getImpl lambda will assert
+                  // expectWithinAbsoluteError (obj.area.get(), 300.f, 0.001f);
+              });
 
-        });
-
-        test ("bi-directional computed value", [&] ()
-        {
-            ObjectWithConversion obj;
-            obj.metric = 100.f;
-            expectWithinAbsoluteError (obj.imperial.get(), 39.3701f, 0.001f);
-            obj.imperial = 10.f;
-            expectWithinAbsoluteError (obj.metric.get(), 25.4f, 0.001f);
-        });
+        test ("bi-directional computed value",
+              [&] ()
+              {
+                  ObjectWithConversion obj;
+                  obj.metric = 100.f;
+                  expectWithinAbsoluteError (obj.imperial.get (), 39.3701f, 0.001f);
+                  obj.imperial = 10.f;
+                  expectWithinAbsoluteError (obj.metric.get (), 25.4f, 0.001f);
+              });
     }
 };
 
