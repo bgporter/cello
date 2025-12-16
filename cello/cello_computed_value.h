@@ -19,8 +19,6 @@
 
 #pragma once
 
-#include <optional>
-
 #include "cello_value.h"
 
 namespace cello
@@ -44,10 +42,13 @@ namespace cello
  *
  * This class is (intentionally) simpler than a Value object, in that it doesn't
  * permit listening to changes in the computed value. If you need to know when
- * the computed value changes, add a listener to the Value used as the source of the computed value.
+ * the computed value changes, add a listener to the Value used as the source(s) of the computed value.
  *
  * This also doesn't support the `onSet` and `onGet` validation functions that are in
  * Value objects; any validation that you need to perform should be done in the get and set lambdas.
+ * Obviously, if your `setImpl()` lambda updates another Value and your computation
+ * would make that Value invalid according to its `onSet()` validator, the underlying
+ * Value will remain in its valid state as determined by its `onSet()` validator.
  *
  * @tparam T The type of the computed value.
  */
@@ -103,14 +104,15 @@ public:
     /**
      * @brief Conversion operator to the type of the computed value.
      *
-     * @return T The current value of the computed value.
+     * @return T The current computed value.
      */
     operator T () const { return get (); }
 
     /**
-     * @brief Get the current value of the computed value.
+     * @brief Get the current computed value.
      *
-     * @return T The current value of the computed value.
+     * @return T The current computed value. If no getImpl lambda is set, this will
+     * will assert (in a debug build) and return a default T value (in release builds)
      */
     T get () const
     {
@@ -129,3 +131,17 @@ private:
 };
 
 } // namespace cello
+
+/**
+ * @brief a useful macro to create and default initialize a cello::Value
+ * as a member of a cello::Object, using the same name for the variable
+ * as the identifier used for the property in its ValueTree.
+ *
+ * Because it uses variadic args, you may pass in 0, 1, or 2 additional
+ * parameters to specify the get and set lambdas for the ComputedValue.
+ */
+// clang-format off
+#define MAKE_COMPUTED_VALUE_MEMBER(type, name, ...)                  \
+    static const inline juce::Identifier name##Id { #name }; \
+    cello::ComputedValue<type> name { *this, name##Id, __VA_ARGS__ };
+// clang-format on

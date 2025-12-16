@@ -10,7 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added 
 
 - `Object::remove(const cello::Query&)` will remove any children that are filtered by the query argument, returning the number of children that were removed as a result. 
-- new `ComputedValue<T>` class; provides a `Value`-like API to functions that are not backed in the ValueTree as such (useful for conversions, etc.)
+- new `ComputedValue<T>` class; provides a `Value`-like API to functions/data that are not backed in the ValueTree as such (useful for conversions, etc.)
 
 ### Changed
 

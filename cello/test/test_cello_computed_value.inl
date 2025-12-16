@@ -30,7 +30,7 @@ public:
     }
     MAKE_VALUE_MEMBER (float, width, 0.f);
     MAKE_VALUE_MEMBER (float, height, 0.f);
-    cello::ComputedValue<float> area { *this, "area", [this] () -> float { return width * height; } };
+    MAKE_COMPUTED_VALUE_MEMBER (float, area, [this] () -> float { return width * height; });
 };
 
 class ObjectWithConversion : public cello::Object
@@ -41,8 +41,9 @@ public:
     {
     }
     MAKE_VALUE_MEMBER (float, metric, 0.f);
-    cello::ComputedValue<float> imperial { *this, "imperial", [this] () -> float { return metric / 2.54f; },
-                                           [this] (const float& val) { metric = val * 2.54f; } };
+    MAKE_COMPUTED_VALUE_MEMBER (
+        float, imperial, [this] () -> float { return metric / 2.54f; },
+        [this] (const float& val) { metric = val * 2.54f; });
 };
 
 class Test_ComputedValue : public TestSuite
