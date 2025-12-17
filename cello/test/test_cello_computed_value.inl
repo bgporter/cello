@@ -17,9 +17,10 @@
     SOFTWARE.
 */
 
+#include <juce_core/juce_core.h>
+
 #include "../cello_object.h"
 #include "../cello_value.h"
-#include <juce_core/juce_core.h>
 
 class ObjectWithArea : public cello::Object
 {
@@ -30,6 +31,7 @@ public:
     }
     MAKE_VALUE_MEMBER (float, width, 0.f);
     MAKE_VALUE_MEMBER (float, height, 0.f);
+    // provide just the getImpl lambda -- this is a read-only computed value
     MAKE_COMPUTED_VALUE_MEMBER (float, area, [this] () -> float { return width * height; });
 };
 
@@ -41,6 +43,7 @@ public:
     {
     }
     MAKE_VALUE_MEMBER (float, metric, 0.f);
+    // provide both getImpl and setImpl lambdas for bi-directional conversion
     MAKE_COMPUTED_VALUE_MEMBER (
         float, imperial, [this] () -> float { return metric / 2.54f; },
         [this] (const float& val) { metric = val * 2.54f; });

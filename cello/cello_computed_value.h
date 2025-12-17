@@ -19,6 +19,7 @@
 
 #pragma once
 
+#include "cello_object.h"
 #include "cello_value.h"
 
 namespace cello

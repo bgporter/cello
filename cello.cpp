@@ -27,10 +27,10 @@
 #error "Incorrect use of JUCE cpp file"
 #endif
 
+#include "cello/cello_computed_value.cpp"
 #include "cello/cello_ipc.cpp"
 #include "cello/cello_object.cpp"
 #include "cello/cello_path.cpp"
 #include "cello/cello_query.cpp"
 #include "cello/cello_sync.cpp"
 #include "cello/cello_value.cpp"
-#include "cello/cello_computed_value.cpp"
