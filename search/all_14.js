@@ -1,7 +1,11 @@
 var searchData=
 [
-  ['query_0',['Query',['../md__r_e_a_d_m_e.html#autotoc_md45',1,'Database / Query'],['../classcello_1_1_query.html',1,'cello::Query'],['../classcello_1_1_query.html#a83e4da63677cd62c471a26f225d0f3a6',1,'cello::Query::Query(const juce::Identifier &amp;resultType=Result)'],['../classcello_1_1_query.html#a3f57334dcd4152e5864aa4a33dbab395',1,'cello::Query::Query(Predicate filter, const juce::Identifier &amp;resultType=Result)']]],
-  ['query_1',['query',['../classcello_1_1_path.html#a11d3057a624ca94e3eeb672d12a98fbfa1b1cc7f086b3f074da452bc3129981eb',1,'cello::Path']]],
-  ['query_3a_3acomparison_2',['Query::Comparison',['../md__r_e_a_d_m_e.html#autotoc_md47',1,'']]],
-  ['query_3a_3apredicate_3',['Query::Predicate',['../md__r_e_a_d_m_e.html#autotoc_md46',1,'']]]
+  ['path_0',['Path',['../classcello_1_1_path.html',1,'cello']]],
+  ['patterns_3a_20creating_20vs_20wrapping_1',['Creation Patterns: Creating vs Wrapping',['../md__r_e_a_d_m_e.html#autotoc_md46',1,'']]],
+  ['performallupdates_2',['performAllUpdates',['../classcello_1_1_update_queue.html#a65ba56b5ad3fe3637a2862ab336df575',1,'cello::UpdateQueue::performAllUpdates()'],['../classcello_1_1_sync_controller.html#ae7de96cb49486b8e343f0944a8d9ce04',1,'cello::SyncController::performAllUpdates()']]],
+  ['performnextupdate_3',['performNextUpdate',['../classcello_1_1_update_queue.html#af6d6551dbd6977f742644255dc1b0f6e',1,'cello::UpdateQueue::performNextUpdate()'],['../classcello_1_1_sync_controller.html#a27847cd83a7f71b1588e82d6522f898c',1,'cello::SyncController::performNextUpdate()']]],
+  ['persistence_4',['Persistence',['../md__r_e_a_d_m_e.html#autotoc_md64',1,'']]],
+  ['pieces_5',['Missing Pieces',['../md__r_e_a_d_m_e.html#autotoc_md66',1,'']]],
+  ['property_20changes_6',['Property Changes',['../md__r_e_a_d_m_e.html#autotoc_md60',1,'']]],
+  ['pythonesque_20access_7',['&quot;Pythonesque&quot; access',['../md__r_e_a_d_m_e.html#autotoc_md63',1,'']]]
 ];

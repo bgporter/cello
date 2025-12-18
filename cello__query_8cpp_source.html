@@ -175,55 +175,73 @@ $(function(){initNavTree('cello__query_8cpp_source.html',''); initResizable(true
 <div class="line"><a id="l00064" name="l00064"></a><span class="lineno">   64</span>}</div>
 </div>
 <div class="line"><a id="l00065" name="l00065"></a><span class="lineno">   65</span> </div>
-<div class="line"><a id="l00066" name="l00066"></a><span class="lineno">   66</span><span class="keywordtype">bool</span> Query::filter (juce::ValueTree tree)<span class="keyword"> const</span></div>
+<div class="foldopen" id="foldopen00066" data-start="{" data-end="}">
+<div class="line"><a id="l00066" name="l00066"></a><span class="lineno"><a class="line" href="classcello_1_1_query.html#aae74f727697452e87f4ee2471b0ff76a">   66</a></span><span class="keywordtype">int</span> <a class="code hl_function" href="classcello_1_1_query.html#aae74f727697452e87f4ee2471b0ff76a">Query::remove</a> (juce::ValueTree tree)<span class="keyword"> const</span></div>
 <div class="line"><a id="l00067" name="l00067"></a><span class="lineno">   67</span><span class="keyword"></span>{</div>
-<div class="line"><a id="l00068" name="l00068"></a><span class="lineno">   68</span>    <span class="keywordflow">if</span> (filters.size () &gt; 0)</div>
-<div class="line"><a id="l00069" name="l00069"></a><span class="lineno">   69</span>    {</div>
-<div class="line"><a id="l00070" name="l00070"></a><span class="lineno">   70</span>        <span class="keywordflow">for</span> (<span class="keyword">auto</span> fn : filters)</div>
-<div class="line"><a id="l00071" name="l00071"></a><span class="lineno">   71</span>        {</div>
-<div class="line"><a id="l00072" name="l00072"></a><span class="lineno">   72</span>            <span class="keywordflow">if</span> (!fn (tree))</div>
-<div class="line"><a id="l00073" name="l00073"></a><span class="lineno">   73</span>                <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
-<div class="line"><a id="l00074" name="l00074"></a><span class="lineno">   74</span>        }</div>
-<div class="line"><a id="l00075" name="l00075"></a><span class="lineno">   75</span>    }</div>
-<div class="line"><a id="l00076" name="l00076"></a><span class="lineno">   76</span>    <span class="keywordflow">return</span> <span class="keyword">true</span>;</div>
-<div class="line"><a id="l00077" name="l00077"></a><span class="lineno">   77</span>}</div>
-<div class="line"><a id="l00078" name="l00078"></a><span class="lineno">   78</span> </div>
-<div class="foldopen" id="foldopen00079" data-start="{" data-end="}">
-<div class="line"><a id="l00079" name="l00079"></a><span class="lineno"><a class="line" href="classcello_1_1_query.html#a6590ad472f1f5393686b176ce2ce8e2c">   79</a></span><a class="code hl_function" href="classcello_1_1_query.html#a83e4da63677cd62c471a26f225d0f3a6">Query</a>&amp; <a class="code hl_function" href="classcello_1_1_query.html#a6590ad472f1f5393686b176ce2ce8e2c">Query::addComparison</a> (Comparison sorter)</div>
-<div class="line"><a id="l00080" name="l00080"></a><span class="lineno">   80</span>{</div>
-<div class="line"><a id="l00081" name="l00081"></a><span class="lineno">   81</span>    sorters.push_back (sorter);</div>
-<div class="line"><a id="l00082" name="l00082"></a><span class="lineno">   82</span>    <span class="keywordflow">return</span> *<span class="keyword">this</span>;</div>
-<div class="line"><a id="l00083" name="l00083"></a><span class="lineno">   83</span>}</div>
+<div class="line"><a id="l00068" name="l00068"></a><span class="lineno">   68</span>    <span class="keywordtype">int</span> removed { 0 };</div>
+<div class="line"><a id="l00069" name="l00069"></a><span class="lineno">   69</span>    <span class="keywordflow">for</span> (<span class="keywordtype">int</span> i = tree.getNumChildren () - 1; i &gt;= 0; i--)</div>
+<div class="line"><a id="l00070" name="l00070"></a><span class="lineno">   70</span>    {</div>
+<div class="line"><a id="l00071" name="l00071"></a><span class="lineno">   71</span>        <span class="keywordflow">if</span> (filter (tree.getChild (i)))</div>
+<div class="line"><a id="l00072" name="l00072"></a><span class="lineno">   72</span>        {</div>
+<div class="line"><a id="l00073" name="l00073"></a><span class="lineno">   73</span>            tree.removeChild (i, <span class="keyword">nullptr</span>);</div>
+<div class="line"><a id="l00074" name="l00074"></a><span class="lineno">   74</span>            removed++;</div>
+<div class="line"><a id="l00075" name="l00075"></a><span class="lineno">   75</span>        }</div>
+<div class="line"><a id="l00076" name="l00076"></a><span class="lineno">   76</span>    }</div>
+<div class="line"><a id="l00077" name="l00077"></a><span class="lineno">   77</span>    <span class="keywordflow">return</span> removed;</div>
+<div class="line"><a id="l00078" name="l00078"></a><span class="lineno">   78</span>}</div>
 </div>
-<div class="line"><a id="l00084" name="l00084"></a><span class="lineno">   84</span> </div>
-<div class="foldopen" id="foldopen00085" data-start="{" data-end="}">
-<div class="line"><a id="l00085" name="l00085"></a><span class="lineno"><a class="line" href="classcello_1_1_query.html#a12bca3775b0c75aebbf8832d9a2500f8">   85</a></span>juce::ValueTree <a class="code hl_function" href="classcello_1_1_query.html#a12bca3775b0c75aebbf8832d9a2500f8">Query::sort</a> (juce::ValueTree tree, juce::UndoManager* undo, <span class="keywordtype">bool</span> stableSort)<span class="keyword"> const</span></div>
-<div class="line"><a id="l00086" name="l00086"></a><span class="lineno">   86</span><span class="keyword"></span>{</div>
-<div class="line"><a id="l00087" name="l00087"></a><span class="lineno">   87</span>    <span class="keywordflow">if</span> (sorters.size () &gt; 0)</div>
-<div class="line"><a id="l00088" name="l00088"></a><span class="lineno">   88</span>        tree.<a class="code hl_function" href="classcello_1_1_query.html#a12bca3775b0c75aebbf8832d9a2500f8">sort</a> (*<span class="keyword">this</span>, undo, stableSort);</div>
-<div class="line"><a id="l00089" name="l00089"></a><span class="lineno">   89</span>    <span class="keywordflow">return</span> tree;</div>
-<div class="line"><a id="l00090" name="l00090"></a><span class="lineno">   90</span>}</div>
+<div class="line"><a id="l00079" name="l00079"></a><span class="lineno">   79</span> </div>
+<div class="line"><a id="l00080" name="l00080"></a><span class="lineno">   80</span> </div>
+<div class="line"><a id="l00081" name="l00081"></a><span class="lineno">   81</span><span class="keywordtype">bool</span> Query::filter (juce::ValueTree tree)<span class="keyword"> const</span></div>
+<div class="line"><a id="l00082" name="l00082"></a><span class="lineno">   82</span><span class="keyword"></span>{</div>
+<div class="line"><a id="l00083" name="l00083"></a><span class="lineno">   83</span>    <span class="keywordflow">if</span> (filters.size () &gt; 0)</div>
+<div class="line"><a id="l00084" name="l00084"></a><span class="lineno">   84</span>    {</div>
+<div class="line"><a id="l00085" name="l00085"></a><span class="lineno">   85</span>        <span class="keywordflow">for</span> (<span class="keyword">auto</span> fn : filters)</div>
+<div class="line"><a id="l00086" name="l00086"></a><span class="lineno">   86</span>        {</div>
+<div class="line"><a id="l00087" name="l00087"></a><span class="lineno">   87</span>            <span class="keywordflow">if</span> (!fn (tree))</div>
+<div class="line"><a id="l00088" name="l00088"></a><span class="lineno">   88</span>                <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
+<div class="line"><a id="l00089" name="l00089"></a><span class="lineno">   89</span>        }</div>
+<div class="line"><a id="l00090" name="l00090"></a><span class="lineno">   90</span>    }</div>
+<div class="line"><a id="l00091" name="l00091"></a><span class="lineno">   91</span>    <span class="keywordflow">return</span> <span class="keyword">true</span>;</div>
+<div class="line"><a id="l00092" name="l00092"></a><span class="lineno">   92</span>}</div>
+<div class="line"><a id="l00093" name="l00093"></a><span class="lineno">   93</span> </div>
+<div class="foldopen" id="foldopen00094" data-start="{" data-end="}">
+<div class="line"><a id="l00094" name="l00094"></a><span class="lineno"><a class="line" href="classcello_1_1_query.html#a6590ad472f1f5393686b176ce2ce8e2c">   94</a></span><a class="code hl_function" href="classcello_1_1_query.html#a83e4da63677cd62c471a26f225d0f3a6">Query</a>&amp; <a class="code hl_function" href="classcello_1_1_query.html#a6590ad472f1f5393686b176ce2ce8e2c">Query::addComparison</a> (Comparison sorter)</div>
+<div class="line"><a id="l00095" name="l00095"></a><span class="lineno">   95</span>{</div>
+<div class="line"><a id="l00096" name="l00096"></a><span class="lineno">   96</span>    sorters.push_back (sorter);</div>
+<div class="line"><a id="l00097" name="l00097"></a><span class="lineno">   97</span>    <span class="keywordflow">return</span> *<span class="keyword">this</span>;</div>
+<div class="line"><a id="l00098" name="l00098"></a><span class="lineno">   98</span>}</div>
 </div>
-<div class="line"><a id="l00091" name="l00091"></a><span class="lineno">   91</span> </div>
-<div class="line"><a id="l00092" name="l00092"></a><span class="lineno">   92</span><span class="keywordtype">int</span> Query::compareElements (<span class="keyword">const</span> juce::ValueTree&amp; left, <span class="keyword">const</span> juce::ValueTree&amp; right)<span class="keyword"> const</span></div>
-<div class="line"><a id="l00093" name="l00093"></a><span class="lineno">   93</span><span class="keyword"></span>{</div>
-<div class="line"><a id="l00094" name="l00094"></a><span class="lineno">   94</span>    <span class="keywordflow">for</span> (<span class="keyword">auto</span> sorter : sorters)</div>
-<div class="line"><a id="l00095" name="l00095"></a><span class="lineno">   95</span>    {</div>
-<div class="line"><a id="l00096" name="l00096"></a><span class="lineno">   96</span>        <span class="keyword">auto</span> sortOrder { sorter (left, right) };</div>
-<div class="line"><a id="l00097" name="l00097"></a><span class="lineno">   97</span>        <span class="keywordflow">if</span> (sortOrder != 0)</div>
-<div class="line"><a id="l00098" name="l00098"></a><span class="lineno">   98</span>            <span class="keywordflow">return</span> sortOrder;</div>
-<div class="line"><a id="l00099" name="l00099"></a><span class="lineno">   99</span>    }</div>
-<div class="line"><a id="l00100" name="l00100"></a><span class="lineno">  100</span>    <span class="keywordflow">return</span> 0;</div>
-<div class="line"><a id="l00101" name="l00101"></a><span class="lineno">  101</span>}</div>
-<div class="line"><a id="l00102" name="l00102"></a><span class="lineno">  102</span>} <span class="comment">// namespace cello</span></div>
-<div class="line"><a id="l00103" name="l00103"></a><span class="lineno">  103</span> </div>
-<div class="line"><a id="l00104" name="l00104"></a><span class="lineno">  104</span><span class="preprocessor">#if RUN_UNIT_TESTS</span></div>
-<div class="line"><a id="l00105" name="l00105"></a><span class="lineno">  105</span><span class="preprocessor">#include &quot;test/test_cello_query.inl&quot;</span></div>
-<div class="line"><a id="l00106" name="l00106"></a><span class="lineno">  106</span><span class="preprocessor">#endif</span></div>
-<div class="ttc" id="aclasscello_1_1_query_html_a12bca3775b0c75aebbf8832d9a2500f8"><div class="ttname"><a href="classcello_1_1_query.html#a12bca3775b0c75aebbf8832d9a2500f8">cello::Query::sort</a></div><div class="ttdeci">juce::ValueTree sort(juce::ValueTree tree, juce::UndoManager *undo=nullptr, bool stableSort=false) const</div><div class="ttdoc">Use the list of comparison functions to sort the tree arg into its desired order.</div><div class="ttdef"><b>Definition</b> cello_query.cpp:85</div></div>
-<div class="ttc" id="aclasscello_1_1_query_html_a6590ad472f1f5393686b176ce2ce8e2c"><div class="ttname"><a href="classcello_1_1_query.html#a6590ad472f1f5393686b176ce2ce8e2c">cello::Query::addComparison</a></div><div class="ttdeci">Query &amp; addComparison(Comparison sorter)</div><div class="ttdoc">Add a comparison function to the list we use to sort a list of children.</div><div class="ttdef"><b>Definition</b> cello_query.cpp:79</div></div>
+<div class="line"><a id="l00099" name="l00099"></a><span class="lineno">   99</span> </div>
+<div class="foldopen" id="foldopen00100" data-start="{" data-end="}">
+<div class="line"><a id="l00100" name="l00100"></a><span class="lineno"><a class="line" href="classcello_1_1_query.html#a12bca3775b0c75aebbf8832d9a2500f8">  100</a></span>juce::ValueTree <a class="code hl_function" href="classcello_1_1_query.html#a12bca3775b0c75aebbf8832d9a2500f8">Query::sort</a> (juce::ValueTree tree, juce::UndoManager* undo, <span class="keywordtype">bool</span> stableSort)<span class="keyword"> const</span></div>
+<div class="line"><a id="l00101" name="l00101"></a><span class="lineno">  101</span><span class="keyword"></span>{</div>
+<div class="line"><a id="l00102" name="l00102"></a><span class="lineno">  102</span>    <span class="keywordflow">if</span> (sorters.size () &gt; 0)</div>
+<div class="line"><a id="l00103" name="l00103"></a><span class="lineno">  103</span>        tree.<a class="code hl_function" href="classcello_1_1_query.html#a12bca3775b0c75aebbf8832d9a2500f8">sort</a> (*<span class="keyword">this</span>, undo, stableSort);</div>
+<div class="line"><a id="l00104" name="l00104"></a><span class="lineno">  104</span>    <span class="keywordflow">return</span> tree;</div>
+<div class="line"><a id="l00105" name="l00105"></a><span class="lineno">  105</span>}</div>
+</div>
+<div class="line"><a id="l00106" name="l00106"></a><span class="lineno">  106</span> </div>
+<div class="line"><a id="l00107" name="l00107"></a><span class="lineno">  107</span><span class="keywordtype">int</span> Query::compareElements (<span class="keyword">const</span> juce::ValueTree&amp; left, <span class="keyword">const</span> juce::ValueTree&amp; right)<span class="keyword"> const</span></div>
+<div class="line"><a id="l00108" name="l00108"></a><span class="lineno">  108</span><span class="keyword"></span>{</div>
+<div class="line"><a id="l00109" name="l00109"></a><span class="lineno">  109</span>    <span class="keywordflow">for</span> (<span class="keyword">auto</span> sorter : sorters)</div>
+<div class="line"><a id="l00110" name="l00110"></a><span class="lineno">  110</span>    {</div>
+<div class="line"><a id="l00111" name="l00111"></a><span class="lineno">  111</span>        <span class="keyword">auto</span> sortOrder { sorter (left, right) };</div>
+<div class="line"><a id="l00112" name="l00112"></a><span class="lineno">  112</span>        <span class="keywordflow">if</span> (sortOrder != 0)</div>
+<div class="line"><a id="l00113" name="l00113"></a><span class="lineno">  113</span>            <span class="keywordflow">return</span> sortOrder;</div>
+<div class="line"><a id="l00114" name="l00114"></a><span class="lineno">  114</span>    }</div>
+<div class="line"><a id="l00115" name="l00115"></a><span class="lineno">  115</span>    <span class="keywordflow">return</span> 0;</div>
+<div class="line"><a id="l00116" name="l00116"></a><span class="lineno">  116</span>}</div>
+<div class="line"><a id="l00117" name="l00117"></a><span class="lineno">  117</span>} <span class="comment">// namespace cello</span></div>
+<div class="line"><a id="l00118" name="l00118"></a><span class="lineno">  118</span> </div>
+<div class="line"><a id="l00119" name="l00119"></a><span class="lineno">  119</span><span class="preprocessor">#if RUN_UNIT_TESTS</span></div>
+<div class="line"><a id="l00120" name="l00120"></a><span class="lineno">  120</span><span class="preprocessor">#include &quot;test/test_cello_query.inl&quot;</span></div>
+<div class="line"><a id="l00121" name="l00121"></a><span class="lineno">  121</span><span class="preprocessor">#endif</span></div>
+<div class="ttc" id="aclasscello_1_1_query_html_a12bca3775b0c75aebbf8832d9a2500f8"><div class="ttname"><a href="classcello_1_1_query.html#a12bca3775b0c75aebbf8832d9a2500f8">cello::Query::sort</a></div><div class="ttdeci">juce::ValueTree sort(juce::ValueTree tree, juce::UndoManager *undo=nullptr, bool stableSort=false) const</div><div class="ttdoc">Use the list of comparison functions to sort the tree arg into its desired order.</div><div class="ttdef"><b>Definition</b> cello_query.cpp:100</div></div>
+<div class="ttc" id="aclasscello_1_1_query_html_a6590ad472f1f5393686b176ce2ce8e2c"><div class="ttname"><a href="classcello_1_1_query.html#a6590ad472f1f5393686b176ce2ce8e2c">cello::Query::addComparison</a></div><div class="ttdeci">Query &amp; addComparison(Comparison sorter)</div><div class="ttdoc">Add a comparison function to the list we use to sort a list of children.</div><div class="ttdef"><b>Definition</b> cello_query.cpp:94</div></div>
 <div class="ttc" id="aclasscello_1_1_query_html_a7b5d32c81cd0c437f2ec2be8248523d7"><div class="ttname"><a href="classcello_1_1_query.html#a7b5d32c81cd0c437f2ec2be8248523d7">cello::Query::addFilter</a></div><div class="ttdeci">Query &amp; addFilter(Predicate filter)</div><div class="ttdoc">Append a filter predicate to the end of our list; these are executed in the sequence they&#39;re added,...</div><div class="ttdef"><b>Definition</b> cello_query.cpp:35</div></div>
 <div class="ttc" id="aclasscello_1_1_query_html_a83e4da63677cd62c471a26f225d0f3a6"><div class="ttname"><a href="classcello_1_1_query.html#a83e4da63677cd62c471a26f225d0f3a6">cello::Query::Query</a></div><div class="ttdeci">Query(const juce::Identifier &amp;resultType=Result)</div><div class="ttdoc">Construct a new Query object.</div><div class="ttdef"><b>Definition</b> cello_query.cpp:24</div></div>
+<div class="ttc" id="aclasscello_1_1_query_html_aae74f727697452e87f4ee2471b0ff76a"><div class="ttname"><a href="classcello_1_1_query.html#aae74f727697452e87f4ee2471b0ff76a">cello::Query::remove</a></div><div class="ttdeci">int remove(juce::ValueTree tree) const</div><div class="ttdoc">Remove all children from the tree that match the query.</div><div class="ttdef"><b>Definition</b> cello_query.cpp:66</div></div>
 <div class="ttc" id="aclasscello_1_1_query_html_acb65484bc24e3eff713ca2cac0328e53"><div class="ttname"><a href="classcello_1_1_query.html#acb65484bc24e3eff713ca2cac0328e53">cello::Query::search</a></div><div class="ttdeci">juce::ValueTree search(juce::ValueTree tree, bool deep, bool returnFirstFound=false) const</div><div class="ttdoc">Execute the query we&#39;re programmed for – iterate through the children of tree, returning a new tree o...</div><div class="ttdef"><b>Definition</b> cello_query.cpp:41</div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->

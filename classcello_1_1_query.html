@@ -144,6 +144,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:acb65484bc24e3eff713ca2cac0328e53" id="r_acb65484bc24e3eff713ca2cac0328e53"><td class="memItemLeft" align="right" valign="top">juce::ValueTree&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#acb65484bc24e3eff713ca2cac0328e53">search</a> (juce::ValueTree tree, bool deep, bool returnFirstFound=false) const</td></tr>
 <tr class="memdesc:acb65484bc24e3eff713ca2cac0328e53"><td class="mdescLeft">&#160;</td><td class="mdescRight">Execute the query we're programmed for &ndash; iterate through the children of <code>tree</code>, returning a new tree of type <code>resultType</code> that contains a copy (either shallow or deep) of each child that fulfills the query, sorted according to the sort criteria we've been given.  <br /></td></tr>
 <tr class="separator:acb65484bc24e3eff713ca2cac0328e53"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aae74f727697452e87f4ee2471b0ff76a" id="r_aae74f727697452e87f4ee2471b0ff76a"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aae74f727697452e87f4ee2471b0ff76a">remove</a> (juce::ValueTree tree) const</td></tr>
+<tr class="memdesc:aae74f727697452e87f4ee2471b0ff76a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Remove all children from the tree that match the query.  <br /></td></tr>
+<tr class="separator:aae74f727697452e87f4ee2471b0ff76a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6590ad472f1f5393686b176ce2ce8e2c" id="r_a6590ad472f1f5393686b176ce2ce8e2c"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classcello_1_1_query.html">Query</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a6590ad472f1f5393686b176ce2ce8e2c">addComparison</a> (Comparison sorter)</td></tr>
 <tr class="memdesc:a6590ad472f1f5393686b176ce2ce8e2c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Add a comparison function to the list we use to sort a list of children.  <br /></td></tr>
 <tr class="separator:a6590ad472f1f5393686b176ce2ce8e2c"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -270,6 +273,32 @@ class&#160;</td><td class="memItemRight" valign="bottom"><b>juce::ValueTree</b><
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd><a class="el" href="classcello_1_1_query.html">Query</a>&amp; reference to this so we can use the builder pattern. </dd></dl>
+
+</div>
+</div>
+<a id="aae74f727697452e87f4ee2471b0ff76a" name="aae74f727697452e87f4ee2471b0ff76a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aae74f727697452e87f4ee2471b0ff76a">&#9670;&#160;</a></span>remove()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int cello::Query::remove </td>
+          <td>(</td>
+          <td class="paramtype">juce::ValueTree</td>          <td class="paramname"><span class="paramname"><em>tree</em></span></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Remove all children from the tree that match the query. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">tree</td><td></td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>int number of children removed. </dd></dl>
 
 </div>
 </div>

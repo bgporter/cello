@@ -1,5 +1,7 @@
 var dir_edc25bb996467fc43b3ed414659f82cc =
 [
+    [ "cello_computed_value.cpp", "cello__computed__value_8cpp_source.html", null ],
+    [ "cello_computed_value.h", "cello__computed__value_8h_source.html", null ],
     [ "cello_ipc.cpp", "cello__ipc_8cpp_source.html", null ],
     [ "cello_ipc.h", "cello__ipc_8h_source.html", null ],
     [ "cello_object.cpp", "cello__object_8cpp_source.html", null ],

@@ -9,6 +9,8 @@ var hierarchy =
     ] ],
     [ "juce::ValueTree::Listener", null, [
       [ "cello::Object", "classcello_1_1_object.html", [
+        [ "ObjectWithArea", "class_object_with_area.html", null ],
+        [ "ObjectWithConversion", "class_object_with_conversion.html", null ],
         [ "cello::IpcClientProperties", "structcello_1_1_ipc_client_properties.html", null ],
         [ "cello::IpcServerProperties", "structcello_1_1_ipc_server_properties.html", null ]
       ] ]
@@ -19,6 +21,7 @@ var hierarchy =
     [ "cello::SyncController", "classcello_1_1_sync_controller.html", null ],
     [ "cello::SyncData", "structcello_1_1_sync_data.html", null ],
     [ "TestSuite", null, [
+      [ "Test_ComputedValue", "class_test___computed_value.html", null ],
       [ "Test_cello_ipc", "class_test__cello__ipc.html", null ],
       [ "Test_cello_query", "class_test__cello__query.html", null ],
       [ "Test_cello_sync", "class_test__cello__sync.html", null ],
@@ -32,6 +35,7 @@ var hierarchy =
     [ "cello::UpdateSource", "classcello_1_1_update_source.html", [
       [ "cello::Object", "classcello_1_1_object.html", null ],
       [ "cello::ValueBase", "classcello_1_1_value_base.html", [
+        [ "cello::ComputedValue< T >", "classcello_1_1_computed_value.html", null ],
         [ "cello::Value< T >", "classcello_1_1_value.html", null ]
       ] ]
     ] ],

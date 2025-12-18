@@ -33,6 +33,7 @@ var classcello_1_1_object =
     [ "operator==", "classcello_1_1_object.html#a3fabc22c50460fc720c8be1c3384db70", null ],
     [ "operator[]", "classcello_1_1_object.html#ad8cf02406e7aa4127d4c4f9117123fa9", null ],
     [ "redo", "classcello_1_1_object.html#a534edaa253affc488dba210e86e55ccf", null ],
+    [ "remove", "classcello_1_1_object.html#a43cc2848d284422f9fa6ae24fc7f7ed6", null ],
     [ "remove", "classcello_1_1_object.html#adcd6547ac3a03479b2d7c55d44fef840", null ],
     [ "remove", "classcello_1_1_object.html#ab91a10de733ff8c8bc3fa3729fd036a0", null ],
     [ "save", "classcello_1_1_object.html#a5162885cca204640f836e776fcdd1cb9", null ],

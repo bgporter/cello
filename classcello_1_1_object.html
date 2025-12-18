@@ -113,9 +113,11 @@ Inheritance diagram for cello::Object:</div>
  <div class="center">
   <img src="classcello_1_1_object.png" usemap="#cello::Object_map" alt=""/>
   <map id="cello::Object_map" name="cello::Object_map">
-<area href="classcello_1_1_update_source.html" alt="cello::UpdateSource" shape="rect" coords="0,0,159,24"/>
-<area href="structcello_1_1_ipc_client_properties.html" title="Properties struct to monitor an IPC client. Created automatically when creating an IpcClient object,..." alt="cello::IpcClientProperties" shape="rect" coords="0,112,159,136"/>
-<area href="structcello_1_1_ipc_server_properties.html" alt="cello::IpcServerProperties" shape="rect" coords="169,112,328,136"/>
+<area href="classcello_1_1_update_source.html" alt="cello::UpdateSource" shape="rect" coords="169,0,328,24"/>
+<area href="class_object_with_area.html" alt="ObjectWithArea" shape="rect" coords="0,112,159,136"/>
+<area href="class_object_with_conversion.html" alt="ObjectWithConversion" shape="rect" coords="169,112,328,136"/>
+<area href="structcello_1_1_ipc_client_properties.html" title="Properties struct to monitor an IPC client. Created automatically when creating an IpcClient object,..." alt="cello::IpcClientProperties" shape="rect" coords="338,112,497,136"/>
+<area href="structcello_1_1_ipc_server_properties.html" alt="cello::IpcServerProperties" shape="rect" coords="507,112,666,136"/>
   </map>
 </div></div>
 <table class="memberdecls">
@@ -204,6 +206,9 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>operator!=</b> (const
 <tr class="memitem:aa7230b2a5bdaedf19fd3b6487e40138f" id="r_aa7230b2a5bdaedf19fd3b6487e40138f"><td class="memItemLeft" align="right" valign="top">juce::ValueTree&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa7230b2a5bdaedf19fd3b6487e40138f">findOne</a> (const <a class="el" href="classcello_1_1_query.html">cello::Query</a> &amp;query, bool deep=false)</td></tr>
 <tr class="memdesc:aa7230b2a5bdaedf19fd3b6487e40138f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Perform a query against the children of this object, returning a copy of the first child found that meets the predicates in the query object, or an empty tree if none is found.  <br /></td></tr>
 <tr class="separator:aa7230b2a5bdaedf19fd3b6487e40138f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a43cc2848d284422f9fa6ae24fc7f7ed6" id="r_a43cc2848d284422f9fa6ae24fc7f7ed6"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a43cc2848d284422f9fa6ae24fc7f7ed6">remove</a> (const <a class="el" href="classcello_1_1_query.html">cello::Query</a> &amp;query)</td></tr>
+<tr class="memdesc:a43cc2848d284422f9fa6ae24fc7f7ed6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Remove all children from the tree that match the query.  <br /></td></tr>
+<tr class="separator:a43cc2848d284422f9fa6ae24fc7f7ed6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a26a8d3a310c6ac67498f762224f09daf" id="r_a26a8d3a310c6ac67498f762224f09daf"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a26a8d3a310c6ac67498f762224f09daf">upsert</a> (const <a class="el" href="classcello_1_1_object.html">Object</a> *object, const juce::Identifier &amp;key, bool deep=false)</td></tr>
 <tr class="memdesc:a26a8d3a310c6ac67498f762224f09daf"><td class="mdescLeft">&#160;</td><td class="mdescRight">Update or insert a child object (concept borrowed from MongoDB) Looks for a child with a 'key' value that matches the one found in the object we've been passed. If a match is found, we update the entry in place (update). If no match is found, we append a copy of <code>object</code> to our children.  <br /></td></tr>
 <tr class="separator:a26a8d3a310c6ac67498f762224f09daf"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -1285,8 +1290,34 @@ false </dd></dl>
 
 </div>
 </div>
+<a id="a43cc2848d284422f9fa6ae24fc7f7ed6" name="a43cc2848d284422f9fa6ae24fc7f7ed6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a43cc2848d284422f9fa6ae24fc7f7ed6">&#9670;&#160;</a></span>remove() <span class="overload">[1/3]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int cello::Object::remove </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="classcello_1_1_query.html">cello::Query</a> &amp;</td>          <td class="paramname"><span class="paramname"><em>query</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Remove all children from the tree that match the query. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">query</td><td></td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>int number of children removed. </dd></dl>
+
+</div>
+</div>
 <a id="adcd6547ac3a03479b2d7c55d44fef840" name="adcd6547ac3a03479b2d7c55d44fef840"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#adcd6547ac3a03479b2d7c55d44fef840">&#9670;&#160;</a></span>remove() <span class="overload">[1/2]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#adcd6547ac3a03479b2d7c55d44fef840">&#9670;&#160;</a></span>remove() <span class="overload">[2/3]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1312,7 +1343,7 @@ false </dd></dl>
 </div>
 </div>
 <a id="ab91a10de733ff8c8bc3fa3729fd036a0" name="ab91a10de733ff8c8bc3fa3729fd036a0"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ab91a10de733ff8c8bc3fa3729fd036a0">&#9670;&#160;</a></span>remove() <span class="overload">[2/2]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#ab91a10de733ff8c8bc3fa3729fd036a0">&#9670;&#160;</a></span>remove() <span class="overload">[3/3]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
