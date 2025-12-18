@@ -101,6 +101,11 @@ juce::ValueTree Object::findOne (const cello::Query& query, bool deep)
     return query.search (data, deep, true);
 }
 
+int Object::remove (const cello::Query& query)
+{
+    return query.remove (data);
+}
+
 bool Object::upsert (const Object* object, const juce::Identifier& key, bool deep)
 {
     if (!object->hasattr (key))

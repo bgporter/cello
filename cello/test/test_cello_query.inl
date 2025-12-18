@@ -238,6 +238,35 @@ public:
                   // updates only, no inserts.
                   expectEquals (parentTree.getNumChildren (), originalSize);
               });
+
+        test ("remove",
+              [this] ()
+              {
+                  cello::Object root { "root", parentTree };
+                  cello::Query q1 { };
+                  q1.addFilter([](juce::ValueTree tree) { return false; });
+
+                  // query should remove nothing. 
+                  int removed = root.remove(q1);
+                  expectEquals(removed, 0); 
+
+                  cello::Query q2 { };
+                  // remove all odd children
+                  q2.addFilter (
+                      [] (juce::ValueTree tree)
+                      {
+                          Data d { tree };
+                          return d.odd;
+                      });
+                  removed = root.remove (q2);
+                  expectEquals (removed, 50);
+                  expectEquals (root.getNumChildren (), 50);
+                  // remove the remaining children
+                  cello::Query q3 { };
+                  removed = root.remove (q3);
+                  expectEquals (removed, 50);
+                  expectEquals (root.getNumChildren (), 0);
+              });
 #if 0
         // re-enable this to explore speed of queries/sorting.
         // temp: create 100K entries so we can time speed

@@ -1,5 +1,5 @@
 /*
-    Copyright (c) 2023 Brett g Porter
+    Copyright (c) 2025 Brett g Porter
     Permission is hereby granted, free of charge, to any person obtaining a copy
     of this software and associated documentation files (the "Software"), to deal
     in the Software without restriction, including without limitation the rights
@@ -17,29 +17,10 @@
     SOFTWARE.
 */
 
-#pragma once
-#define CELLO_H_INCLUDED
+#include "JuceHeader.h"
 
-/*
-BEGIN_JUCE_MODULE_DECLARATION
- ID:               cello
- vendor:           Brett g Porter
- version:          1.4.0
- name:             Cello
- description:      Classes for working with JUCE Value Trees
- website:          https://github.com/bgporter/cello
- license:          MIT
- minimumCppStandard: 17
+#include "cello_computed_value.h"
 
- dependencies:     juce_core, juce_data_structures
-END_JUCE_MODULE_DECLARATION
-*/
-
-#include "cello/cello_computed_value.h"
-#include "cello/cello_ipc.h"
-#include "cello/cello_object.h"
-#include "cello/cello_path.h"
-#include "cello/cello_query.h"
-#include "cello/cello_sync.h"
-#include "cello/cello_update_source.h"
-#include "cello/cello_value.h"
+#if RUN_UNIT_TESTS
+#include "test/test_cello_computed_value.inl"
+#endif
