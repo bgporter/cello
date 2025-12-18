@@ -134,9 +134,10 @@ private:
 } // namespace cello
 
 /**
- * @brief a useful macro to create and default initialize a cello::Value
- * as a member of a cello::Object, using the same name for the variable
- * as the identifier used for the property in its ValueTree.
+ * @brief a useful macro to create a ComputedValue<T> member
+ * of a cello::Object. Because it doesn't hold a value of any kind, there
+ * is no value initialization. If you don't pass in a getImpl lambda,
+ * you'll need to add one later, or accessing the value will assert.
  *
  * Because it uses variadic args, you may pass in 0, 1, or 2 additional
  * parameters to specify the get and set lambdas for the ComputedValue.
