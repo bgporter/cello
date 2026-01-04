@@ -11,6 +11,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 ### Fixed
 
+- `Object::getattr<T>` using VariantConverters. Previous code didn't invoke the converters as needed to make things work. Corrected, tests added. 
+
 ## 1.7.0 * 2025-12-17
 
 ### Added 

@@ -112,12 +112,38 @@ public:
         size.y   = h;
     }
 
-private:
     Vec2 origin { "origin", this };
     Vec2 size { "size", this };
 };
 
+struct FourInts
+{
+    int one { 1 };
+    int two { 2 };
+    int three { 3 };
+    int four { 4 };
+};
+
 } // namespace
+
+namespace juce
+{
+template <> struct VariantConverter<FourInts>
+{
+    static FourInts fromVar (const var& v)
+    {
+        auto parts { juce::StringArray::fromTokens (v.toString (), ",", "") };
+        return { parts[0].getIntValue (), parts[1].getIntValue (), parts[2].getIntValue (), parts[3].getIntValue () };
+    }
+    static var toVar (const FourInts& fi)
+    {
+        String v { fi.one };
+        v << "," << fi.two << "," << fi.three << "," << fi.four;
+        return v;
+    }
+};
+} // namespace juce
+
 namespace cello
 {
 class Test_cello_object : public TestSuite
@@ -289,7 +315,7 @@ public:
                   pt.y = 200;
                   expect (lastIdentifier.isNull ());
                   expect (lastValue == 0);
-            
+
                   Vec2 pt2 = pt;
                   // install the generic callback on pt2
                   pt2.onPropertyChange (callback2);
@@ -578,6 +604,20 @@ public:
                   expect (!root.hasattr ("anotherInt"));
                   expect (!root.hasattr ("nonexistent"));
                   expectEquals (root.getattr<int> ("nonexistent", {}), 0);
+
+                  // test setattr/getattr through Variant Converters.
+                  FourInts fi;
+                  fi.one   = 10;
+                  fi.two   = 20;
+                  fi.three = 30;
+                  fi.four  = 40;
+                  root.setattr ("fourInts", fi);
+                  expect (root.hasattr ("fourInts"));
+                  auto recovered { root.getattr<FourInts> ("fourInts", {}) };
+                  expect (recovered.one == 10);
+                  expect (recovered.two == 20);
+                  expect (recovered.three = 30);
+                  expect (recovered.four == 40);
               });
 
         test ("parentage change",

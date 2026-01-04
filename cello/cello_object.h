@@ -513,7 +513,8 @@ public:
      */
     template <typename T> T getattr (const juce::Identifier& attr, const T& defaultVal) const
     {
-        return juce::VariantConverter<T>::fromVar (data.getProperty (attr, defaultVal));
+        using conv = juce::VariantConverter<T>;
+        return conv::fromVar (data.getProperty (attr, conv::toVar (defaultVal)));
     }
 
     /**
