@@ -79,6 +79,25 @@ public:
     MAKE_VALUE_MEMBER (std::complex<float>, complexVal, {});
 };
 
+class ObjectWithValidators : public cello::Object
+{
+public:
+    ObjectWithValidators ()
+    : cello::Object ("validators", nullptr)
+    {
+    }
+
+    MAKE_VALUE_MEMBER (int, baseValue, 10);
+
+    cello::Value<int>::ValidateGetFn getter = [this] (const int& val)
+    { return std::max (val, this->getattr<int> ("baseValue", 0)); };
+    MAKE_VALUE_MEMBER_GET (int, bigger, 100, getter);
+
+    cello::Value<int>::ValidateSetFn setter = [this] (const int& val)
+    { return std::max (val, this->baseValue.get ()); };
+    MAKE_VALUE_MEMBER_GET_SET (int, smaller, 0, nullptr, setter);
+};
+
 } // namespace
 
 class Test_cello_value : public TestSuite
@@ -190,7 +209,7 @@ public:
                       CACHED_VALUE (cachedVal, owcv.complexVal);
                       // expands to
                       // decltype(owcv.complexVal.getCached()) cachedVal { owcv.complexVal };
-                      // which expands to 
+                      // which expands to
                       // cello::Value<std::complex<float>>::Cached cachedVal { owcv.complexVal };
                   };
 
@@ -207,13 +226,27 @@ public:
                   obj.intVal = 100;
                   expect (obj.intVal == 100);
                   obj.intVal.onSet = [] (const int& v) { return v + 1; };
-                  obj.intVal = 100;
+                  obj.intVal       = 100;
                   expect (obj.intVal == 101);
 
                   // returning std::nullopt will not change the value
                   obj.intVal.onSet = [] (const int& v) { return std::nullopt; };
-                  obj.intVal = 200;
-                  expect (obj.intVal == 101);   
+                  obj.intVal       = 200;
+                  expect (obj.intVal == 101);
+              });
+
+        test ("validators in ctor",
+              [this] ()
+              {
+                  ObjectWithValidators ov;
+                  expect (ov.baseValue.get () == 10);
+                  expect (ov.bigger == 100);
+                  ov.bigger = 0;
+                  expect (ov.bigger == 10);
+
+                  expect (ov.smaller == 0);
+                  ov.smaller = 1;
+                  expect (ov.smaller == 10);
               });
     }
 

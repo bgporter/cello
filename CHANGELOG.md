@@ -15,6 +15,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- `Value` constructor now accepts (optional) get/set validation functions. 
+- `MAKE_VALUE_MEMBER_GET` macro (create a Value with a get validator)
+- `MAKE_VALUE_MEMBER_GET_SET` macro (create a Value with get and set validators))
+
 ### Changed
 
 ### Fixed

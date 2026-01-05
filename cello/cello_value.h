@@ -76,14 +76,33 @@ template <typename T> class Value : public ValueBase
 {
 public:
     /**
+     * @brief An optional validator function that can be used to modify the value
+     * when it's retrieved.
+     */
+    using ValidateGetFn = std::function<T (const T&)>;
+
+    /**
+     * @brief an optional validator function that can be used to modify the value
+     * when it's set. If the function returns std::nullopt, the value will not be
+     * changed (so you can either ignore attempts to change the value to something
+     * invalid, or you can always return nullopt to treat the value as if it were
+     * `const`. Obviously, other code touching the underlying value tree can still
+     * change the value)
+     */
+    using ValidateSetFn = std::function<std::optional<T> (const T&)>;
+
+    /**
      * @brief Construct a new Value object
      *
      * @param data The cello::Object that owns this Value
      * @param id Identifier of the data
      * @param initVal default initialized state for this value.
      */
-    Value (Object& data, const juce::Identifier& id_, T initVal = {})
+    Value (Object& data, const juce::Identifier& id_, T initVal = {}, ValidateGetFn getFn = nullptr,
+           ValidateSetFn setFn = nullptr)
     : ValueBase { id_ }
+    , onSet { setFn }
+    , onGet { getFn }
     , object { data }
     {
         // if the object doesn't have this value yet, add it and set it
@@ -199,22 +218,6 @@ public:
      * of this `Value`.
      */
     Cached getCached () { return Cached (*this); }
-
-    /**
-     * @brief An optional validator function that can be used to modify the value 
-     * when it's retrieved. 
-     */
-    using ValidateGetFn = std::function<T (const T&)>;
-    
-    /**
-     * @brief an optional validator function that can be used to modify the value 
-     * when it's set. If the function returns std::nullopt, the value will not be 
-     * changed (so you can either ignore attempts to change the value to something 
-     * invalid, or you can always return nullopt to treat the value as if it were 
-     * `const`. Obviously, other code touching the underlying value tree can still 
-     * change the value)
-     */
-    using ValidateSetFn = std::function<std::optional<T> (const T&)>;
 
     /**
      * @brief validator function called before setting this Value.
@@ -423,6 +426,17 @@ T operator-- (Value<T>& val, int)
 #define MAKE_VALUE_MEMBER(type, name, init)                  \
     static const inline juce::Identifier name##Id { #name }; \
     cello::Value<type> name { *this, name##Id, init }
+
+// ...also pass in a ValidateGetFn callable at construction time. 
+#define MAKE_VALUE_MEMBER_GET(type, name, init, getFn) \
+    static const inline juce::Identifier name##Id { #name }; \
+    cello::Value<type> name { *this, name##Id, init, getFn }
+
+// ...pass in Validation functions for get and set.
+#define MAKE_VALUE_MEMBER_GET_SET(type, name, init, getFn, setFn) \
+    static const inline juce::Identifier name##Id { #name }; \
+    cello::Value<type> name { *this, name##Id, init, getFn, setFn }
+
 // clang-format on
 
 // clang-format off
