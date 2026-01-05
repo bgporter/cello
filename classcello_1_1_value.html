@@ -144,9 +144,9 @@ using&#160;</td><td class="memItemRight" valign="bottom"><b>ValidateSetFn</b> = 
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a7c2156f94dec53dfa724a6e2aac11088" id="r_a7c2156f94dec53dfa724a6e2aac11088"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a7c2156f94dec53dfa724a6e2aac11088">Value</a> (<a class="el" href="classcello_1_1_object.html">Object</a> &amp;data, const juce::Identifier &amp;id_, T initVal={})</td></tr>
-<tr class="memdesc:a7c2156f94dec53dfa724a6e2aac11088"><td class="mdescLeft">&#160;</td><td class="mdescRight">Construct a new <a class="el" href="classcello_1_1_value.html" title="A class to abstract away the issues around storing and retrieving a value from a ValueTree....">Value</a> object.  <br /></td></tr>
-<tr class="separator:a7c2156f94dec53dfa724a6e2aac11088"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0488870e2d77571c53094171017ebbc4" id="r_a0488870e2d77571c53094171017ebbc4"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a0488870e2d77571c53094171017ebbc4">Value</a> (<a class="el" href="classcello_1_1_object.html">Object</a> &amp;data, const juce::Identifier &amp;id_, T initVal={}, <a class="el" href="#a10cf611f46c2d8211018263df624e808">ValidateGetFn</a> getFn=nullptr, <a class="el" href="#af0427df06ddc40e81c728b28e309c238">ValidateSetFn</a> setFn=nullptr)</td></tr>
+<tr class="memdesc:a0488870e2d77571c53094171017ebbc4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Construct a new <a class="el" href="classcello_1_1_value.html" title="A class to abstract away the issues around storing and retrieving a value from a ValueTree....">Value</a> object.  <br /></td></tr>
+<tr class="separator:a0488870e2d77571c53094171017ebbc4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7c7b92027f618a169cd26815b5a37ea2" id="r_a7c7b92027f618a169cd26815b5a37ea2"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classcello_1_1_value.html">Value</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a7c7b92027f618a169cd26815b5a37ea2">operator=</a> (const T &amp;val)</td></tr>
 <tr class="memdesc:a7c7b92027f618a169cd26815b5a37ea2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Assign a new value, setting it in the underlying tree and perhaps notifying listeners.  <br /></td></tr>
 <tr class="separator:a7c7b92027f618a169cd26815b5a37ea2"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -220,8 +220,8 @@ class cello::Value&lt; T &gt;</div><p>A class to abstract away the issues around
   </dd>
 </dl>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a id="a7c2156f94dec53dfa724a6e2aac11088" name="a7c2156f94dec53dfa724a6e2aac11088"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a7c2156f94dec53dfa724a6e2aac11088">&#9670;&#160;</a></span>Value()</h2>
+<a id="a0488870e2d77571c53094171017ebbc4" name="a0488870e2d77571c53094171017ebbc4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0488870e2d77571c53094171017ebbc4">&#9670;&#160;</a></span>Value()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -244,7 +244,17 @@ template&lt;typename T&gt; </div>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">T</td>          <td class="paramname"><span class="paramname"><em>initVal</em></span><span class="paramdefsep"> = </span><span class="paramdefval">{}</span>&#160;)</td>
+          <td class="paramtype">T</td>          <td class="paramname"><span class="paramname"><em>initVal</em></span><span class="paramdefsep"> = </span><span class="paramdefval">{}</span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="#a10cf611f46c2d8211018263df624e808">ValidateGetFn</a></td>          <td class="paramname"><span class="paramname"><em>getFn</em></span><span class="paramdefsep"> = </span><span class="paramdefval">nullptr</span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="#af0427df06ddc40e81c728b28e309c238">ValidateSetFn</a></td>          <td class="paramname"><span class="paramname"><em>setFn</em></span><span class="paramdefsep"> = </span><span class="paramdefval">nullptr</span>&#160;)</td>
         </tr>
       </table>
   </td>

@@ -3,7 +3,7 @@ var classcello_1_1_value =
     [ "Cached", "classcello_1_1_value_1_1_cached.html", "classcello_1_1_value_1_1_cached" ],
     [ "ValidateGetFn", "classcello_1_1_value.html#a10cf611f46c2d8211018263df624e808", null ],
     [ "ValidateSetFn", "classcello_1_1_value.html#af0427df06ddc40e81c728b28e309c238", null ],
-    [ "Value", "classcello_1_1_value.html#a7c2156f94dec53dfa724a6e2aac11088", null ],
+    [ "Value", "classcello_1_1_value.html#a0488870e2d77571c53094171017ebbc4", null ],
     [ "excludeListener", "classcello_1_1_value.html#a5cb3116dff1d8fd02428ab0af613f79b", null ],
     [ "get", "classcello_1_1_value.html#a3e72a168c2a3de244a6be42cdf4a4301", null ],
     [ "getCached", "classcello_1_1_value.html#af18baa55efabfe09259855f6fa4d020c", null ],
