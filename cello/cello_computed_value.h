@@ -127,7 +127,7 @@ public:
     GetImplFn getImpl;
     SetImplFn setImpl;
 
-private:
+protected:
     Object& object;
 };
 
@@ -145,5 +145,5 @@ private:
 // clang-format off
 #define MAKE_COMPUTED_VALUE_MEMBER(type, name, ...)                  \
     static const inline juce::Identifier name##Id { #name }; \
-    cello::ComputedValue<type> name { *this, name##Id, __VA_ARGS__ };
+    cello::ComputedValue<type> name { *this, name##Id, __VA_ARGS__ }
 // clang-format on
