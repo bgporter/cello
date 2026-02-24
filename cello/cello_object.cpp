@@ -68,6 +68,8 @@ Object& Object::operator= (const Object& rhs)
     // can't change this object's type by doing this.
     jassert (getType () == rhs.getType ());
     data.copyPropertiesAndChildrenFrom (rhs.data, getUndoManager ());
+    if (onTreeRedirected != nullptr)
+        onTreeRedirected ();
     return *this;
 }
 
@@ -401,8 +403,13 @@ void Object::valueTreeChildAdded (juce::ValueTree& parentTree, juce::ValueTree& 
 
 void Object::valueTreeChildRemoved (juce::ValueTree& parentTree, juce::ValueTree& childTree, int index)
 {
-    if (parentTree == data && onChildRemoved != nullptr)
-        onChildRemoved (childTree, index, -1);
+    if (parentTree == data)
+    {
+        if (onChildRemoved != nullptr)
+            onChildRemoved (childTree, index, -1);
+        if (data.getNumChildren () == 0 && onChildrenCleared != nullptr)
+            onChildrenCleared ();
+    }
 }
 
 void Object::valueTreeChildOrderChanged (juce::ValueTree& parentTree, int oldIndex, int newIndex)

@@ -679,6 +679,48 @@ public:
                       expectEquals (val.getValue (), i);
                   }
               });
+
+        test ("onChildrenCleared - direct clear",
+              [&] ()
+              {
+                  cello::Object list { "list", nullptr };
+                  for (int i { 0 }; i < 5; ++i)
+                  {
+                      Vec2 pt { "point", (float) i, (float) i };
+                      list.append (&pt);
+                  }
+                  expectEquals (list.getNumChildren (), 5);
+
+                  bool cleared { false };
+                  list.onChildrenCleared = [&cleared] () { cleared = true; };
+                  while (list.getNumChildren () > 0)
+                      list.remove (list.getNumChildren () - 1);
+                  expect (cleared);
+                  expectEquals (list.getNumChildren (), 0);
+              });
+
+        test ("onChildrenCleared - cross-object (listener receives when other clears)",
+              [&] ()
+              {
+                  cello::Object list { "list", nullptr };
+                  for (int i { 0 }; i < 5; ++i)
+                  {
+                      Vec2 pt { "point", (float) i, (float) i };
+                      list.append (&pt);
+                  }
+                  expectEquals (list.getNumChildren (), 5);
+
+                  cello::Object listCopy { list };
+                  bool listenerReceivedCleared { false };
+                  listCopy.onChildrenCleared = [&listenerReceivedCleared] () { listenerReceivedCleared = true; };
+
+                  while (list.getNumChildren () > 0)
+                      list.remove (list.getNumChildren () - 1);
+
+                  expect (listenerReceivedCleared);
+                  expectEquals (list.getNumChildren (), 0);
+                  expectEquals (listCopy.getNumChildren (), 0);
+              });
     }
 
 private:

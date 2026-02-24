@@ -487,6 +487,7 @@ public:
 
     SelfUpdateFn onParentChanged;
     SelfUpdateFn onTreeRedirected;
+    SelfUpdateFn onChildrenCleared;
 
     ///@}
 
