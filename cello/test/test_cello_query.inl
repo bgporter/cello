@@ -253,7 +253,7 @@ public:
                   cello::Query q2 { };
                   // remove all odd children
                   q2.addFilter (
-                      [] (juce::ValueTree tree)
+                      [] (juce::ValueTree tree) -> bool
                       {
                           Data d { tree };
                           return d.odd;
