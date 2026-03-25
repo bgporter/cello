@@ -127,7 +127,7 @@ public:
     GetImplFn getImpl;
     SetImplFn setImpl;
 
-private:
+protected:
     Object& object;
 };
 
