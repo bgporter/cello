@@ -314,14 +314,14 @@ juce::ValueTree Object::load (juce::File file, FileFormat format)
     return {};
 }
 
-juce::Result Object::save (juce::File file, FileFormat format) const
+juce::Result Object::save (juce::File file, FileFormat format, juce::XmlElement::TextFormat textFormat) const
 {
     if (format == FileFormat::xml)
     {
         auto res { file.create () };
         if (res.wasOk ())
         {
-            if (file.replaceWithText (data.toXmlString ()))
+            if (file.replaceWithText (data.toXmlString (textFormat)))
                 return juce::Result::ok ();
             res = juce::Result::fail ("Error writing to " + file.getFullPathName ());
         }

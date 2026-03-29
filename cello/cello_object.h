@@ -569,9 +569,11 @@ public:
      *
      * @param file
      * @param format one of (xml, binary, zipped)
+     * @param textFormat if using xml format, this specifies details of the output.
      * @return Result of the save operation.
      */
-    juce::Result save (juce::File file, FileFormat format = FileFormat::xml) const;
+    juce::Result save (juce::File file, FileFormat format = FileFormat::xml,
+                       juce::XmlElement::TextFormat textFormat = {}) const;
 
     ///@}
 private:
